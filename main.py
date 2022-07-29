@@ -23,8 +23,8 @@ pygame.display.set_caption("Game")
 screen.fill(background_color)
 pygame.display.flip()
 
-hand = pygame.image.load("assets/1.png")
-hand = pygame.transform.scale(hand, (40, 40))
+handPointing = pygame.image.load("assets/1.png")
+handPointing = pygame.transform.scale(handPointing, (40, 40))
 
 
 
@@ -82,7 +82,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     if isDrawing:
-        screen.blit(hand, (x1, y1))
+        screen.blit(handPointing, (x1, y1))
     pygame.display.update()
 cap.release()
 pygame.quit()
