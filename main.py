@@ -62,6 +62,30 @@ while running:
         if all(finger == False for finger in fingers):
             print("Close")
 
+        # index_up = lmList[8][2] < lmList[6][2]
+        # index_down = lmList[8][2] > lmList[6][2]
+        # middle_up = lmList[12][2] < lmList[10][2]
+        # middle_down = lmList[12][2] > lmList[10][2]
+        # ring_up = lmList[16][2] < lmList[14][2]
+        # ring_down = lmList[16][2] > lmList[14][2]
+        # little_up = lmList[20][2] < lmList[18][2]
+        # little_down = lmList[20][2] > lmList[18][2]
+        # thumb_up = lmList[4][1] < lmList[2][1]
+        # thumb_down = lmList[4][1] > lmList[2][1]
+        #
+        # if thumb_down and index_up and middle_up and ring_down and little_down:
+        #     print("Select")
+        #
+        # if thumb_down and index_up and middle_down and ring_down and little_down:
+        #     print("Draw")
+        #     isDrawing = True
+        #
+        # if thumb_up and index_up and middle_down and ring_down and little_down:
+        #     print("Change")
+        #
+        # if thumb_down and index_down and middle_down and ring_down and little_down:
+        #     print("Close")
+
     # Show opencv window
 
     # fps indicator
