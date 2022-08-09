@@ -8,7 +8,7 @@ import HandTrackingModule as htm
 # OpenCV & Mediapipe tracking
 pTime = 0
 cTime = 0
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 cap.set(3, 1280)
 cap.set(4, 720)
 detector = htm.handDetector(detectCon=0.85)
@@ -65,14 +65,14 @@ while running:
     # Show opencv window
 
     # fps indicator
-    # cTime = time.time()
-    # fps = 1 / (cTime - pTime)
-    # pTime = cTime
+    cTime = time.time()
+    fps = 1 / (cTime - pTime)
+    pTime = cTime
 
-    # img.flags.writeable = True
-    # cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
-    #
-    # cv2.imshow("Image", img)
+    img.flags.writeable = True
+    cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
+
+    cv2.imshow("Image", img)
 
     cv2.waitKey(1)
 
@@ -84,5 +84,8 @@ while running:
     if isDrawing:
         screen.blit(handPointing, (x1, y1))
     pygame.display.update()
+    pygame.display.flip()
+
+
 cap.release()
 pygame.quit()
