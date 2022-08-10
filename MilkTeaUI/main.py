@@ -3,6 +3,8 @@ from Button import CompleteButton, IconButton2
 import LevelSelection
 import Setting
 import SceneManager
+import About
+import MusicController
 # init screen
 pygame.init()
 
@@ -64,22 +66,24 @@ def levelSelection():
     LevelSelection.playLevelSelection()
     #level Selection must overlay other
 
-# Game loop
+# Game loop-------------------------------------------------------------------------------------------
 running = True
 while running:
     screen.blit(menuBackground, (0, 0))
-    if play_Button.draw(screen):
+    if play_Button.draw(screen) and SceneManager.CheckMain():
         levelSelection()
-    if settingButton.draw(screen):
+    if settingButton.draw(screen) and SceneManager.CheckMain():
         SceneManager.SetState(SceneManager.settingState)
-    if aboutButton.draw(screen):
-        pass
+    if aboutButton.draw(screen) and SceneManager.CheckMain():
+        SceneManager.SetState(SceneManager.aboutState)
     if exitButton.draw(screen):
         running = False
         continue # will ignore what come next and quit directuly
-    #display sub
+    #display submenu-------------------
     if(SceneManager.CheckSetting()):
-        Setting.runSetting(screen)
+        Setting.run(screen)
+    if(SceneManager.CheckAbout()):
+        About.run(screen)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False

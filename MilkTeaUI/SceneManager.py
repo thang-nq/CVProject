@@ -9,6 +9,8 @@ def CheckSetting():
     return subSetting == settingState
 def CheckAbout():
     return subSetting == aboutState
+def CheckMain():
+    return subSetting == mainState
 def SetState(state):
     global  subSetting
     subSetting = state

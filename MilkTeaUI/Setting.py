@@ -2,13 +2,12 @@ import pygame
 from Panel import GamePanel,SettingCompBox
 from Button import CompleteButton
 import SceneManager
+import MusicController
 # init screen
 
 # create the screen
 screenWidth = 1500
 screenHeight = 810
-# caption
-pygame.display.set_caption("MilkTea")
 #overlay color
 s = pygame.Surface((screenWidth,screenHeight))
 s.set_alpha(80)
@@ -27,10 +26,13 @@ musicIcon_img=pygame.image.load('MilkTeaImages/MusicIcon.png')
 musicSettingX=screenWidth/2
 musicSettingY = screenHeight/2 -50
 musicSetting = SettingCompBox(musicSettingX,musicSettingY,musicIcon_img,"Music",1)
-def runSetting(surface):
+def run(surface):
     surface.blit(s,(0,0))
     settingPanel.draw(surface)
-    musicSetting.draw(surface)
+    if musicSetting.draw(surface):
+        MusicController.PlayMusic()
+    else:
+        MusicController.StopMusic()
     if(cancelButton.draw(surface)):
         SceneManager.SetState(SceneManager.mainState)
     for event in pygame.event.get():
