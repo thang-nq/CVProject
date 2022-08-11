@@ -21,9 +21,12 @@ pygame.display.set_caption("MilkTea")
 screenWidth = 1500
 screenHeight = 810
 #property
-menuBackground = pygame.image.load('MilkTeaImages/Background.png')
+menuBackground = pygame.image.load('MilkTeaImages/IntroBackground.png')
 screenPaddingX = 50
 screenPaddingY = 50
+title = pygame.image.load('MilkTeaImages/IntroTitle.png')
+titleX=screenWidth/2-title.get_width()/2
+titleY= 200-title.get_height()/2
 # play button
 playButton_img = pygame.image.load('MilkTeaImages/PlayButton.png')
 # compute play button property
@@ -70,6 +73,7 @@ def levelSelection():
 running = True
 while running:
     screen.blit(menuBackground, (0, 0))
+    screen.blit(title,(titleX,titleY))
     if play_Button.draw(screen) and SceneManager.CheckMain():
         levelSelection()
     if settingButton.draw(screen) and SceneManager.CheckMain():
