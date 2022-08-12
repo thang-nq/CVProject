@@ -1,91 +1,95 @@
-import cv2
-import numpy as np
-import os
+import ball
 import pygame
-import time
-import HandTrackingModule as htm
+import pymunk
+import pymunk.util as u
+from pymunk import Vec2d
 
-# OpenCV & Mediapipe tracking
-pTime = 0
-cTime = 0
-cap = cv2.VideoCapture(1)
-cap.set(3, 1280)
-cap.set(4, 720)
-detector = htm.handDetector(detectCon=0.85)
-
-
-# Pygame
 pygame.init()
-background_color = (255,255,255)
-(width, height) = (1280,720)
-screen = pygame.display.set_mode((width,height))
-pygame.display.set_caption("Game")
-screen.fill(background_color)
-pygame.display.flip()
+pygame.font.init()
 
-handPointing = pygame.image.load("assets/1.png")
-handPointing = pygame.transform.scale(handPointing, (40, 40))
+WIDTH, HEIGHT = 900, 500
+RAD = 20
 
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("First Game!")
+space = pymunk.Space()
+space.gravity = (0, 981)
 
-
-running = True
-
-while running:
-
-    success, img = cap.read()
-    img = cv2.flip(img, 1)
-    img.flags.writeable = False
-    img = detector.findHands(img, draw=False)
-    lmList = detector.findPosition(img)
-    x1, y1 = 0, 0
-    isDrawing = False
-    if len(lmList) != 0:
-        # index finger coord
-        x1, y1 = lmList[8][1:]
-
-        # Middle finger coord
-        # x2, y2 = lmList[12][1:]
-
-        # Return an array [0,0,0,0,0] each element is a finger, 0 is close and 1 is up
-        fingers = detector.fingersUp()
-
-        # 2 finger up (index and middle)
-        if fingers[1] and fingers[2]:
-            print("Select")
-
-        # 1 finger up (index)
-        if fingers[1] and fingers[2] == False:
-            print("Draw")
-            isDrawing = True
-
-        # Hand close
-        if all(finger == False for finger in fingers):
-            print("Close")
-
-    # Show opencv window
-
-    # fps indicator
-    cTime = time.time()
-    fps = 1 / (cTime - pTime)
-    pTime = cTime
-
-    img.flags.writeable = True
-    cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
-
-    cv2.imshow("Image", img)
-
-    cv2.waitKey(1)
-
-    # Pygame
-    screen.fill(background_color)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-    if isDrawing:
-        screen.blit(handPointing, (x1, y1))
-    pygame.display.update()
-    pygame.display.flip()
+FPS = 60
+VEL = 5
+DT = 1 / FPS
 
 
-cap.release()
+def flipyv(self,v):
+    return int(v.x), int(-v.y + h)
+
+def convert_coordinate(point):
+    return point[0], WIDTH - point[1]
+
+
+def create_apple(sp, pos):
+    body = pymunk.Body(1, 100)
+    body.position = pos
+    body.mass = 1
+    shape = pymunk.Circle(body, RAD)
+    shape.elasticity = 1
+    shape.friction = 0.5
+    sp.add(body, shape)
+    return shape
+
+
+def draw_apples(apples):
+    for apple in apples:
+        pos_x = int(apple.body.position.x)
+        pos_y = int(apple.body.position.y)
+
+        pygame.draw.circle(screen, (0, 0, 0), (pos_x, pos_y), RAD)
+
+
+apples = []
+seg_body = pymunk.Body(body_type=pymunk.Body.STATIC)
+seg_shape = pymunk.Segment(seg_body, (100, 300), (450, 400), 1)
+seg_shape.elasticity = 0.5
+space.add(seg_body, seg_shape)
+
+
+def game():
+    clock = pygame.time.Clock()
+    run = True
+
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                bubble = ball.Ball(space, RAD, 1)
+                bubble.body.position = event.pos
+
+                apples.append(bubble.shape)
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+                if pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                    pass
+            mpos = pygame.mouse.get_pos()
+
+            if pygame.key.get_mods() & pygame.KMOD_SHIFT and pygame.mouse.get_pressed()[2]:
+                p = self.flipyv(Vec2d(*mpos))
+                self.poly_points.append(p)
+            hit = self.space.point_query_nearest(
+                self.flipyv(Vec2d(*mpos)), 0, pm.ShapeFilter()
+            )
+        screen.fill((247, 247, 247))
+        pygame.draw.line(screen, (0, 0, 0), (100, 300), (450, 400), 1)
+        draw_apples(apples)
+        # draw_lines(screen, lines)
+
+        # space.debug_draw(draw_options)
+
+        space.step(DT)
+
+        pygame.display.update()
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+game()
 pygame.quit()
