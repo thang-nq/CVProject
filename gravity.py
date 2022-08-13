@@ -10,7 +10,8 @@ WIDTH, HEIGHT = 900, 500
 RAD = 30
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("First Game!")
-
+screen2 = pygame.display.set_mode((WIDTH+100, HEIGHT))
+pygame.display.set_caption("Second Game!")
 space = pymunk.Space()
 space.gravity = (0, 981)
 
@@ -103,7 +104,7 @@ def main():
         screen.fill((247, 247, 247))
         draw_apples(apples)
         draw_lines(screen,lines)
-
+        screen2.fill((247, 247, 247))
         #space.debug_draw(draw_options)
         space.step(DT)
 
