@@ -39,7 +39,18 @@ class NormalLevelBox():
         self.milkTeaBackground = pygame.transform.scale(milkteaBackground_img, (milkteaSizeX, milkteaSizeY))
         # assign amount fo start
         self.star = teaStar
-
+        self.clicked = False
+    def checkForInput(self):
+        pos = pygame.mouse.get_pos()
+        action = False
+        # check mouse over and clicked condition
+        if self.rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                self.clicked = True
+                action = True
+        if pygame.mouse.get_pressed()[0] == 0:
+            self.clicked = False
+        return action
     def draw(self,screen):
         # draw button
         screen.blit(self.image, (self.rect.x, self.rect.y))
@@ -66,6 +77,19 @@ class ChocolateLevelBox():
         self.milkTeaBackground = pygame.transform.scale(chocoteaBackground_img, (milkteaSizeX, milkteaSizeY))
         # assign amount fo start
         self.star = teaStar
+        self.clicked = False
+
+    def checkForInput(self):
+        pos = pygame.mouse.get_pos()
+        action = False
+        # check mouse over and clicked condition
+        if self.rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                self.clicked = True
+                action = True
+        if pygame.mouse.get_pressed()[0] == 0:
+            self.clicked = False
+        return action
 
     def draw(self,screen):
         # draw button

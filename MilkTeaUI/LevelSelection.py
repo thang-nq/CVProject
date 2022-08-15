@@ -1,6 +1,8 @@
 import pygame
 from Button import IconButton2
 from LevelBox import NormalLevelBox,ChocolateLevelBox
+#from prototype_game1 import game
+import prototype_game1
 # init screen
 pygame.init()
 
@@ -58,6 +60,12 @@ def playLevelSelection():
             running = False
         for l in levels:
             l.draw(screen)
+            if(l.checkForInput()):
+                #run the function that lead to a game scene
+                #game()
+                #prototype_game1.game()
+                pass
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False

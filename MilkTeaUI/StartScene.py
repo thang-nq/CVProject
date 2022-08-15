@@ -73,7 +73,7 @@ def levelSelection():
 running = True
 while running:
     screen.blit(menuBackground, (0, 0))
-    screen.blit(title,(titleX,titleY))
+    #screen.blit(title,(titleX,titleY))
     if play_Button.draw(screen) and SceneManager.CheckMain():
         levelSelection()
     if settingButton.draw(screen) and SceneManager.CheckMain():
