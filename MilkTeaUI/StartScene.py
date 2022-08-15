@@ -75,6 +75,7 @@ while running:
     screen.blit(menuBackground, (0, 0))
     #screen.blit(title,(titleX,titleY))
     if play_Button.draw(screen) and SceneManager.CheckMain():
+        SceneManager.SetOnButton()
         levelSelection()
     if settingButton.draw(screen) and SceneManager.CheckMain():
         SceneManager.SetState(SceneManager.settingState)

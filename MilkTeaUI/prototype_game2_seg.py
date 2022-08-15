@@ -7,7 +7,7 @@ from pymunk import Vec2d
 pygame.init()
 pygame.font.init()
 
-WIDTH, HEIGHT = 900, 500
+WIDTH, HEIGHT = 1500,810
 RAD = 20
 LINE_WEIGHT = 10
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -58,6 +58,8 @@ def draw_ball(apples):
 
 
 def draw_path2(segments):
+    if(segments == None):
+        return
     for seg in segments:
         point1 = seg.a
         point2 = seg.b
@@ -100,5 +102,3 @@ def game():
         pygame.display.flip()
         clock.tick(FPS)
 
-
-pygame.quit()

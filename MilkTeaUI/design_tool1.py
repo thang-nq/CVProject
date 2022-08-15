@@ -5,9 +5,9 @@ import pymunk.util as u
 from pymunk import Vec2d
 
 pygame.init()
-pygame.font.init()
+#pygame.font.init()
 
-WIDTH, HEIGHT = 900, 500
+WIDTH, HEIGHT = 1500, 810
 RAD = 20
 LINE_WEIGHT = 10
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -128,5 +128,3 @@ def game():
         pygame.display.flip()
         clock.tick(FPS)
 
-
-pygame.quit()
