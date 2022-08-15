@@ -16,6 +16,7 @@ class handDetector():
         self.mpDraw = mp.solutions.drawing_utils
         self.mpDrawingStyle = mp.solutions.drawing_styles
         self.tipIds = [4, 8, 12, 16, 20]
+        self.handType = 'None'
 
         # Video capture
         # self.pTime = 0
@@ -29,6 +30,9 @@ class handDetector():
         self.results = self.hands.process(imgRGB)
 
         if self.results.multi_hand_landmarks:
+            for hand in self.results.multi_handedness:
+                self.handType = hand.classification[0]
+                print(self.handType.label)
             for handLms in self.results.multi_hand_landmarks:
                 if draw:
                     self.mpDraw.draw_landmarks(img, handLms, self.mpHands.HAND_CONNECTIONS,
@@ -55,10 +59,16 @@ class handDetector():
         fingers = []
 
         # Thumb
-        if self.lmList[self.tipIds[0]][1] < self.lmList[self.tipIds[0] - 1][1]:
-            fingers.append(1)
-        else:
-            fingers.append(0)
+        if self.handType.label == "Right":
+            if self.lmList[self.tipIds[0]][1] < self.lmList[self.tipIds[0] - 1][1]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+        if self.handType.label == "Left":
+            if self.lmList[self.tipIds[0]][1] > self.lmList[self.tipIds[0] - 1][1]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
 
         # Other fingers
         for id in range(1, 5):
