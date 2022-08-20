@@ -21,27 +21,24 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("First Game!")
 space = pymunk.Space()
 space.gravity = (0, 981)
-x, y = 0, 0
+
 FPS = 30
 VEL = 5
 DT = 1 / FPS
 
 
-def create_segments(pos):
-    global x, y
-    x1, y1 = pos
-
+def create_segments(previouspos, currentpos):
     # The drawing function will draw a line from 2 point
-    if x == 0 and y == 0:  # if the pen is not inside the canvas or first start the app
-        x, y = x1, y1  # pass the current coordinate of the pen
-    else:  # draw a line from previous frame location of the pen to current frame position
-        seg_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        seg_shape = pymunk.Segment(seg_body, (x, y), (x1, y1), LINE_WEIGHT)
-        seg_shape.elasticity = 0.5
-        space.add(seg_body, seg_shape)
+    if previouspos == (0, 0): # if the pen is not inside the canvas or first start the app
+         previouspos = currentpos # pass the current coordinate of the pen
+    # draw a line from previous frame location of the pen to current frame position
+    seg_body = pymunk.Body(body_type=pymunk.Body.STATIC)
+    seg_shape = pymunk.Segment(seg_body, previouspos, currentpos, LINE_WEIGHT)
+    seg_shape.elasticity = 0.5
+    space.add(seg_body, seg_shape)
 
-        x, y = x1, y1  # after drawing, the current position become previous position
-        return seg_shape
+    # x, y = x1, y1  # after drawing, the current position become previous position
+    return seg_shape
 
 
 
@@ -69,62 +66,55 @@ def draw_path2(segments):
         point1 = seg.a
         point2 = seg.b
 
+        print("point1", point1)
+        print("point2", point2)
         pygame.draw.line(screen, (0, 0, 0), point1, point2, LINE_WEIGHT)
 
 # GROUP to draw
 segs = []
 balls = []
-
-
+previouspos = (0,0)
+currentpos = (0,0)
+handState = 'None'
 # MAIN GAME
 def game():
+    global previouspos, currentpos, handState
     clock = pygame.time.Clock()
     run = True
-
     while run:
+
         success, img = cap.read()
         img = cv2.flip(img, 1)
         img.flags.writeable = False
         img = detector.findHands(img, draw=False)
         lmList = detector.findPosition(img)
-        (x1, y1) = (0, 0)
-        isDrawing = False
-        isSelecting = False
 
         if len(lmList) != 0:
-            (x1, y1) = lmList[8][1:]
-            print((x1,y1))
+            currentpos = lmList[8][1:]
             fingers = detector.fingersUp()
 
             if fingers[1] and fingers[2] == False:
                 print("Draw")
-                isDrawing = True
+                handState = "Drawing"
+            if fingers[1] and fingers[2]:
+                handState = "Selecting"
             if all(finger == False for finger in fingers):
                 print("Close")
-                isSelecting = True
+                handState = "Resting"
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-            # if event.type == pygame.MOUSEBUTTONDOWN:
-                # if isSelecting:
-                    # Left mouse button - DRAW PATH
-                    # if event.button == 1:
-                    #     global x, y
-                    #     x, y = pygame.mouse.get_pos()
-            # RMB - CREATE BALL
-            # elif event.button == 3:
-        if isDrawing:
-            global x, y
-            x, y = (x1, y1)
-            segs.append(create_segments((x1, y1)))
-
+        # RMB - CREATE BALL
+        # Reset handstate will reset current position:
+        if handState != "Drawing":
+            previouspos = currentpos
+        if handState == "Drawing":
+            segs.append(create_segments(previouspos, currentpos))
+            previouspos = currentpos
         # TAKE mouse position if pressed down
-        # if pygame.mouse.get_pressed()[0]:
-        if isSelecting:
-            # mpos = pygame.mouse.get_pos()
-            # segs.append(create_segments((x1,y1)))
-            balls.append(create_ball(space, (x1, y1)))
+        if handState == "Creating":
+            balls.append(create_ball(space, currentpos))
         screen.fill((247, 247, 247))
         draw_ball(balls)
         draw_path2(segs)
