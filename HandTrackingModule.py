@@ -17,6 +17,7 @@ class handDetector():
         self.mpDrawingStyle = mp.solutions.drawing_styles
         self.tipIds = [4, 8, 12, 16, 20]
         self.handType = 'None'
+        self.handState = 'Resting'
         # Video capture
         # self.pTime = 0
         # self.cTime = 0
@@ -51,7 +52,7 @@ class handDetector():
 
                 if draw and id == handL:
                     cv2.circle(img, (cx, cy), 25, (255,0,255), cv2.FILLED)
-                    cv2.putText(img, self.handType.label, (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+                    cv2.putText(img,(self.handState + "-" + self.handType.label), (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
 
         return self.lmList
 
@@ -81,12 +82,15 @@ class handDetector():
 
     #Get current hand state by checking the finger array
     def getHandState(self):
+        self.handState = 'Unmapped'
         if self.results.multi_hand_landmarks:
             fingers = self.fingersUp()
-            if fingers[1] and fingers[2]:
-                return "Selecting"
-            if fingers[1] and not fingers[2]:
-                return "Drawing"
+            if fingers[1] and fingers[2] and not fingers[3] and not fingers[4]:
+                self.handState = "Selecting"
+                return self.handState
+            if fingers[1] and not fingers[2] and not fingers[3] and not fingers[4]:
+                self.handState = "Drawing"
+                return self.handState
 
-        return "NoHand"
+        return self.handState
 

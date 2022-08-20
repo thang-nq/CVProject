@@ -104,7 +104,7 @@ def game():
 
         print("current point", currentpos)
         print("previous point", previouspos)
-
+        print(handState)
         screen.fill((247, 247, 247))
         draw_ball(balls)
         draw_path2(segs)
@@ -117,7 +117,7 @@ def game():
         #Show opencv window
 
         cv2.imshow("Tracking", img)
-        
+
         clock.tick(FPS)
 
 
