@@ -3,7 +3,7 @@ import mediapipe as mp
 
 
 class handDetector():
-    def __init__(self, mode=False, maxHands=2, detectCon=0.5, trackCon=0.5):
+    def __init__(self, mode=False, maxHands=1, detectCon=0.5, trackCon=0.5):
         self.mode = mode
         self.maxHands = maxHands
         self.detectCon = detectCon
@@ -17,7 +17,6 @@ class handDetector():
         self.mpDrawingStyle = mp.solutions.drawing_styles
         self.tipIds = [4, 8, 12, 16, 20]
         self.handType = 'None'
-
         # Video capture
         # self.pTime = 0
         # self.cTime = 0
@@ -52,6 +51,7 @@ class handDetector():
 
                 if draw and id == handL:
                     cv2.circle(img, (cx, cy), 25, (255,0,255), cv2.FILLED)
+                    cv2.putText(img, self.handType.label, (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
 
         return self.lmList
 
@@ -76,4 +76,17 @@ class handDetector():
                 fingers.append(1)
             else:
                 fingers.append(0)
+
         return fingers
+
+    #Get current hand state by checking the finger array
+    def getHandState(self):
+        if self.results.multi_hand_landmarks:
+            fingers = self.fingersUp()
+            if fingers[1] and fingers[2]:
+                return "Selecting"
+            if fingers[1] and not fingers[2]:
+                return "Drawing"
+
+        return "NoHand"
+

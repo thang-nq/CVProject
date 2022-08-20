@@ -7,8 +7,8 @@ import HandTrackingModule as htm
 import cv2
 
 cap = cv2.VideoCapture(0)
-cap.set(3, 1280)
-cap.set(4, 720)
+cap.set(3, 900)
+cap.set(4, 500)
 detector = htm.handDetector(detectCon=0.85)
 
 pygame.init()
@@ -65,9 +65,6 @@ def draw_path2(segments):
     for seg in segments:
         point1 = seg.a
         point2 = seg.b
-
-        print("point1", point1)
-        print("point2", point2)
         pygame.draw.line(screen, (0, 0, 0), point1, point2, LINE_WEIGHT)
 
 # GROUP to draw
@@ -86,35 +83,28 @@ def game():
         success, img = cap.read()
         img = cv2.flip(img, 1)
         img.flags.writeable = False
-        img = detector.findHands(img, draw=False)
+        img = detector.findHands(img, draw=True)
         lmList = detector.findPosition(img)
-
         if len(lmList) != 0:
             currentpos = lmList[8][1:]
-            fingers = detector.fingersUp()
-
-            if fingers[1] and fingers[2] == False:
-                print("Draw")
-                handState = "Drawing"
-            if fingers[1] and fingers[2]:
-                handState = "Selecting"
-            if all(finger == False for finger in fingers):
-                print("Close")
-                handState = "Resting"
-
+            handState = detector.getHandState()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
         # RMB - CREATE BALL
         # Reset handstate will reset current position:
         if handState != "Drawing":
-            previouspos = currentpos
+            previouspos = (0,0)
         if handState == "Drawing":
             segs.append(create_segments(previouspos, currentpos))
             previouspos = currentpos
         # TAKE mouse position if pressed down
         if handState == "Creating":
             balls.append(create_ball(space, currentpos))
+
+        print("current point", currentpos)
+        print("previous point", previouspos)
+
         screen.fill((247, 247, 247))
         draw_ball(balls)
         draw_path2(segs)
@@ -123,6 +113,11 @@ def game():
 
         pygame.display.update()
         pygame.display.flip()
+
+        #Show opencv window
+
+        cv2.imshow("Tracking", img)
+        
         clock.tick(FPS)
 
 
