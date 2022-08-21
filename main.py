@@ -3,8 +3,6 @@ import numpy as np
 import os
 import pygame
 import pymunk
-import pymunk.util as u
-from pymunk import Vec2d
 import GameObjects
 
 pygame.init()
@@ -18,9 +16,33 @@ pygame.display.set_caption("First Game!")
 space = pymunk.Space()
 space.gravity = (0, 981)
 x, y = 0, 0
+
 FPS = 60
 VEL = 5
 DT = 1 / FPS
+
+# Add a new collision type
+COLLTYPE_BALL = 2
+COLLTYPE_GOAL = 3
+
+
+# Define collision callback function, will be called when X touches Y
+def goal_reached(arbiter, space, data):
+    print("you reached the goal!")
+    return True
+
+
+# Setup the collision callback function
+h = space.add_collision_handler(COLLTYPE_BALL, COLLTYPE_GOAL)
+h.begin = goal_reached
+
+
+# Create and add the "goal"
+
+def create_goal():
+    seg = GameObjects.Dot(space, RAD, (400, 200), COLLTYPE_GOAL, color=(255, 0, 0))
+    seg_shape = seg.shape
+    return seg
 
 
 def create_dot(sp, pos):
@@ -49,7 +71,7 @@ def draw_apples(apples):
         pos_x = int(apple.body.position.x)
         pos_y = int(apple.body.position.y)
 
-        pygame.draw.circle(screen, (0, 0, 0), (pos_x, pos_y), RAD)
+        pygame.draw.circle(screen, apple.color, (pos_x, pos_y), RAD)
 
 
 def draw_path(apples):
@@ -68,13 +90,14 @@ def create_segments(pos):
     if x == 0 and y == 0:  # if the pen is not inside the canvas or first start the app
         x, y = x1, y1  # pass the current coordinate of the pen
     else:  # draw a line from previous frame location of the pen to current frame position
-        seg = GameObjects.Seg(space, 5, 1,(x,y),(x1,y1))
+        seg = GameObjects.Seg(space, 5, 1, (x, y), (x1, y1))
         seg_shape = seg.shape
         x, y = x1, y1  # after drawing, the current position become previous position
         return seg_shape
 
+
 def draw_path2(segments):
-        x, y = x1, y1  # pass the current coordinate of the pen
+    # x, y = x1, y1  # pass the current coordinate of the pen
     for seg in segments:
         point1 = seg.a
         point2 = seg.b
@@ -96,9 +119,11 @@ segs = []
 def game():
     clock = pygame.time.Clock()
     run = True
+    goal = create_goal()
+    gameStart = False
 
     while run:
-
+        screen.fill((247, 247, 247))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
@@ -110,27 +135,38 @@ def game():
                     # apples.append(create_apple(space,event.pos))
                     global x, y
                     x, y = pygame.mouse.get_pos()
+
                     # dots.append(create_dot(space, (x,y)))
-                elif event.button == 3:
-                    apples.append(create_apple(space, event.pos))
+                # elif event.button == 3:
+                    # apples.append(create_apple(space, event.pos))
+
+
+                    # dot = GameObjects.Dot(space, RAD, event.pos, COLLTYPE_BALL)
                 # dots.append(draw_path(event.pos))
+            if event.type == pygame.MOUSEBUTTONUP:
+                apples.append(GameObjects.Dot(space, RAD, (200, 200), COLLTYPE_BALL))
+                apples.append(create_goal())
+                gameStart = True
 
         if pygame.mouse.get_pressed()[0]:
             mpos = pygame.mouse.get_pos()
             # dots.append(create_dot(space, mpos))
             segs.append(create_segments(mpos))
-        screen.fill((247, 247, 247))
+
+        if not gameStart:
+            pygame.draw.circle(screen, (0, 0, 0), (200, 200), RAD)
+            pygame.draw.circle(screen, (255, 0, 0), (400, 200), RAD)
+
+        # draw_goal(goal)
         draw_apples(apples)
         draw_path2(segs)
-        # draw_path(dots)
-        # draw_lines(screen, lines)
 
         # space.debug_draw(draw_options)
 
         space.step(DT)
 
         pygame.display.update()
-        pygame.display.flip()
+        # pygame.display.flip()
         clock.tick(FPS)
 
 
