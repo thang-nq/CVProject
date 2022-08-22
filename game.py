@@ -5,6 +5,7 @@ import pygame
 import pymunk
 import GameObjects
 
+
 class Bubble_tea:
     def __init__(self):
         pygame.init()
@@ -17,7 +18,6 @@ class Bubble_tea:
         self.space = pymunk.Space()
         self.space.gravity = (0, 981)
 
-
         # CONSTANTS
         self.FPS = 60
         self.VEL = 5
@@ -25,30 +25,71 @@ class Bubble_tea:
         self.RAD = 20
         self.LINE_WEIGHT = 10
         # Add a new collision type
-        self.COLLTYPE_BALL = 2
-        self.COLLTYPE_GOAL = 3
+        self.collision = {"ball": 1, "goal": 2, "border": 3, "line": 4}
+        self.border = []
+        self.border.append(
+            GameObjects.Seg(self.space, 1, 1, (0, 0), (0, self.HEIGHT), elastic=0, collisionType="border"))
+        self.border.append(GameObjects.Seg(self.space, 1, 1, (0, self.HEIGHT), (self.WIDTH, self.HEIGHT), elastic=0,
+                                           collisionType="border"))
+        self.border.append(GameObjects.Seg(self.space, 1, 1, (self.WIDTH, self.HEIGHT), (self.WIDTH, 0), elastic=0,
+                                           collisionType="border"))
+        self.border.append(
+            GameObjects.Seg(self.space, 1, 1, (self.WIDTH, 0), (0, 0), elastic=0, collisionType="border"))
 
         # Variables
         self.gameStart = False
+        self.ended = 0
         self.X, self.Y = 0, 0
         self.apples = []
         self.dots = []
         self.segs = []
 
         # Setup the collision callback function
-        self.h = self.space.add_collision_handler(self.COLLTYPE_BALL, self.COLLTYPE_GOAL)
+        self.h = self.space.add_collision_handler(self.collision['ball'], self.collision['goal'])
+        self.b1 = self.space.add_collision_handler(self.collision['ball'], self.collision['border'])
+        self.b2 = self.space.add_collision_handler(self.collision['goal'], self.collision['border'])
+        self.b1.begin = False   
+        self.b2.begin = self.through
+        self.b1.separate = self.reset_game
+        self.b2.separate = self.reset_game
 
     # Define collision callback function, will be called when X touches Y
+    def through(self, arbiter, space, data):
+        return False
+
     def goal_reached(self, arbiter, space, data):
-        print("you reached the goal!")
+        if self.ended == 0:
+            print("you reached the goal!")
+            self.ended += 1
+        return True
+
+    # Define collision callback function, will be called when X touches Y
+    def finished(self, arbiter, space, data):
+        ball_shape1 = arbiter.shapes[0]
+        space.remove(ball_shape1, ball_shape1.body)
+        ball_shape2 = arbiter.shapes[1]
+        space.remove(ball_shape2, ball_shape2.body)
         return True
 
     def main_loop(self):
-        self.h.begin = self.goal_reached
+
         while True:
             self._event_hanlder()
             self._draw()
             self._update()
+
+    def reset_game(self, arbiter, space, data):
+        self.gameStart = False
+        for shape in self.space.shapes:
+            if shape.collision_type != self.collision['border']:
+                self.space.remove(shape, shape.body)
+        self.apples = []
+        self.dots = []
+        self.segs = []
+        self._draw()
+        return False
+
+
 
     def _update(self):
         self.space.step(self.DT)
@@ -63,7 +104,7 @@ class Bubble_tea:
                 if event.button == 1:
                     self.X, self.Y = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONUP:
-                self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200), self.COLLTYPE_BALL))
+                self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball'))
                 self.apples.append(self.create_goal())
                 self.gameStart = True
 
@@ -77,9 +118,9 @@ class Bubble_tea:
             pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
             pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
 
-        # draw_goal(goal)
         self.draw_apples(self.apples)
         self.draw_path(self.segs)
+        self.draw_border(self.border)
 
     def create_segments(self, pos):
         x1, y1 = pos
@@ -94,8 +135,9 @@ class Bubble_tea:
             return seg_shape
 
     def create_goal(self):
-        seg = GameObjects.Dot(self.space, self.RAD, (400, 200), self.COLLTYPE_GOAL, color=(255, 0, 0))
-        seg_shape = seg.shape
+        seg = GameObjects.Dot(self.space, self.RAD, (400, 200), 'goal', color=(255, 0, 0))
+        self.h.begin = self.goal_reached
+        self.h.separate = self.finished
         return seg
 
     def draw_path(self, segments):
@@ -105,9 +147,20 @@ class Bubble_tea:
 
             pygame.draw.line(self.screen, (0, 0, 0), point1, point2, 5)
 
-    def draw_apples(self,apples):
+    def draw_border(self, segments):
+        for seg in segments:
+            point1 = seg.shape.a
+            point2 = seg.shape.b
+
+            pygame.draw.line(self.screen, (0, 0, 0), point1, point2, 5)
+
+    def draw_apples(self, apples):
         for apple in apples:
             pos_x = int(apple.body.position.x)
             pos_y = int(apple.body.position.y)
 
             pygame.draw.circle(self.screen, apple.color, (pos_x, pos_y), self.RAD)
+
+
+game = Bubble_tea()
+game.main_loop()

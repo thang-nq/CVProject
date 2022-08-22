@@ -4,7 +4,7 @@ import os
 import pygame
 import pymunk
 import GameObjects
-
+import game as g
 pygame.init()
 pygame.font.init()
 
@@ -170,5 +170,5 @@ def game():
         clock.tick(FPS)
 
 
-game()
-pygame.quit()
+# game()
+# pygame.quit()

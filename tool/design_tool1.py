@@ -1,4 +1,4 @@
-import ball
+
 import pygame
 import pymunk
 import pymunk.util as u

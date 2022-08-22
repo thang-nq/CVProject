@@ -1,13 +1,15 @@
 import pygame
 import pymunk
 
+collision = {"ball": 1, "goal": 2, "border": 3, "line":4}
+
 
 class Dot:
     """
     param
     """
 
-    def __init__(self, space, radian, pos, collisionType, density=1, elastic=1, friction=0, color=(0, 0, 0)):
+    def __init__(self, space, radian, pos, collisionType = 'ball', density=1, elastic=1, friction=0, color=(0, 0, 0)):
         self.body = pymunk.Body(pymunk.Body.DYNAMIC)
         self.rad = radian
         self.body.position = pos
@@ -15,7 +17,7 @@ class Dot:
         self.shape.density = density
         self.shape.elasticity = elastic
         self.shape.friction = friction
-        self.shape.collision_type = collisionType
+        self.shape.collision_type = collision[collisionType]
         self.color = color
         space.add(self.body, self.shape)
 
@@ -28,10 +30,11 @@ class Seg:
 
     """
 
-    def __init__(self, space, weight, density, pos1, pos2, elastic=0.5, friction=0):
+    def __init__(self, space, radius, density, pos1, pos2, elastic=0.5, friction=0, collisionType = 'line'):
         self.body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        self.weight = weight
-        self.shape = pymunk.Segment(self.body, pos1, pos2, weight)
+        self.radius = radius
+        self.shape = pymunk.Segment(self.body, pos1, pos2, radius= self.radius)
+        self.shape.collision_type = collision[collisionType]
         self.shape.density = density
         self.shape.elasticity = elastic
         self.shape.friction = friction
