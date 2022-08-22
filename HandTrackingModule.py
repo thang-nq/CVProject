@@ -1,3 +1,5 @@
+
+
 import cv2
 import mediapipe as mp
 
@@ -32,7 +34,7 @@ class handDetector():
         if self.results.multi_hand_landmarks:
             for hand in self.results.multi_handedness:
                 self.handType = hand.classification[0]
-                print(self.handType.label)
+                # print(self.handType.label)
             for handLms in self.results.multi_hand_landmarks:
                 if draw:
                     self.mpDraw.draw_landmarks(img, handLms, self.mpHands.HAND_CONNECTIONS,
@@ -93,4 +95,3 @@ class handDetector():
                 return self.handState
 
         return self.handState
-

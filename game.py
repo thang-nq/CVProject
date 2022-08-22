@@ -1,12 +1,138 @@
-import pygame
+import cv2
+import numpy as np
 import os
+import pygame
+import pymunk
+import GameObjects
+import HandTrackingModule as htm
 
-pygame.font.init()
-pygame.mixer.init()
+class Bubble_tea:
+    def __init__(self):
+        pygame.init()
+        pygame.font.init()
 
-WIDTH, HEIGHT = 900, 500
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("First Game!")
+        self.WIDTH, self.HEIGHT = 1280, 720
+        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
+        self.clock = pygame.time.Clock()
+        pygame.display.set_caption("First Game!")
+        self.space = pymunk.Space()
+        self.space.gravity = (0, 981)
 
-FPS = 60
-VEL = 5
+
+        # CONSTANTS
+        self.FPS = 60
+        self.VEL = 5
+        self.DT = 1 / self.FPS
+        self.RAD = 20
+        self.LINE_WEIGHT = 10
+        # Add a new collision type
+        self.COLLTYPE_BALL = 2
+        self.COLLTYPE_GOAL = 3
+
+        # Variables
+        self.gameStart = 0
+        self.X, self.Y = 0, 0
+        self.cX, self.cY = 0, 0
+        self.apples = []
+        self.dots = []
+        self.segs = []
+
+        # Setup the collision callback function
+        self.h = self.space.add_collision_handler(self.COLLTYPE_BALL, self.COLLTYPE_GOAL)
+
+        #Tracking module config
+        self.capture = cv2.VideoCapture(0)
+        self.capture.set(3, 1280)
+        self.capture.set(4, 720)
+        self.detector = htm.handDetector(detectCon=0.85)
+
+
+    # Define collision callback function, will be called when X touches Y
+    def goal_reached(self, arbiter, space, data):
+        print("you reached the goal!")
+        return True
+
+    def main_loop(self):
+        self.h.begin = self.goal_reached
+        while True:
+
+            self._event_hanlder()
+            self._draw()
+            self._update()
+
+    def _update(self):
+        self.space.step(self.DT)
+        pygame.display.update()
+        self.clock.tick(self.FPS)
+
+    def _event_hanlder(self):
+        success, img = self.capture.read()
+        img = cv2.flip(img, 1)
+        img.flags.writeable = False
+        img = self.detector.findHands(img, draw=True)
+        lmList = self.detector.findPosition(img)
+        handState = 'None'
+        if len(lmList) != 0:
+            (self.cX, self.cY) = lmList[8][1:]
+            handState = self.detector.getHandState()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+        if handState == "Drawing":
+            self.segs.append(self.create_segments((self.X, self.Y), (self.cX, self.cY)))
+            self.X, self.Y = self.cX, self.cY
+            print(self.X, self.Y)
+        if handState == "Selecting" and self.gameStart < 1:
+            self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200), self.COLLTYPE_BALL))
+            self.apples.append(self.create_goal())
+            self.gameStart += 1
+
+        # print(handState)
+
+        # if pygame.mouse.get_pressed()[0]:
+        #     mpos = pygame.mouse.get_pos()
+        #     self.segs.append(self.create_segments(mpos))
+
+    def _draw(self):
+        self.screen.fill((247, 247, 247))
+        if not self.gameStart:
+            pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
+            pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
+
+        # draw_goal(goal)
+        self.draw_apples(self.apples)
+        self.draw_path(self.segs)
+
+    def create_segments(self, previouspos, currentpos):
+        if previouspos == (0, 0):  # if the pen is not inside the canvas or first start the app
+            previouspos = currentpos  # pass the current coordinate of the pen
+        # draw a line from previous frame location of the pen to current frame position
+        seg_body = pymunk.Body(body_type=pymunk.Body.STATIC)
+        seg_shape = pymunk.Segment(seg_body, previouspos, currentpos, self.LINE_WEIGHT)
+        seg_shape.elasticity = 0.5
+        self.space.add(seg_body, seg_shape)
+        return seg_shape
+
+    def create_goal(self):
+        seg = GameObjects.Dot(self.space, self.RAD, (400, 200), self.COLLTYPE_GOAL, color=(255, 0, 0))
+        seg_shape = seg.shape
+        return seg
+
+    def draw_path(self, segments):
+        for seg in segments:
+            point1 = seg.a
+            point2 = seg.b
+
+            pygame.draw.line(self.screen, (0, 0, 0), point1, point2, 5)
+
+    def draw_apples(self,apples):
+        for apple in apples:
+            pos_x = int(apple.body.position.x)
+            pos_y = int(apple.body.position.y)
+
+            pygame.draw.circle(self.screen, apple.color, (pos_x, pos_y), self.RAD)
+
+game = Bubble_tea()
+game.main_loop()

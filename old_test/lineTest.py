@@ -10,14 +10,14 @@ WIDTH, HEIGHT = 900, 500
 RAD = 30
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("First Game!")
-screen2 = pygame.display.set_mode((WIDTH+100, HEIGHT))
+
 pygame.display.set_caption("Second Game!")
 space = pymunk.Space()
 space.gravity = (0, 981)
 
 
 def create_apple(space, pos):
-    body = pymunk.Body(1, 100)
+    body = pymunk.Body(1, 100,body_type=pymunk.Body.STATIC)
     body.position = pos
     shape = pymunk.Circle(body, RAD)
     space.add(body, shape)
@@ -99,13 +99,13 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            while event.type == pygame.MOUSEBUTTONDOWN:
                 apples.append(create_apple(space, event.pos))
         screen.fill((247, 247, 247))
         draw_apples(apples)
-        draw_lines(screen,lines)
-        screen2.fill((247, 247, 247))
-        #space.debug_draw(draw_options)
+
+
+        space.debug_draw(pymunk.pygame_util.DrawOptions(screen))
         space.step(DT)
 
         pygame.display.update()
