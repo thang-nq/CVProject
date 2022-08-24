@@ -26,6 +26,8 @@ class Bubble_tea:
         self.LINE_WEIGHT = 10
         # Add a new collision type
         self.collision = {"ball": 1, "goal": 2, "border": 3, "line": 4}
+
+        # ------- CREATE BORDER ------------------------------------------
         self.border = []
         self.border.append(
             GameObjects.Seg(self.space, 1, 1, (0, 0), (0, self.HEIGHT), elastic=0, collisionType="border"))
@@ -41,18 +43,19 @@ class Bubble_tea:
         self.ended = 0
         self.X, self.Y = 0, 0
         self.apples = []
-        self.dots = []
+        self.blocks = []
         self.segs = []
 
         # Setup the collision callback function
         self.h = self.space.add_collision_handler(self.collision['ball'], self.collision['goal'])
         self.b1 = self.space.add_collision_handler(self.collision['ball'], self.collision['border'])
         self.b2 = self.space.add_collision_handler(self.collision['goal'], self.collision['border'])
-        self.b1.begin = False   
+        self.b1.begin = self.through
         self.b2.begin = self.through
         self.b1.separate = self.reset_game
         self.b2.separate = self.reset_game
 
+    # -------COLLISION HANDLER ------------------------------------------
     # Define collision callback function, will be called when X touches Y
     def through(self, arbiter, space, data):
         return False
@@ -71,9 +74,12 @@ class Bubble_tea:
         space.remove(ball_shape2, ball_shape2.body)
         return True
 
+    # -------END ------------------------------------------
+    # ------- MAIN LOOP ------------------------------------------
     def main_loop(self):
 
         while True:
+            self.create_blocks()
             self._event_hanlder()
             self._draw()
             self._update()
@@ -84,13 +90,11 @@ class Bubble_tea:
             if shape.collision_type != self.collision['border']:
                 self.space.remove(shape, shape.body)
         self.apples = []
-        self.dots = []
         self.segs = []
         self._draw()
         return False
 
-
-
+    # ------- CORE FUNCTIONS ------------------------------------------
     def _update(self):
         self.space.step(self.DT)
         pygame.display.update()
@@ -122,6 +126,9 @@ class Bubble_tea:
         self.draw_path(self.segs)
         self.draw_border(self.border)
 
+
+    # -------END ------------------------------------------
+    # ------- CREATE  FUNCTIONS -----------------------------------------
     def create_segments(self, pos):
         x1, y1 = pos
 
@@ -140,6 +147,24 @@ class Bubble_tea:
         self.h.separate = self.finished
         return seg
 
+    def create_blocks(self):
+        body = pymunk.Body(body_type=pymunk.Body.STATIC)
+
+        body.position = (100, 100)
+        shape = pymunk.Poly.create_box(body, (200, 100))
+        self.space.add(body, shape)
+        # pygame.draw.rect(self.screen,(0,0,0),())
+        return shape
+
+    # -------   END  -----------------------------------------
+
+    # -------   DRAW FUNCTIONS -----------------------------------------
+    def draw_blocks(self,blocks):
+        for seg in segments:
+            point1 = seg.a
+            point2 = seg.b
+
+            pygame.draw.line(self.screen, (0, 0, 0), point1, point2, 5)
     def draw_path(self, segments):
         for seg in segments:
             point1 = seg.a
@@ -160,6 +185,8 @@ class Bubble_tea:
             pos_y = int(apple.body.position.y)
 
             pygame.draw.circle(self.screen, apple.color, (pos_x, pos_y), self.RAD)
+
+    # -------   END  -----------------------------------------
 
 
 game = Bubble_tea()

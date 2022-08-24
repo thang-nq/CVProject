@@ -157,7 +157,7 @@ def game():
             pygame.draw.circle(screen, (0, 0, 0), (200, 200), RAD)
             pygame.draw.circle(screen, (255, 0, 0), (400, 200), RAD)
 
-        # draw_goal(goal)
+        draw_goal(goal)
         draw_apples(apples)
         draw_path2(segs)
 
@@ -170,5 +170,5 @@ def game():
         clock.tick(FPS)
 
 
-# game()
-# pygame.quit()
+game()
+pygame.quit()
