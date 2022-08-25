@@ -45,6 +45,8 @@ class Bubble_tea:
         self.apples = []
         self.blocks = []
         self.segs = []
+        self.x_mouse, self.y_mouse = 0, 0
+        self.game_state = 0
 
         # Setup the collision callback function
         self.h = self.space.add_collision_handler(self.collision['ball'], self.collision['goal'])
@@ -96,7 +98,8 @@ class Bubble_tea:
 
     # ------- CORE FUNCTIONS ------------------------------------------
     def _update(self):
-        self.space.step(self.DT)
+        if self.game_state != 1:
+            self.space.step(self.DT)
         pygame.display.update()
         self.clock.tick(self.FPS)
 
@@ -107,6 +110,21 @@ class Bubble_tea:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.X, self.Y = pygame.mouse.get_pos()
+                    self.x_mouse, self.y_mouse = pygame.mouse.get_pos()
+                    print(self.x_mouse)
+                    if (self.x_mouse < 60 and self.y_mouse < 155 and self.y_mouse > 90):
+                        self.game_state = 1
+                        print(self.game_state)
+                    if self.game_state == 1:
+                        if self.x_mouse > 500 and self.y_mouse > 200 and self.y_mouse < 300:
+                            # Resume in the paused screen
+                            self.game_state = 0
+                        if self.x_mouse > 500 and self.y_mouse > 300:
+                            # Restart in the paused screen
+                            restart()
+                            level.load_level()
+                            self.game_state = 0
+
             if event.type == pygame.MOUSEBUTTONUP:
                 self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball'))
                 self.apples.append(self.create_goal())
@@ -119,13 +137,14 @@ class Bubble_tea:
     def _draw(self):
         self.screen.fill((247, 247, 247))
         if not self.gameStart:
+            pygame.draw.circle(self.screen, (0, 255, 255), (50, 150), self.RAD)
+            pygame.draw.circle(self.screen, (0, 255, 255), (500, 200), self.RAD)
             pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
             pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
 
         self.draw_apples(self.apples)
         self.draw_path(self.segs)
         self.draw_border(self.border)
-
 
     # -------END ------------------------------------------
     # ------- CREATE  FUNCTIONS -----------------------------------------
@@ -159,12 +178,13 @@ class Bubble_tea:
     # -------   END  -----------------------------------------
 
     # -------   DRAW FUNCTIONS -----------------------------------------
-    def draw_blocks(self,blocks):
+    def draw_blocks(self, blocks):
         for seg in segments:
             point1 = seg.a
             point2 = seg.b
 
             pygame.draw.line(self.screen, (0, 0, 0), point1, point2, 5)
+
     def draw_path(self, segments):
         for seg in segments:
             point1 = seg.a

@@ -41,6 +41,7 @@ def game():
     run = True
     x_mouse, y_mouse =0,0
     game_state = 0
+
     gameStart = False
     border = []
     apples = []
@@ -67,14 +68,15 @@ def game():
                         bird_path = []
         x_mouse, y_mouse = pygame.mouse.get_pos()
         screen.fill((247, 247, 247))
-        apples.append(GameObjects.Dot(space, RAD, (450,450), 'ball'))
+
+        # apples.append(GameObjects.Dot(space, RAD, (450,450), 'ball'))
         # border.append(
         #     GameObjects.Seg(space, 10, 1, (0, 400), (400, 400), elastic=0, collisionType="border"))
 
         draw_apples(apples)
         # draw_border(border)
-
-        space.step(DT)
+        if game_state != 1:
+            space.step(DT)
 
         pygame.display.update()
         clock.tick(FPS)

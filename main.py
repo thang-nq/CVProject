@@ -5,6 +5,7 @@ import pygame
 import pymunk
 import GameObjects
 import game as g
+
 pygame.init()
 pygame.font.init()
 
@@ -16,7 +17,7 @@ pygame.display.set_caption("First Game!")
 space = pymunk.Space()
 space.gravity = (0, 981)
 x, y = 0, 0
-
+collision = {"ball": 1, "goal": 2, "border": 3, "line": 4}
 FPS = 60
 VEL = 5
 DT = 1 / FPS
@@ -40,7 +41,7 @@ h.begin = goal_reached
 # Create and add the "goal"
 
 def create_goal():
-    seg = GameObjects.Dot(space, RAD, (400, 200), COLLTYPE_GOAL, color=(255, 0, 0))
+    seg = GameObjects.Dot(space, RAD, (400, 200), collisionType="goal", color=(255, 0, 0),)
     seg_shape = seg.shape
     return seg
 
@@ -138,8 +139,7 @@ def game():
 
                     # dots.append(create_dot(space, (x,y)))
                 # elif event.button == 3:
-                    # apples.append(create_apple(space, event.pos))
-
+                # apples.append(create_apple(space, event.pos))
 
                     # dot = GameObjects.Dot(space, RAD, event.pos, COLLTYPE_BALL)
                 # dots.append(draw_path(event.pos))
@@ -152,8 +152,8 @@ def game():
             mpos = pygame.mouse.get_pos()
             # dots.append(create_dot(space, mpos))
             segs.append(create_segments(mpos))
-
         if not gameStart:
+            pygame.draw.circle(screen, (0, 255, 255), (50, 150), RAD)
             pygame.draw.circle(screen, (0, 0, 0), (200, 200), RAD)
             pygame.draw.circle(screen, (255, 0, 0), (400, 200), RAD)
 
@@ -162,7 +162,6 @@ def game():
         draw_path2(segs)
 
         # space.debug_draw(draw_options)
-
         space.step(DT)
 
         pygame.display.update()
