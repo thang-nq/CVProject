@@ -1,12 +1,12 @@
 import threading
 import GameUI
 import time
-
+import Constants
 mainState = "main"
 settingState = "setting"
 aboutState = "about"
 subSetting = mainState
-UI_STATES = {"main": 0, "levelSelect": 1, "setting": 2, "about": 3, "game": 4}
+UI_STATES = Constants.UI_STATES
 
 buttonDelay = 1
 
@@ -14,6 +14,11 @@ buttonDelay = 1
 class manager:
     def __init__(self,screen):
         self.gameState = UI_STATES['main']
+        self.time_now = 0
+        self.next_allowed = 0
+        self.DELAY = Constants.DELAY
+
+
         self.subSetting = mainState
         self.buttonPressed = False
         self.screen = screen
@@ -21,7 +26,12 @@ class manager:
         self.settingState = "setting"
         self.aboutState = "about"
 
+
+        #------------------- UIs ---------------------
         self.mainUI = GameUI.mainUI(self.screen)
+        self.levelsUI = GameUI.selectorUI(self.screen)
+        self.aboutUI = GameUI.aboutUI(self.screen)
+        self.settingUI = GameUI.settingUI(self.screen)
 
     def SetOffButton(self):
         self.buttonPressed = False
@@ -43,18 +53,30 @@ class manager:
         return self.subSetting == settingState
 
     def CheckAbout(self):
-        print(self.subSetting == aboutState)
         return self.subSetting == aboutState
 
     def CheckMain(self):
         return self.subSetting == mainState
 
     def SetState(self, state):
-        self.gameState = UI_STATES[state]
+        self.gameState = state
         self.subSetting = state
 
         print("set state: "+self.subSetting)
 
     def getMainUI(self):
-        self.mainUI
-        self.gameState = UI_STATES[self.mainUI.draw_UI()]
+        self.gameState = self.mainUI.draw_UI()
+        if self.gameState == UI_STATES['levelSelect']:
+            self.next_allowed = self.time_now + self.DELAY
+            self.SetOnButton()
+
+    def getLevelSelect(self):
+
+        self.gameState = self.levelsUI.draw_UI(self.time_now,self.next_allowed)
+
+
+    def getAbout(self):
+        self.gameState = self.aboutUI.draw_UI()
+
+    def getSetting(self):
+        self.gameState = self.settingUI.draw_UI()

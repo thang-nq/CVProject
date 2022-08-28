@@ -1,15 +1,15 @@
 import pygame
 from Button import CompleteButton, IconButton2
-from LevelBox import NormalLevelBox,ChocolateLevelBox
-import LevelSelection
-import Setting
+from LevelBox import NormalLevelBox, ChocolateLevelBox
+from Panel import GamePanel, AboutUsCompBox, SettingCompBox
 import SceneManager
-import About
 import MusicController
+import Constants
 
-WIDTH = 1500
-HEIGHT = 810
-UI_STATES = {"main": 0, "levelSelect": 1, "setting": 2, "about": 3, "game": 4}
+WIDTH = Constants.WIDTH
+HEIGHT = Constants.HEIGHT
+UI_STATES = Constants.UI_STATES
+
 # ---------------------------------- BACKGROUND IMG ----------------------------------
 menuBackground = pygame.image.load('MilkTeaImages/IntroBackground.png')
 screenPaddingX = 50
@@ -20,8 +20,10 @@ squareButton_img = pygame.image.load('MilkTeaImages/Button_Square.png')
 squareWidth = squareButton_img.get_width()
 squareHeight = squareButton_img.get_height()
 
-
 # ---------------------------------- END ---------------------------------------------
+# ---------------------------------- Cancel button ---------------------------------------------
+cancel_img = pygame.image.load('MilkTeaImages/QuitButton.png')
+
 
 class mainUI:
     def __init__(self, screen):
@@ -78,25 +80,22 @@ class mainUI:
                                        self.iconButtonScale)
         self.exitButton = IconButton2(self.exitButtonX, self.exitButtonY, self.squareButton_img, self.exitIcon_img,
                                       self.buttonScale, self.iconButtonScale)
-        self.sceneManager = SceneManager.manager(self.screen)
 
-    def draw_UI(self,gameState):
-
-
+    def draw_UI(self):
         self.screen.blit(menuBackground, (0, 0))
 
         if self.play_Button.draw(self.screen):
-            self.sceneManager.SetOnButton()
+            # self.sceneManager.SetOnButton()
             # LevelSelection.playLevelSelection()
             # levelSelector = selectorUI(self.screen).draw_UI()
-            return "levelSelect"
+            return UI_STATES["levelSelect"]
         if self.settingButton.draw(self.screen):
-            self.sceneManager.SetState(self.sceneManager.settingState)
-            # return "setting"
+            # self.sceneManager.SetState(self.sceneManager.settingState)
+            return UI_STATES["setting"]
         if self.aboutButton.draw(self.screen):
-            self.sceneManager.SetState(self.sceneManager.aboutState)
-            print(self.sceneManager.subSetting)
-            return "about"
+            # self.sceneManager.SetState(self.sceneManager.aboutState)
+            # print(self.sceneManager.subSetting)
+            return UI_STATES["about"]
         if self.exitButton.draw(self.screen):
             self.running = False
             pygame.quit()
@@ -106,11 +105,10 @@ class mainUI:
         #     Setting.run(self.screen)
         # if self.sceneManager.CheckAbout():
         #     About.run(self.screen)
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-        return "main"
+        return UI_STATES["main"]
 
 
 class selectorUI:
@@ -158,15 +156,126 @@ class selectorUI:
                                            i + 1 - self.chocolateOffset, self.boxScale, 0, i)
                 self.levels.append(tempLevel)
 
-    def draw_UI(self):
+    def draw_UI(self, time_now, next_allowed):
         self.screen.blit(menuBackground, (0, 0))
         if self.returnButton.draw(self.screen):
-            running = False
+            return UI_STATES["main"]
+
         for l in self.levels:
             l.draw(self.screen)
-            if l.checkForInput() and not SceneManager.buttonPressed:
-                return l.level
-
+            # and not SceneManager.buttonPressed
+            # if l.checkForInput():
+            #     return l.level
+        if (time_now > next_allowed):
+            for l in self.levels:
+                if l.checkForInput():
+                    print(l.level)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+        return UI_STATES["levelSelect"]
+
+
+class aboutUI:
+    def __init__(self, screen):
+        self.screen = screen
+
+        # -------------- Overlay color ----------------
+        self.overlay = pygame.Surface((WIDTH, HEIGHT))
+        self.overlay.set_alpha(80)
+        self.overlay.fill((0, 0, 0))
+
+        # -------------- Overlay Panel ----------------
+        self.aboutPanel_img = pygame.image.load('MilkTeaImages/AboutUs.png')
+        self.aboutPanel = GamePanel(WIDTH / 2, HEIGHT / 2, self.aboutPanel_img, 1)
+
+        # ------------------------ Cancel Panel ------------------------
+        self.cancel_img = cancel_img
+        # cancel property
+        self.cancelX = WIDTH / 2 + 500
+        self.cancelY = HEIGHT / 2 - 300
+        self.cancelButton = CompleteButton(self.cancelX, self.cancelY, self.cancel_img, 0.8)
+        # --------------------------- END -------------------------------
+
+        # ------------------------------- AVATARS -------------------------------
+        self.avatarSample1 = pygame.image.load('MilkTeaImages/Avatar_Beereel.png')
+        self.avatarSample2 = pygame.image.load('MilkTeaImages/Avatar_Princess.png')
+        self.avatarSample3 = pygame.image.load('MilkTeaImages/Avatar_Tinia.png')
+        self.avatarSample4 = pygame.image.load('MilkTeaImages/Avatar_Scyn.png')
+
+        self.khoaX = WIDTH / 2 - 250
+        self.khoaY = HEIGHT / 2 - 50
+        self.khoa_Box = AboutUsCompBox(self.khoaX, self.khoaY, self.avatarSample1, "Tran Nguyen Anh Khoa", "s3863956",
+                                       "I worked on the aesthetic, UX/ UI of the game ", 1)
+
+        self.khaiX = WIDTH / 2 - 200
+        self.khaiY = HEIGHT / 2 + 100
+        self.khai_Box = AboutUsCompBox(self.khaiX, self.khaiY, self.avatarSample2, "Khai", "s3863956",
+                                       "I worked on the physics simulation",
+                                       1)
+
+        self.thangX = WIDTH / 2 - 70
+        self.thangY = HEIGHT / 2 + 250
+        self.thang_Box = AboutUsCompBox(self.thangX, self.thangY, self.avatarSample3, "Thang", "s3863956",
+                                        "I worked in the computer vision system", 1)
+
+        self.ducX = WIDTH / 2 + 250
+        self.ducY = HEIGHT / 2 - 150
+        self.duc_Box = AboutUsCompBox(self.ducX, self.ducY, self.avatarSample4, "Duc", "s3863956",
+                                      "I worked in the computer vision system",
+                                      1)
+
+        # ----------------------------------- END ----------------------------------------
+
+    def draw_UI(self):
+        self.screen.blit(self.overlay, (0, 0))
+        self.aboutPanel.draw(self.screen)
+        self.khoa_Box.draw(self.screen)
+        self.khai_Box.draw(self.screen)
+        self.thang_Box.draw(self.screen)
+        self.duc_Box.draw(self.screen)
+        if (self.cancelButton.draw(self.screen)):
+            # SceneManager.SetState(SceneManager.mainState)
+            return UI_STATES["main"]
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+        return UI_STATES["about"]
+
+
+class settingUI:
+    def __init__(self,screen):
+        self.screen = screen
+        # -------------- Overlay color ----------------
+        self.overlay = pygame.Surface((WIDTH, HEIGHT))
+        self.overlay.set_alpha(80)
+        self.overlay.fill((0, 0, 0))
+        # -------------- Overlay Panel ----------------
+        self.settingPanel_img = pygame.image.load('MilkTeaImages/Setting.png')
+        self.settingPanel = GamePanel(WIDTH / 2, HEIGHT / 2, self.settingPanel_img, 1)
+
+        # -------------- Cancel symbol ----------------
+        self.cancel_img = cancel_img
+        # cancel property
+        self.cancelX = WIDTH / 2 + 200
+        self.cancelY = HEIGHT / 2 - 240
+        self.cancelButton = CompleteButton(self.cancelX, self.cancelY, self.cancel_img, 0.8)
+        # -------------- Music icon ----------------
+        self.musicIcon_img = pygame.image.load('MilkTeaImages/MusicIcon.png')
+        self.musicSettingX = WIDTH / 2
+        self.musicSettingY = HEIGHT / 2 - 50
+        self.musicSetting = SettingCompBox(self.musicSettingX, self.musicSettingY, self.musicIcon_img, "Music", 1)
+
+    def draw_UI(self):
+        self.screen.blit(self.overlay, (0, 0))
+        self.settingPanel.draw(self.screen)
+        if self.musicSetting.draw(self.screen):
+            MusicController.PlayMusic()
+        else:
+            MusicController.StopMusic()
+        if (self.cancelButton.draw(self.screen)):
+            return UI_STATES["main"]
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+        return UI_STATES["setting"]

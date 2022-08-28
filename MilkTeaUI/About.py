@@ -39,7 +39,7 @@ avatarSample4 = pygame.image.load('MilkTeaImages/Avatar_Scyn.png')
 
 khoaX = screenWidth / 2 - 250
 khoaY = screenHeight / 2 - 50
-khoa_Box = AboutUsCompBox(khoaX, khoaY, avatarSample1, "Tran Nguyen Anh Khoa", "s3863956","I worked on the aesthetic, UX/ UI of the game ", 1)\
+khoa_Box = AboutUsCompBox(khoaX, khoaY, avatarSample1, "Tran Nguyen Anh Khoa", "s3863956","I worked on the aesthetic, UX/ UI of the game ", 1)
 
 khaiX = screenWidth / 2 - 200
 khaiY = screenHeight / 2 + 100

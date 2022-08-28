@@ -1,37 +1,46 @@
 import pygame
 from Button import CompleteButton, IconButton2
-import LevelSelection
+# import LevelSelection
 import Setting
 from SceneManager import manager
-import About
+# import About
 import MusicController
 import GameUI
+import Constants
 
 # init screen
 pygame.init()
 
 # create the screen
-screenWidth = 1500
-screenHeight = 810
-screen = pygame.display.set_mode((screenWidth, screenHeight))
+screen = pygame.display.set_mode((Constants.WIDTH, Constants.HEIGHT))
+FPS = Constants.FPS
 
 # caption
 pygame.display.set_caption("MilkTea")
-UI_STATES = {"main": 0, "levelSelect": 1, "setting": 2, "about": 3, "game": 4}
-gameState = UI_STATES["main"]
+
 gameManager = manager(screen)
 
 def main():
+    clock = pygame.time.Clock()
+
     # ----------------- Game loop --------------------------------
     while True:
+        gameManager.time_now = pygame.time.get_ticks()
+
         if gameManager.gameState == 0:
             gameManager.getMainUI()
-            print(gameManager.gameState)
-        elif gameState == 1:
-            selectUI = GameUI.selectorUI(screen)
-            selectUI.draw_UI()
-        # print(gameState)
+
+        elif gameManager.gameState == 1:
+            gameManager.getLevelSelect()
+
+        elif gameManager.gameState == 2:
+            gameManager.getSetting()
+
+        elif gameManager.gameState == 3:
+            gameManager.getAbout()
+
         pygame.display.update()
+        clock.tick(FPS)
 
 
 main()
