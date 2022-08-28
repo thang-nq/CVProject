@@ -7,7 +7,7 @@ import prototype_game2_seg
 
 # init screen
 pygame.init()
-
+sceneManager = SceneManager.manager()
 # create the screen
 screenWidth = 1500
 screenHeight = 810
@@ -68,7 +68,7 @@ def playLevelSelection():
             running = False
         for l in levels:
             l.draw(screen)
-            if(l.checkForInput() and not SceneManager.buttonPressed):
+            if(l.checkForInput() and not sceneManager.buttonPressed):
                 return l.level
 
         for event in pygame.event.get():

@@ -2,7 +2,7 @@ import pygame
 from Button import CompleteButton, IconButton2
 import LevelSelection
 import Setting
-import SceneManager
+from SceneManager import manager
 import About
 import MusicController
 import GameUI
@@ -19,19 +19,17 @@ screen = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("MilkTea")
 UI_STATES = {"main": 0, "levelSelect": 1, "setting": 2, "about": 3, "game": 4}
 gameState = UI_STATES["main"]
-
+gameManager = manager(screen)
 
 def main():
     # ----------------- Game loop --------------------------------
-    global gameState
     while True:
-        if gameState == 0:
-            mainUI = GameUI.mainUI(screen)
-            mainUI.draw_UI(gameState)
-            print(gameState)
+        if gameManager.gameState == 0:
+            gameManager.getMainUI()
+            print(gameManager.gameState)
         elif gameState == 1:
             selectUI = GameUI.selectorUI(screen)
-            print(selectUI.draw_UI())
+            selectUI.draw_UI()
         # print(gameState)
         pygame.display.update()
 

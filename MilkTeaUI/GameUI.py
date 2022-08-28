@@ -78,32 +78,39 @@ class mainUI:
                                        self.iconButtonScale)
         self.exitButton = IconButton2(self.exitButtonX, self.exitButtonY, self.squareButton_img, self.exitIcon_img,
                                       self.buttonScale, self.iconButtonScale)
+        self.sceneManager = SceneManager.manager(self.screen)
 
     def draw_UI(self,gameState):
 
+
         self.screen.blit(menuBackground, (0, 0))
-        if self.play_Button.draw(self.screen) and SceneManager.CheckMain():
-            SceneManager.SetOnButton()
+
+        if self.play_Button.draw(self.screen):
+            self.sceneManager.SetOnButton()
             # LevelSelection.playLevelSelection()
             # levelSelector = selectorUI(self.screen).draw_UI()
-        if self.settingButton.draw(self.screen) and SceneManager.CheckMain():
-            SceneManager.SetState(SceneManager.settingState)
-            return "setting"
-        if self.aboutButton.draw(self.screen) and SceneManager.CheckMain():
-            SceneManager.SetState(SceneManager.aboutState)
+            return "levelSelect"
+        if self.settingButton.draw(self.screen):
+            self.sceneManager.SetState(self.sceneManager.settingState)
+            # return "setting"
+        if self.aboutButton.draw(self.screen):
+            self.sceneManager.SetState(self.sceneManager.aboutState)
+            print(self.sceneManager.subSetting)
             return "about"
         if self.exitButton.draw(self.screen):
             self.running = False
             pygame.quit()
 
         # -------------------Display submenu-------------------
-        if SceneManager.CheckSetting():
-            Setting.run(self.screen)
-        if SceneManager.CheckAbout():
-            About.run(self.screen)
+        # if self.sceneManager.CheckSetting():
+        #     Setting.run(self.screen)
+        # if self.sceneManager.CheckAbout():
+        #     About.run(self.screen)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+        return "main"
 
 
 class selectorUI:

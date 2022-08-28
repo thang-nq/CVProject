@@ -4,7 +4,6 @@ import pygame
 pygame.init()
 font = pygame.font.SysFont("Ravie", 90)
 
-
 # level box
 levelBox_img = pygame.image.load('MilkTeaImages/GreenLevelSelection.png')
 
