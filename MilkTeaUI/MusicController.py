@@ -1,6 +1,7 @@
 from pygame import mixer
 mixer.music.load('Music/Background.wav')
 mixer.music.play(-1)
+mixer.music.set_volume(0)
 isPlaying =True
 def StopMusic():
     global isPlaying

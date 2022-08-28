@@ -1,38 +1,51 @@
 import threading
 import time
 
-mainState="main"
+mainState = "main"
 settingState = "setting"
 aboutState = "about"
-subSetting= mainState
+subSetting = mainState
 
 buttonPressed = False
 buttonDelay = 1
+
+
 def SetOffButton():
     global buttonPressed
-
     buttonPressed = False
+
+
 def SetOnButton():
-    global  buttonPressed
+    global buttonPressed
     buttonPressed = True
-    setOff = threading.Timer(buttonDelay,SetOffButton)
+    setOff = threading.Timer(buttonDelay, SetOffButton)
 
     setOff.start()
+    # buttonPressed = False
 
 
-    #buttonPressed = False
 def MainButtonPressed():
     return buttonPressed
+
+
 def CheckState(state):
-    #print("what is state:"+subSetting+" - "+ state)
+    print("what is state:"+subSetting+" - "+ state)
     return subSetting == state
+
+
 def CheckSetting():
     return subSetting == settingState
+
+
 def CheckAbout():
     return subSetting == aboutState
+
+
 def CheckMain():
     return subSetting == mainState
+
+
 def SetState(state):
-    global  subSetting
+    global subSetting
     subSetting = state
-    #print("set state: "+subSetting)
+    # print("set state: "+subSetting)
