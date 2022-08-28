@@ -1,9 +1,11 @@
 import cv2
 import numpy as np
 import os
-import pygame
+import pygame, sys
 import pymunk
 import GameObjects
+from settings import *
+from level import Level
 
 pygame.init()
 pygame.font.init()
@@ -20,7 +22,7 @@ x, y = 0, 0
 FPS = 60
 VEL = 5
 DT = 1 / FPS
-
+level = Level(level_map, screen)
 # Add a new collision type
 COLLTYPE_BALL = 2
 COLLTYPE_GOAL = 3
@@ -164,11 +166,12 @@ def game():
         # space.debug_draw(draw_options)
 
         space.step(DT)
-
+        level.load_map()
         pygame.display.update()
         # pygame.display.flip()
         clock.tick(FPS)
 
 
 game()
+
 pygame.quit()
