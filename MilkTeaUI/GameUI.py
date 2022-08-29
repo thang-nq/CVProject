@@ -96,6 +96,7 @@ class mainUI:
             # self.sceneManager.SetState(self.sceneManager.aboutState)
             # print(self.sceneManager.subSetting)
             return UI_STATES["about"]
+
         if self.exitButton.draw(self.screen):
             self.running = False
             pygame.quit()

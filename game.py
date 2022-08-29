@@ -4,6 +4,7 @@ import os
 import pygame
 import pymunk
 import GameObjects
+import Constants
 
 
 class Bubble_tea:
@@ -11,10 +12,10 @@ class Bubble_tea:
         pygame.init()
         pygame.font.init()
 
-        self.WIDTH, self.HEIGHT = 900, 500
+        self.WIDTH, self.HEIGHT = Constants.WIDTH, Constants.HEIGHT
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         self.clock = pygame.time.Clock()
-        pygame.display.set_caption("First Game!")
+
         self.space = pymunk.Space()
         self.space.gravity = (0, 981)
 
@@ -79,7 +80,6 @@ class Bubble_tea:
     # -------END ------------------------------------------
     # ------- MAIN LOOP ------------------------------------------
     def main_loop(self):
-
         while True:
             self.create_blocks()
             self._event_hanlder()
@@ -125,20 +125,20 @@ class Bubble_tea:
                             level.load_level()
                             self.game_state = 0
 
+            if pygame.mouse.get_pressed()[0]:
+                mpos = pygame.mouse.get_pos()
+                self.segs.append(self.create_segments(mpos))
+
             if event.type == pygame.MOUSEBUTTONUP:
                 self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball'))
                 self.apples.append(self.create_goal())
                 self.gameStart = True
 
-        if pygame.mouse.get_pressed()[0]:
-            mpos = pygame.mouse.get_pos()
-            self.segs.append(self.create_segments(mpos))
+
 
     def _draw(self):
         self.screen.fill((247, 247, 247))
         if not self.gameStart:
-            pygame.draw.circle(self.screen, (0, 255, 255), (50, 150), self.RAD)
-            pygame.draw.circle(self.screen, (0, 255, 255), (500, 200), self.RAD)
             pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
             pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
 
@@ -187,6 +187,7 @@ class Bubble_tea:
 
     def draw_path(self, segments):
         for seg in segments:
+
             point1 = seg.a
             point2 = seg.b
 

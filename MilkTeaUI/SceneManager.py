@@ -2,10 +2,7 @@ import threading
 import GameUI
 import time
 import Constants
-mainState = "main"
-settingState = "setting"
-aboutState = "about"
-subSetting = mainState
+
 UI_STATES = Constants.UI_STATES
 
 buttonDelay = 1
@@ -19,12 +16,8 @@ class manager:
         self.DELAY = Constants.DELAY
 
 
-        self.subSetting = mainState
         self.buttonPressed = False
         self.screen = screen
-        self.mainState = "main"
-        self.settingState = "setting"
-        self.aboutState = "about"
 
 
         #------------------- UIs ---------------------
@@ -37,30 +30,13 @@ class manager:
         self.buttonPressed = False
 
     def SetOnButton(self):
-        self.buttonPressed = True
         setOff = threading.Timer(buttonDelay, self.SetOffButton)
         setOff.start()
         # buttonPressed = False
 
-    def MainButtonPressed(self):
-        return self.buttonPressed
-
-    def CheckState(self, state):
-        # print("what is state:"+subSetting+" - "+ state)
-        return self.subSetting == state
-
-    def CheckSetting(self):
-        return self.subSetting == settingState
-
-    def CheckAbout(self):
-        return self.subSetting == aboutState
-
-    def CheckMain(self):
-        return self.subSetting == mainState
 
     def SetState(self, state):
         self.gameState = state
-        self.subSetting = state
 
         print("set state: "+self.subSetting)
 

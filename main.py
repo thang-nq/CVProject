@@ -169,5 +169,5 @@ def game():
         clock.tick(FPS)
 
 
-game()
-pygame.quit()
+# game()
+# pygame.quit()
