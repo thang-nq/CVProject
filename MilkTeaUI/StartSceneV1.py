@@ -21,7 +21,7 @@ FPS = Constants.FPS
 cap = cv2.VideoCapture(0)
 cap.set(3, 1500)
 cap.set(4, 810)
-detector = htm.handDetector(detectCon=0.85)
+detector = htm.handDetector(detectCon=0.5)
 # caption
 pygame.display.set_caption("MilkTea")
 gameManager = manager(screen)
@@ -43,14 +43,15 @@ def main():
             config.currentpos = value
             config.state = detector.getHandState()
             isHand = True
+        else:
+            isHand = False
+            config.currentpos = (0, 0)
 
 
         if gameManager.gameState == 0:
-            print(config.currentpos)
             gameManager.getMainUI()
 
         elif gameManager.gameState == 1:
-            print(config.currentpos)
             gameManager.getLevelSelect()
 
         elif gameManager.gameState == 2:
@@ -61,7 +62,6 @@ def main():
         if isHand:
             pygame.draw.circle(screen, "blue", config.currentpos, 5)
         pygame.display.update()
-        cv2.imshow("Tracking", img)
         clock.tick(FPS)
 
 
