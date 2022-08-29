@@ -2,6 +2,7 @@ import threading
 import GameUI
 import time
 import Constants
+import config
 mainState = "main"
 settingState = "setting"
 aboutState = "about"
@@ -26,9 +27,12 @@ class manager:
         self.settingState = "setting"
         self.aboutState = "about"
 
+        #TRACKING
+        self.handstate = 'None'
+        self.currentpos = (0, 0)
 
         #------------------- UIs ---------------------
-        self.mainUI = GameUI.mainUI(self.screen)
+        self.mainUI = GameUI.mainUI(self.screen, self.currentpos)
         self.levelsUI = GameUI.selectorUI(self.screen)
         self.aboutUI = GameUI.aboutUI(self.screen)
         self.settingUI = GameUI.settingUI(self.screen)

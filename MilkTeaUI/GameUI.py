@@ -5,6 +5,7 @@ from Panel import GamePanel, AboutUsCompBox, SettingCompBox
 import SceneManager
 import MusicController
 import Constants
+import config
 
 WIDTH = Constants.WIDTH
 HEIGHT = Constants.HEIGHT
@@ -26,11 +27,11 @@ cancel_img = pygame.image.load('MilkTeaImages/QuitButton.png')
 
 
 class mainUI:
-    def __init__(self, screen):
+    def __init__(self, screen, handPos):
 
         self.screen = screen
         self.running = True
-
+        self.handpos = handPos
         # Main property
         # ---------------------------------- End ----------------------------------------------
 

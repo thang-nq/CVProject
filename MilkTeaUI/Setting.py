@@ -3,6 +3,7 @@ from Panel import GamePanel,SettingCompBox
 from Button import CompleteButton
 import SceneManager
 import MusicController
+import config
 # init screen
 
 # create the screen

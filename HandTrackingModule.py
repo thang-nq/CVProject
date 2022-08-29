@@ -95,3 +95,9 @@ class handDetector():
                 return self.handState
 
         return self.handState
+
+    # def setGlobalCurrentPos(self, value):
+    #     config.currentPos = value
+
+    # def getGlobalCurrentPos(self):
+    #     return self.currentPos
