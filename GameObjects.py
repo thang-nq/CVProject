@@ -39,3 +39,18 @@ class Seg:
         self.shape.elasticity = elastic
         self.shape.friction = friction
         space.add(self.body, self.shape)
+
+class Seg2:
+    """
+
+    """
+
+    def __init__(self, space, radius, density, pos1, pos2, elastic=0.5, friction=0, collisionType = 'line'):
+        self.body = pymunk.Body(1)
+        self.radius = radius
+        self.shape = pymunk.Segment(self.body, pos1, pos2, radius= self.radius)
+        self.shape.collision_type = collision[collisionType]
+        self.shape.density = density
+        self.shape.elasticity = elastic
+        self.shape.friction = friction
+        space.add(self.body, self.shape)

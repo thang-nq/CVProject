@@ -60,6 +60,6 @@ class manager:
         self.gameState = self.settingUI.draw_UI()
 
     def getGame(self):
-        pygame.mouse.get_pressed()[0]
-        # self.game.main_loop(self.time_now ,self.next_allowed)
+        # pygame.mouse.get_pressed()[0]
+        self.game.main_loop()
 
