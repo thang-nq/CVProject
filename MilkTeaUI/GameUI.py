@@ -170,7 +170,8 @@ class selectorUI:
         if (time_now > next_allowed):
             for l in self.levels:
                 if l.checkForInput():
-                    print(l.level)
+                    return (len(Constants.UI_STATES)+l.level)
+                    # print(l.level)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -280,3 +281,24 @@ class settingUI:
             if event.type == pygame.QUIT:
                 pygame.quit()
         return UI_STATES["setting"]
+
+class inGameUI:
+    def __init__(self,screen):
+        self.screen = screen
+        buttonScale = 0.6
+        iconScale = 0.3
+        #------------------------ Restart Button ------------------------
+        restartIcon = pygame.image.load('MilkTeaImages/RestartIcon.png')
+        restartPosX = Constants.WIDTH - screenPaddingX - restartIcon.get_width()/2
+        restartPosY = screenPaddingY
+        self.restartButton = IconButton2(restartPosX,restartPosY,squareButton_img,restartIcon,buttonScale,iconScale)
+        #------------------------ Return Button ------------------------
+        returnIcon = pygame.image.load('MilkTeaImages/ReturnIcon.png')
+        returnPosX = screenPaddingX
+        returnPosY = screenPaddingY
+        self.returnButton = IconButton2(returnPosX,returnPosY,squareButton_img,returnIcon,buttonScale,iconScale)
+    def draw(self):
+        if self.returnButton.draw(self.screen):
+            pass
+        if self.restartButton.draw(self.screen):
+            pass

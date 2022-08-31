@@ -39,7 +39,9 @@ def main():
 
         elif gameManager.gameState == 3:
             gameManager.getAbout()
-            # gameManager.getGame()
+
+        elif gameManager.gameState > len(Constants.UI_STATES):
+            gameManager.getGame()
 
         pygame.display.update()
         clock.tick(FPS)

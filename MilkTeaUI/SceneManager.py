@@ -47,7 +47,6 @@ class manager:
             self.SetOnButton()
 
     def getLevelSelect(self):
-
         self.gameState = self.levelsUI.draw_UI(self.time_now,self.next_allowed)
 
 

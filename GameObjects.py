@@ -1,7 +1,7 @@
 import pygame
 import pymunk
-
-collision = {"ball": 1, "goal": 2, "border": 3, "line":4}
+import Constants
+collision = Constants.COLLISION_TYPE
 
 
 class Dot:
