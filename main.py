@@ -106,7 +106,16 @@ def draw_path2(segments):
 
         pygame.draw.line(screen, (0, 0, 0), point1, point2, 5)
 
+def draw_box():
+    box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
+    box_shape = pymunk.Segment(box_body,(150,250),(500,250),0)
+    box_shape1 = pymunk.Segment(box_body, (500, 350), (650, 350), 0)
+    box_shape2 = pymunk.Segment(box_body, (700, 400), (850, 400), 0)
+    space.add(box_body,box_shape)
+    space.add(box_shape1)
+    space.add(box_shape2)
 
+    
 apples = []
 dots = []
 segs = []
@@ -119,6 +128,7 @@ segs = []
 
 
 def game():
+
     clock = pygame.time.Clock()
     run = True
     goal = create_goal()
@@ -126,6 +136,9 @@ def game():
 
     while run:
         screen.fill((247, 247, 247))
+        pygame.draw.line(screen,(0,255,0),(150,250),(500,250),10 )
+        pygame.draw.line(screen, (0, 255, 0), (500, 350), (650, 350), 10)
+        pygame.draw.line(screen, (0, 255, 0), (700, 400), (850, 400), 10)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
@@ -167,6 +180,7 @@ def game():
 
         space.step(DT)
         level.load_map()
+        draw_box()
         pygame.display.update()
         # pygame.display.flip()
         clock.tick(FPS)
