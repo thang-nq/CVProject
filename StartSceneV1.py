@@ -4,7 +4,7 @@ from SceneManager import manager
 import MusicController
 import GameUI
 import Constants
-
+import HandTrackingModule as htm
 # init screen
 pygame.init()
 
@@ -16,10 +16,14 @@ screen = pygame.display.set_mode((Constants.WIDTH, Constants.HEIGHT))
 
 FPS = Constants.FPS
 
+# TRacking
+
 # caption
 pygame.display.set_caption("MilkTea")
 
 gameManager = manager(screen)
+
+
 
 def main():
     clock = pygame.time.Clock()

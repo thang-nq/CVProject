@@ -9,7 +9,7 @@ import GameUI
 
 
 class Bubble_tea:
-    def __init__(self,screen):
+    def __init__(self, screen):
         # pygame.init()
         # pygame.font.init()
 
@@ -97,7 +97,7 @@ class Bubble_tea:
                 self.space.remove(shape, shape.body)
         self.apples = []
         self.segs = []
-        self._draw()
+        self.draw()
         return False
 
     # -------END ------------------------------------------
