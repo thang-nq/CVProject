@@ -9,7 +9,6 @@ class Level:
 
     def setup_level(self,layout):
         self.tiles = pygame.sprite.Group()
-        self.player = pygame.sprite.GroupSingle()
         for row_index,row in enumerate(layout):
             for col_index,cell in enumerate(row):
                 x = col_index * tile_size
@@ -18,8 +17,5 @@ class Level:
                     tile = Tile((x,y),tile_size)
                     self.tiles.add(tile)
     def load_map(self):
-
         self.tiles.draw(self.display_surface)
         self.tiles.update(self.display_surface)
-        self.player.update()
-        self.player.draw(self.display_surface)
