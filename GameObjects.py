@@ -1,7 +1,7 @@
 import pygame
 import pymunk
 import Constants
-collision = Constants.COLLISION_TYPE
+collision = Constants.COLLISION_TYPES
 
 
 class Dot:

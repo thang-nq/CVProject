@@ -2,7 +2,6 @@ import pygame
 from Button import CompleteButton, IconButton2
 from LevelBox import NormalLevelBox, ChocolateLevelBox
 from Panel import GamePanel, AboutUsCompBox, SettingCompBox
-import SceneManager
 import MusicController
 import Constants
 
@@ -305,3 +304,4 @@ class inGameUI:
             return UI_STATES["levelSelect"]
         if self.restartButton.draw(self.screen):
             return UI_STATES["pause"]
+        return UI_STATES["game"]

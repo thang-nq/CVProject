@@ -6,7 +6,7 @@ import pymunk
 import GameObjects
 import HandTrackingModule as htm
 import Constants
-
+import GameUI
 
 class Bubble_tea:
     def __init__(self):
@@ -28,8 +28,7 @@ class Bubble_tea:
         self.LINE_WEIGHT = 10
 
         # Add a new collision type
-        self.COLLTYPE_BALL = 2
-        self.COLLTYPE_GOAL = 3
+        self.collision = Constants.COLLISION_TYPES
 
         # Variables
         self.gameStart = 0
@@ -37,7 +36,7 @@ class Bubble_tea:
         self.cX, self.cY = 0, 0
         self.stroke = 0
         self.ended = 0
-
+        self.inGameUI = GameUI.inGameUI(self.screen)
 
         self.apples = []
         self.dots = []
@@ -104,6 +103,16 @@ class Bubble_tea:
         pygame.display.update()
         self.clock.tick(self.FPS)
 
+    def reset_game(self, arbiter, space, data):
+        self.gameStart = False
+        for shape in self.space.shapes:
+            if shape.collision_type != self.collision['border']:
+                self.space.remove(shape, shape.body)
+        self.apples = []
+        self.segs = []
+        self._draw()
+        return False
+
     def _event_hanlder(self):
         success, img = self.capture.read()
         img = cv2.flip(img, 1)
@@ -140,6 +149,7 @@ class Bubble_tea:
             pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
 
         # draw_goal(goal)
+        self.inGameUI.draw()
         self.draw_apples(self.apples)
         self.draw_path(self.segs)
 

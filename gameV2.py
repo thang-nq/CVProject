@@ -5,6 +5,7 @@ import pygame
 import pymunk
 import GameObjects
 import Constants
+import GameUI
 
 
 class Bubble_tea:
@@ -49,6 +50,7 @@ class Bubble_tea:
         self.segs_coor = []
         self.x_mouse, self.y_mouse = 0, 0
         self.game_state = 0
+        self.inGameUI = GameUI.inGameUI(self.screen)
 
         # Setup the collision callback function
         self.h = self.space.add_collision_handler(self.collision['ball'], self.collision['goal'])
@@ -132,23 +134,24 @@ class Bubble_tea:
                 # self.get_position(mpos)
                 # self.draw_tmp_path(self.segs_coor)
 
-            if event.type == pygame.MOUSEBUTTONUP:
+            if event.type == pygame.MOUSEBUTTONUP and self.gameStart <1:
                 # self.create_segments(self.segs_coor)
                 self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball'))
                 self.apples.append(self.create_goal())
-                self.gameStart = True
+                self.gameStart += 1
 
 
 
     def _draw(self):
         self.screen.fill((247, 247, 247))
-        if not self.gameStart:
+        if self.gameStart == 0:
             pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
             pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
 
         self.draw_apples(self.apples)
         self.draw_path(self.segs)
         self.draw_border(self.border)
+        self.inGameUI.draw()
 
     # -------END ------------------------------------------
     # ------- CREATE  FUNCTIONS -----------------------------------------
