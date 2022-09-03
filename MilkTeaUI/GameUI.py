@@ -300,3 +300,57 @@ class inGameUI:
             pass
         if self.restartButton.draw(self.screen):
             pass
+class wonPanelUI:
+    def __init__(self,screen):
+        self.screen = screen
+        # -------------- Overlay color ----------------
+        self.overlay = pygame.Surface((WIDTH, HEIGHT))
+        self.overlay.set_alpha(80)
+        self.overlay.fill((0, 0, 0))
+        # -------------- Overlay Panel ----------------
+        wonPanel_img = pygame.image.load('MilkTeaImages/YouWon.png')
+        self.aboutPanel = GamePanel(WIDTH / 2, HEIGHT / 2, wonPanel_img, 0.9)
+        # -------------- Continue Button ----------------
+        conButton_img = pygame.image.load('MilkTeaImages/ContinueButton.png')
+        conButtonX= WIDTH / 2 -conButton_img.get_width()/2 +250
+        conButtonY = HEIGHT/2 - conButton_img.get_height()/2 +300
+        self.conButton = CompleteButton(conButtonX,conButtonY,conButton_img,1)
+        # -------------- Selector Button ----------------
+        selector = pygame.image.load('MilkTeaImages/YouWon_Selector.png')
+        selButtonX= WIDTH / 2 -selector.get_width()/2 +70
+        selButtonY = HEIGHT/2 - selector.get_height()/2 +240
+        self.selectorButton = CompleteButton(selButtonX,selButtonY,selector,1)
+    def draw(self):
+        self.screen.blit(self.overlay, (0, 0))
+        self.aboutPanel.draw(self.screen)
+        if self.conButton.draw(self.screen):
+            pass
+        if self.selectorButton.draw(self.screen):
+            pass
+class losePanelUI:
+    def __init__(self,screen):
+        self.screen = screen
+        # -------------- Overlay color ----------------
+        self.overlay = pygame.Surface((WIDTH, HEIGHT))
+        self.overlay.set_alpha(80)
+        self.overlay.fill((0, 0, 0))
+        # -------------- Overlay Panel ----------------
+        losePanel_img = pygame.image.load('MilkTeaImages/YouLose.png')
+        self.aboutPanel = GamePanel(WIDTH / 2, HEIGHT / 2, losePanel_img, 1)
+        # -------------- retry Button ----------------
+        retry_img = pygame.image.load('MilkTeaImages/YouLoseButton_Retry.png')
+        conButtonX= WIDTH / 2 -retry_img.get_width()/2 +300
+        conButtonY = HEIGHT/2 - retry_img.get_height()/2 +250
+        self.retryButton = CompleteButton(conButtonX,conButtonY,retry_img,1)
+        # -------------- Selector Button ----------------
+        selector = pygame.image.load('MilkTeaImages/YouLoseButton_Menu.png')
+        selButtonX= WIDTH / 2 -selector.get_width()/2 +100
+        selButtonY = HEIGHT/2 - selector.get_height()/2 +200
+        self.selectorButton = CompleteButton(selButtonX,selButtonY,selector,1)
+    def draw(self):
+        self.screen.blit(self.overlay, (0, 0))
+        self.aboutPanel.draw(self.screen)
+        if self.retryButton.draw(self.screen):
+            pass
+        if self.selectorButton.draw(self.screen):
+            pass
