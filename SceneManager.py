@@ -2,7 +2,7 @@ import threading
 import GameUI
 import time
 import Constants
-import game
+import gameV2
 import pygame.event
 
 UI_STATES = Constants.UI_STATES
@@ -27,7 +27,8 @@ class manager:
         self.levelsUI = GameUI.selectorUI(self.screen)
         self.aboutUI = GameUI.aboutUI(self.screen)
         self.settingUI = GameUI.settingUI(self.screen)
-        self.game = game.Bubble_tea(self.screen)
+        self.inGameUI = GameUI.inGameUI(self.screen)
+        self.game = gameV2.Bubble_tea(self.screen)
 
     def SetOffButton(self):
         self.buttonPressed = False
@@ -59,7 +60,15 @@ class manager:
     def getSetting(self):
         self.gameState = self.settingUI.draw_UI()
 
-    def getGame(self, gameState):
+    def getLevel(self, gameState = len(Constants.UI_STATES)):
         level = gameState - len(Constants.UI_STATES)
+
+    def loadLevel(self):
         self.game.main_loop()
 
+    def getGame(self):
+
+        self.game.event_hanlder()
+        self.game.draw()
+        self.gameState = self.inGameUI.draw()
+        self.game.update()

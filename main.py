@@ -5,7 +5,7 @@ import pygame, sys
 import pymunk
 import GameObjects
 import game as g
-from settings import *
+from level_map import *
 from level import Level
 pygame.init()
 pygame.font.init()

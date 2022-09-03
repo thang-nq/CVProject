@@ -282,8 +282,9 @@ class settingUI:
 
 
 class inGameUI:
-    def __init__(self, screen):
+    def __init__(self, screen, level=0):
         self.screen = screen
+        self.level = level + len(Constants.UI_STATES)
         buttonScale = 0.6
         iconScale = 0.3
         # ------------------------ Restart Button ------------------------
@@ -304,4 +305,4 @@ class inGameUI:
             return UI_STATES["levelSelect"]
         if self.restartButton.draw(self.screen):
             return UI_STATES["pause"]
-        return UI_STATES["game"]
+        return self.level

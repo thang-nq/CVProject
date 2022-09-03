@@ -75,8 +75,8 @@ class Bubble_tea:
         self.detector = htm.handDetector(detectCon=0.85)
 
         # Level init
-        self.level1 = Level(level_map1, self.screen)
-        self.level2 = Level(level_map2, self.screen)
+        # self.level1 = Level(level_map1, self.screen)
+        # self.level2 = Level(level_map2, self.screen)
 
 
     # ==================================================================================================================
@@ -100,11 +100,11 @@ class Bubble_tea:
     def main_loop(self):
         self.h.begin = self.goal_reached
         while True:
-            self._event_hanlder()
-            self._draw()
-            self._update()
+            self.event_hanlder()
+            self.draw()
+            self.update()
 
-    def _update(self):
+    def update(self):
         self.space.step(self.DT)
         pygame.display.update()
         self.clock.tick(self.FPS)
@@ -116,10 +116,10 @@ class Bubble_tea:
                 self.space.remove(shape, shape.body)
         self.apples = []
         self.segs = []
-        self._draw()
+        self.draw()
         return False
 
-    def _event_hanlder(self):
+    def event_hanlder(self):
         success, img = self.capture.read()
         img = cv2.flip(img, 1)
         img.flags.writeable = False
@@ -148,7 +148,7 @@ class Bubble_tea:
         #     mpos = pygame.mouse.get_pos()
         #     self.segs.append(self.create_segments(mpos))
 
-    def _draw(self):
+    def draw(self):
         self.screen.fill((247, 247, 247))
         if not self.gameStart:
             pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
