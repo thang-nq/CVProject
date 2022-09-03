@@ -42,6 +42,7 @@ class Bubble_tea:
         self.dots = []
         self.segs = []
 
+
         # ------------------------------------------ CREATE BORDER ------------------------------------------
         self.border = []
         self.border.append(
@@ -72,6 +73,11 @@ class Bubble_tea:
         self.capture.set(3, 1280)
         self.capture.set(4, 720)
         self.detector = htm.handDetector(detectCon=0.85)
+
+        # Level init
+        self.level1 = Level(level_map1, self.screen)
+        self.level2 = Level(level_map2, self.screen)
+
 
     # ==================================================================================================================
     # Define collision callback function, will be called when X touches Y
