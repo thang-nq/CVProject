@@ -17,13 +17,14 @@ class Bubble_tea:
         self.screen = screen
 
         # self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        self.clock = pygame.time.Clock()
+        # self.clock = pygame.time.Clock()
 
         self.space = pymunk.Space()
+        # self.space = space
         self.space.gravity = (0, 981)
 
         # CONSTANTS
-        self.FPS = 60
+        self.FPS = Constants.FPS
         self.VEL = 5
         self.DT = 1 / self.FPS
         self.RAD = 20
@@ -97,24 +98,24 @@ class Bubble_tea:
                 self.space.remove(shape, shape.body)
         self.apples = []
         self.segs = []
-        self._draw()
+        self.draw()
         return False
 
     # -------END ------------------------------------------
 
     # ------- MAIN LOOP ------------------------------------------
     def main_loop(self):
-        while True:
-            self.event_hanlder()
-            self.draw()
-            self.update()
+        # while True:
+        self.event_hanlder()
+        self.draw()
+        self.update()
 
     # ------- CORE FUNCTIONS ------------------------------------------
     # --------------------------------------------------------
 
     def update(self):
-        if self.game_state != 1:
-            self.space.step(self.DT)
+        # if self.game_state != 1:
+        self.space.step(self.DT)
         # pygame.display.update()
         # self.clock.tick(self.FPS)
 
@@ -259,6 +260,6 @@ class Bubble_tea:
     # --------------------------------------------------------------------------------------
     # ------   END -----------------------------------------
 
-
+#
 # game = Bubble_tea()
 # game.main_loop()

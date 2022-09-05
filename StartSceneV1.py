@@ -1,8 +1,6 @@
+
 import pygame, pymunk
 from Button import CompleteButton, IconButton2
-from SceneManager import manager
-import MusicController
-import GameUI
 import Constants
 
 # init screen
@@ -10,7 +8,9 @@ pygame.init()
 
 # create the screen
 screen = pygame.display.set_mode((Constants.WIDTH, Constants.HEIGHT))
-# space = pymunk.Space()
+
+from SceneManager import manager
+
 #
 # space.gravity = (0, 981)
 
@@ -19,7 +19,7 @@ FPS = Constants.FPS
 # caption
 pygame.display.set_caption("MilkTea")
 
-gameManager = manager(screen)
+gameManager = manager(screen )
 
 def main():
     clock = pygame.time.Clock()
@@ -27,9 +27,9 @@ def main():
     # ----------------- Game loop --------------------------------
     while True:
         gameManager.time_now = pygame.time.get_ticks()
-
         if gameManager.gameState == 0:
             gameManager.getMainUI()
+            gameManager.checkMainUI()
 
         elif gameManager.gameState == 1:
             gameManager.getLevelSelect()

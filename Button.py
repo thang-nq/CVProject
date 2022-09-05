@@ -13,31 +13,34 @@ class CompleteButton():
     def checkForInput(self):
         pos = pygame.mouse.get_pos()
         action = False
+
         # check mouse over and clicked condition
+
         if self.rect.collidepoint(pos):
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 self.clicked = True
                 action = True
-        if pygame.mouse.get_pressed()[0] == 0:
+
+        else:
             self.clicked = False
         return action
 
     def draw(self, surface):
-        action = False
-
-        # get mouse position
-        pos = pygame.mouse.get_pos()
-
-        # check mouse over and clicked condition
-        if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
-                self.clicked = True
-                action = True
-        if pygame.mouse.get_pressed()[0] == 0:
-            self.clicked = False
+        # action = False
+        #
+        # # get mouse position
+        # pos = pygame.mouse.get_pos()
+        #
+        # # check mouse over and clicked condition
+        # if self.rect.collidepoint(pos):
+        #     if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+        #         self.clicked = True
+        #         action = True
+        # if pygame.mouse.get_pressed()[0] == 0:
+        #     self.clicked = False
         # draw button on the screen
         surface.blit(self.image, (self.rect.x, self.rect.y))
-        return action
+        # return action
 
 
 class IconButton():
@@ -52,7 +55,7 @@ class IconButton():
         self.icon = pygame.transform.scale(icon, (int(iconWidth * scale), int(iconHeight * scale)))
         self.clicked = False
 
-    def draw(self, surface):
+    def checkInput(self):
         action = False
 
         # get mouse position
@@ -63,9 +66,12 @@ class IconButton():
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 self.clicked = True
                 action = True
-        if pygame.mouse.get_pressed()[0] == 0:
+        else:
             self.clicked = False
 
+        return self.clicked
+
+    def draw(self, surface):
         # draw button on the screen
         surface.blit(self.image, (self.rect.x, self.rect.y))
 
@@ -76,7 +82,6 @@ class IconButton():
         iconHeight = self.icon.get_height()
         surface.blit(self.icon, (
             self.rect.x + int(width / 2) - int(iconWidth / 2), self.rect.y + int(height / 2) - int(iconHeight / 2)))
-        return action
 
 
 class IconButton2():
@@ -91,18 +96,18 @@ class IconButton2():
         self.icon = pygame.transform.scale(icon, (int(iconWidth * iconScale), int(iconHeight * iconScale)))
         self.clicked = False
 
-    def draw(self, surface):
-        action = False
+    def checkInput(self):
         # get mouse position
         pos = pygame.mouse.get_pos()
         # check mouseover and clicked
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+            if pygame.mouse.get_pressed()[0] == True and self.clicked == False:
                 self.clicked = True
-                action = True
-        if pygame.mouse.get_pressed()[0] == 0:
+        else:
             self.clicked = False
-        # draw button on the screen
+        return self.clicked
+
+    def draw(self, surface):
         surface.blit(self.image, (self.rect.x, self.rect.y))
         # draw icon on the screen
         width = self.image.get_width()
@@ -111,4 +116,3 @@ class IconButton2():
         iconHeight = self.icon.get_height()
         surface.blit(self.icon, (
             self.rect.x + int(width / 2) - int(iconWidth / 2), self.rect.y + int(height / 2) - int(iconHeight / 2)))
-        return action

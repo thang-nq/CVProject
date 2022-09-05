@@ -3,7 +3,7 @@ import GameUI
 import time
 import Constants
 import gameV2
-import pygame.event
+import pymunk
 
 UI_STATES = Constants.UI_STATES
 
@@ -11,18 +11,17 @@ buttonDelay = 1
 
 
 class manager:
-    def __init__(self,screen):
+    def __init__(self, screen):
         self.gameState = UI_STATES['main']
         self.time_now = 0
         self.next_allowed = 0
         self.DELAY = Constants.DELAY
 
-
         self.buttonPressed = False
         self.screen = screen
+        # self.space = space
 
-
-        #------------------- UIs ---------------------
+        # ------------------- UIs ---------------------
         self.mainUI = GameUI.mainUI(self.screen)
         self.levelsUI = GameUI.selectorUI(self.screen)
         self.aboutUI = GameUI.aboutUI(self.screen)
@@ -38,37 +37,40 @@ class manager:
         setOff.start()
         # buttonPressed = False
 
-
-    def SetState(self, state):
-        self.gameState = state
-
-        print("set state: "+self.subSetting)
-
     def getMainUI(self):
-        self.gameState = self.mainUI.draw_UI()
+        self.mainUI.draw_UI()
+
+    def checkMainUI(self):
+        self.gameState = self.mainUI.checkInput()
         if self.gameState == UI_STATES['levelSelect']:
             self.next_allowed = self.time_now + self.DELAY
             self.SetOnButton()
 
     def getLevelSelect(self):
-        self.gameState = self.levelsUI.draw_UI(self.time_now,self.next_allowed)
+        self.levelsUI.draw_UI()
 
+        self.gameState = self.levelsUI.checkInput(self.time_now, self.next_allowed)
+        # print(self.gameState)
 
     def getAbout(self):
-        self.gameState = self.aboutUI.draw_UI()
+        self.aboutUI.draw_UI()
+        self.gameState = self.aboutUI.checkInput()
 
     def getSetting(self):
         self.gameState = self.settingUI.draw_UI()
 
-    def getLevel(self, gameState = len(Constants.UI_STATES)):
+    def getLevel(self, gameState=len(Constants.UI_STATES)):
         level = gameState - len(Constants.UI_STATES)
 
     def loadLevel(self):
         self.game.main_loop()
 
     def getGame(self):
-
         self.game.event_hanlder()
         self.game.draw()
-        self.gameState = self.inGameUI.draw()
+        self.inGameUI.draw()
+        temp = self.inGameUI.checkInput()
+        if temp != self.gameState:
+            self.gameState = temp
+            self.next_allowed = self.time_now + self.DELAY
         self.game.update()
