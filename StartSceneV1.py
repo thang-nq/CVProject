@@ -27,22 +27,25 @@ def main():
     # ----------------- Game loop --------------------------------
     while True:
         gameManager.time_now = pygame.time.get_ticks()
-        if gameManager.gameState == 0:
+        if gameManager.gameState == Constants.UI_STATES["main"]:
             gameManager.getMainUI()
             gameManager.checkMainUI()
 
-        elif gameManager.gameState == 1:
+        elif gameManager.gameState == Constants.UI_STATES["levelSelect"]:
             gameManager.getLevelSelect()
 
-        elif gameManager.gameState == 2:
+        elif gameManager.gameState == Constants.UI_STATES["setting"]:
             gameManager.getSetting()
 
-        elif gameManager.gameState == 3:
+        elif gameManager.gameState == Constants.UI_STATES["about"]:
             # gameManager.getAbout()
             gameManager.getGame()
 
         elif gameManager.gameState >= len(Constants.UI_STATES):
             gameManager.getGame()
+        elif gameManager.gameState == Constants.UI_STATES["restart"]:
+            gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number
+            gameManager.restartGame()
 
         pygame.display.update()
         clock.tick(FPS)

@@ -296,11 +296,12 @@ class inGameUI:
         returnPosY = screenPaddingY
         self.returnButton = IconButton2(returnPosX, returnPosY, squareButton_img, returnIcon, buttonScale, iconScale)
 
-    def checkInput(self):
+    def checkInput(self, time_now, next_allowed):
         if self.returnButton.checkInput():
             return UI_STATES["levelSelect"]
-        if self.restartButton.checkInput():
-            return UI_STATES["restart"]
+        if time_now > next_allowed:
+            if self.restartButton.checkInput():
+                return UI_STATES["restart"]
         return self.level
 
     def draw(self):

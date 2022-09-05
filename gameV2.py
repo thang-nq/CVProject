@@ -45,18 +45,19 @@ class Bubble_tea:
         # Variables
         self.gameStart = 0
         self.ended = 0
-        self.number = 1
+        self.number = 0
 
         # Arrays
-        self.apples = []
+        self.balls = []
         self.blocks = []
         self.segs = []
+        self.death = []
+        self.platforms = []
         self.tiles = pygame.sprite.Group()
 
         #Varibles
         self.X, self.Y = 0, 0
         self.x_mouse, self.y_mouse = 0, 0
-        self.game_state = 0
         self.inGameUI = GameUI.inGameUI(self.screen)
 
         # Setup the collision callback function
@@ -65,8 +66,8 @@ class Bubble_tea:
         self.b2 = self.space.add_collision_handler(self.collision['goal'], self.collision['border'])
         self.b1.begin = self.through
         self.b2.begin = self.through
-        self.b1.separate = self.reset_game
-        self.b2.separate = self.reset_game
+        self.b1.separate = self.collide_reset_game
+        self.b2.separate = self.collide_reset_game
 
         # self.level1 = Level(level_map1, self.screen)
         # self.level2 = Level(level_map2, self.screen)
@@ -91,12 +92,12 @@ class Bubble_tea:
         space.remove(ball_shape2, ball_shape2.body)
         return True
 
-    def reset_game(self, arbiter, space, data):
-        self.gameStart = False
+    def collide_reset_game(self, arbiter, space, data):
+        self.gameStart = 0
         for shape in self.space.shapes:
             if shape.collision_type != self.collision['border']:
                 self.space.remove(shape, shape.body)
-        self.apples = []
+        self.balls = []
         self.segs = []
         self.draw()
         return False
@@ -126,43 +127,35 @@ class Bubble_tea:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.X, self.Y = pygame.mouse.get_pos()
-                    # self.x_mouse, self.y_mouse = pygame.mouse.get_pos()
-                    # print(self.x_mouse)
-                    # if (self.x_mouse < 60 and self.y_mouse < 155 and self.y_mouse > 90):
-                    #     self.game_state = 1
-                    #     print(self.game_state)
-                    # if self.game_state == 1:
-                    #     if self.x_mouse > 500 and self.y_mouse > 200 and self.y_mouse < 300:
-                    # Resume in the paused screen
-                    # self.game_state = 0
-                    # if self.x_mouse > 500 and self.y_mouse > 300:
-                    # Restart in the paused screen
-                    # restart()
-                    # level.load_level()
-                    # self.game_state = 0
-
             if pygame.mouse.get_pressed()[0]:
                 mpos = pygame.mouse.get_pos()
                 self.segs.append(self.create_segments(mpos))
 
             if event.type == pygame.MOUSEBUTTONUP and self.gameStart < 1:
-                # self.create_segments(self.segs_coor)
-                self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball'))
-                self.apples.append(self.create_goal())
+                self.balls.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball'))
+                self.balls.append(self.create_goal())
                 self.gameStart += 1
 
     def draw(self):
         self.screen.fill((247, 247, 247))
-
         if self.gameStart == 0:
             pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
             pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
 
-        self.draw_apples(self.apples)
+        self.draw_apples(self.balls)
         self.draw_path(self.segs)
         self.draw_border(self.border)
 
-        # --------------------------------------------------------
+    def restart(self):
+        self.gameStart = 0
+        for shape in self.space.shapes:
+            if not(shape in self.platforms):
+                self.space.remove(shape, shape.body)
+
+        self.balls = []
+        self.segs = []
+        self.draw()
+    # --------------------------------------------------------
 
     # -------END ------------------------------------------
 
