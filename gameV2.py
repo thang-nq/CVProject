@@ -48,10 +48,11 @@ class Bubble_tea:
 
         # Arrays
         self.balls = []
+        self.deaths = []
         self.blocks = []
         self.segs = []
         self.platforms = []
-        self.tiles = pygame.sprite.Group()
+        self.tileSprites = pygame.sprite.Group()
 
         #Varibles
         self.X, self.Y = 0, 0
