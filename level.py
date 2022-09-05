@@ -3,11 +3,14 @@ from tiles import Tile
 from level_map import tile_size
 
 class Level:
-    def __init__(self, level_data, surface, tilesSprites, platforms):
+    def __init__(self, level_num, surface, tilesSprites, platforms):
         self.display_surface = surface
         self.tileSprites = tilesSprites
-        self.setup_level(level_data)
+        self.number = level_num
+        level_name = "level_map" + str(level_num)
+        self.setup_level(level_name)
         self.platforms = platforms
+        self.load_level(level_num)
 
     def setup_level(self, layout):
         for row_index, row in enumerate(layout):

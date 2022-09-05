@@ -6,10 +6,10 @@ import pymunk
 import GameObjects
 import Constants
 import GameUI
-
+from level import Level
 
 class Bubble_tea:
-    def __init__(self,screen):
+    def __init__(self, screen):
         # pygame.init()
         # pygame.font.init()
 
@@ -53,7 +53,7 @@ class Bubble_tea:
         self.segs = []
         self.death = []
         self.platforms = []
-        self.tiles = pygame.sprite.Group()
+        self.tileSprites = pygame.sprite.Group()
 
         #Varibles
         self.X, self.Y = 0, 0
@@ -68,7 +68,7 @@ class Bubble_tea:
         self.b2.begin = self.through
         self.b1.separate = self.collide_reset_game
         self.b2.separate = self.collide_reset_game
-
+        self.level = Level(1,screen,self.tileSprites, self.platforms)
         # self.level1 = Level(level_map1, self.screen)
         # self.level2 = Level(level_map2, self.screen)
 
