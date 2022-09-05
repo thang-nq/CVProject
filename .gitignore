@@ -1,7 +1,8 @@
-
 .idea/CVProject.iml
 .idea/misc.xml
 *.xml
 *.iml
 *.pyc
 *.pyc
+venv
+.idea/CVProject.iml

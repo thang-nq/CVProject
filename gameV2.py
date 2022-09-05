@@ -47,9 +47,10 @@ class Bubble_tea:
         self.number = 1
 
         # Arrays
-        self.apples = []
+        self.balls = []
         self.blocks = []
         self.segs = []
+        self.platforms = []
         self.tiles = pygame.sprite.Group()
 
         #Varibles
@@ -95,9 +96,9 @@ class Bubble_tea:
         for shape in self.space.shapes:
             if shape.collision_type != self.collision['border']:
                 self.space.remove(shape, shape.body)
-        self.apples = []
+        self.balls = []
         self.segs = []
-        self._draw()
+        self.draw()
         return False
 
     # -------END ------------------------------------------
@@ -146,8 +147,8 @@ class Bubble_tea:
 
             if event.type == pygame.MOUSEBUTTONUP and self.gameStart < 1:
                 # self.create_segments(self.segs_coor)
-                self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball'))
-                self.apples.append(self.create_goal())
+                self.balls.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball'))
+                self.balls.append(self.create_goal())
                 self.gameStart += 1
 
     def draw(self):
@@ -157,11 +158,11 @@ class Bubble_tea:
             pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
             pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
 
-        self.draw_apples(self.apples)
+        self.draw_apples(self.balls)
         self.draw_path(self.segs)
         self.draw_border(self.border)
 
-        # --------------------------------------------------------
+    # --------------------------------------------------------
 
     # -------END ------------------------------------------
 
