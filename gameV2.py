@@ -6,7 +6,7 @@ import pymunk
 import GameObjects
 import Constants
 import GameUI
-
+import position
 
 class Bubble_tea:
     def __init__(self, screen):
@@ -122,9 +122,11 @@ class Bubble_tea:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    self.X, self.Y = pygame.mouse.get_pos()
+            print(position.state)
+            if position.state == 'Drawing':
+
+                # if event.button == 1:
+                self.X, self.Y = position.currentpos
                     # self.x_mouse, self.y_mouse = pygame.mouse.get_pos()
                     # print(self.x_mouse)
                     # if (self.x_mouse < 60 and self.y_mouse < 155 and self.y_mouse > 90):
@@ -140,11 +142,12 @@ class Bubble_tea:
                     # level.load_level()
                     # self.game_state = 0
 
-            if pygame.mouse.get_pressed()[0]:
-                mpos = pygame.mouse.get_pos()
-                self.segs.append(self.create_segments(mpos))
 
-            if event.type == pygame.MOUSEBUTTONUP and self.gameStart < 1:
+                mpos = position.currentpos
+                self.segs.append(self.create_segments(mpos))
+                position.previospos = mpos
+
+            # if position.state != 'Drawing' and self.gameStart < 1:
                 # self.create_segments(self.segs_coor)
                 self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball'))
                 self.apples.append(self.create_goal())
