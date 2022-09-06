@@ -122,7 +122,7 @@ class Bubble_tea:
     def event_hanlder(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return
+                pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.X, self.Y = pygame.mouse.get_pos()
@@ -158,11 +158,17 @@ class Bubble_tea:
 
     def clear(self):
         self.gameStart = 0
-        for shape in self.space.shapes:
-            self.space.remove(shape, shape.body)
+        for shape in self.platforms:
+            self.space.remove(shape,shape.body)
         self.balls = []
         self.segs = []
-        self.draw()
+        self.platforms =[]
+        self.tileSprites.empty()
+
+    def load(self):
+        self.level.number = self.number
+        self.level.platforms = self.platforms
+        self.level.built()
     # --------------------------------------------------------
 
     # -------END ------------------------------------------

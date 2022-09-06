@@ -150,7 +150,6 @@ class selectorUI:
                 self.levels.append(tempLevel)
 
     def checkInput(self, time_now, next_allowed):
-
         if time_now > next_allowed:
             if self.returnButton.checkInput():
                 return UI_STATES["main"]

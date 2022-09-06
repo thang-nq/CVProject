@@ -33,6 +33,11 @@ def main():
 
         elif gameManager.gameState == Constants.UI_STATES["levelSelect"]:
             gameManager.getLevelSelect()
+            if gameManager.gameState > len(Constants.UI_STATES):
+                gameManager.game.number = gameManager.gameState - len(Constants.UI_STATES)
+                gameManager.game.clear()
+                gameManager.game.load()
+                gameManager.getGame()
 
         elif gameManager.gameState == Constants.UI_STATES["setting"]:
             gameManager.getSetting()

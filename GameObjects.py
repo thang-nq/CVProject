@@ -40,6 +40,9 @@ class Seg:
         self.shape.friction = friction
         space.add(self.body, self.shape)
 
+    def getShape(self):
+        return self.shape
+
 class Seg2:
     """
 

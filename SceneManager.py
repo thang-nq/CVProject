@@ -66,7 +66,7 @@ class manager:
         level = gameState - len(Constants.UI_STATES)
 
     def loadLevel(self):
-        self.game.main_loop()
+        self.game.load()
 
     def getGame(self):
         self.game.event_hanlder()
