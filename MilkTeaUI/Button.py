@@ -1,5 +1,5 @@
 import pygame
-
+import position
 
 class CompleteButton():
     def __init__(self, x, y, image, scale):
@@ -11,14 +11,14 @@ class CompleteButton():
         self.clicked = False
 
     def checkForInput(self):
-        pos = pygame.mouse.get_pos()
+        pos = position.currentpos
         action = False
         # check mouse over and clicked condition
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+            if position.state == 'Selecting' and self.clicked == False:
                 self.clicked = True
                 action = True
-        if pygame.mouse.get_pressed()[0] == 0:
+        if position.state != 'Selecting':
             self.clicked = False
         return action
 
@@ -56,14 +56,14 @@ class IconButton():
         action = False
 
         # get mouse position
-        pos = pygame.mouse.get_pos()
+        pos = position.currentpos
 
         # check mouseover and clicked
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+            if position.state == 'Selecting' and self.clicked == False:
                 self.clicked = True
                 action = True
-        if pygame.mouse.get_pressed()[0] == 0:
+        if position.state != 'Selecting':
             self.clicked = False
 
         # draw button on the screen
@@ -94,13 +94,13 @@ class IconButton2():
     def draw(self, surface):
         action = False
         # get mouse position
-        pos = pygame.mouse.get_pos()
+        pos = position.currentpos
         # check mouseover and clicked
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+            if position.state == 'Selecting' and self.clicked == False:
                 self.clicked = True
                 action = True
-        if pygame.mouse.get_pressed()[0] == 0:
+        if position.state != 'Selecting':
             self.clicked = False
         # draw button on the screen
         surface.blit(self.image, (self.rect.x, self.rect.y))

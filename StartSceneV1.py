@@ -22,7 +22,7 @@ FPS = Constants.FPS
 cap = cv2.VideoCapture(0)
 cap.set(3, 1500)
 cap.set(4, 810)
-detector = htm.handDetector(detectCon=0.5)
+detector = htm.handDetector(detectCon=0.65)
 position.init()
 isHand = False
 # caption
@@ -51,7 +51,7 @@ def main():
         else:
             position.currentpos = (0, 0)
             isHand = False
-        if gameManager.gameState == 0:
+
         if gameManager.gameState == Constants.UI_STATES["main"]:
             gameManager.getMainUI()
             gameManager.checkMainUI()
@@ -63,17 +63,17 @@ def main():
             gameManager.getSetting()
 
         elif gameManager.gameState == Constants.UI_STATES["about"]:
-            # gameManager.getAbout()
+            gameManager.getAbout()
             gameManager.getGame()
 
         elif gameManager.gameState >= len(Constants.UI_STATES):
             gameManager.getGame()
-        if isHand:
-            pygame.draw.circle(screen, "blue", position.currentpos, 5)
+
         elif gameManager.gameState == Constants.UI_STATES["restart"]:
             gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number
             gameManager.restartGame()
-
+        if isHand:
+            pygame.draw.circle(screen, "blue", position.currentpos, 5)
         pygame.display.update()
         clock.tick(FPS)
 

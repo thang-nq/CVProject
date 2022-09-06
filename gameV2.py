@@ -68,7 +68,7 @@ class Bubble_tea:
         self.b2.begin = self.through
         self.b1.separate = self.collide_reset_game
         self.b2.separate = self.collide_reset_game
-        self.level = Level(1,screen,self.tileSprites, self.platforms)
+        # self.level = Level(1, screen, self.tileSprites, self.platforms)
         # self.level1 = Level(level_map1, self.screen)
         # self.level2 = Level(level_map2, self.screen)
 
