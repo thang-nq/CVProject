@@ -1,5 +1,5 @@
 def init():
-    global currentpos, state
+    global currentpos, state, previouspos
     previouspos = (0, 0)
     currentpos = (0, 0)
     state = 'None'

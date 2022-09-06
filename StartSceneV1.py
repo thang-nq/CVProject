@@ -50,6 +50,7 @@ def main():
             isHand = True
         else:
             position.currentpos = (0, 0)
+            position.state = 'None'
             isHand = False
 
         if gameManager.gameState == Constants.UI_STATES["main"]:

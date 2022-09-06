@@ -93,5 +93,8 @@ class handDetector():
             if fingers[1] and not fingers[2] and not fingers[3] and not fingers[4]:
                 self.handState = "Drawing"
                 return self.handState
+            if all(not finger for finger in fingers):
+                self.handState = "Close"
+                return self.handState
 
         return self.handState

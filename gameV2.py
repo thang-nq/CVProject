@@ -7,7 +7,7 @@ import GameObjects
 import Constants
 import GameUI
 from level import Level
-
+import position
 class Bubble_tea:
     def __init__(self, screen):
         # pygame.init()
@@ -124,14 +124,16 @@ class Bubble_tea:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    self.X, self.Y = pygame.mouse.get_pos()
-            if pygame.mouse.get_pressed()[0]:
-                mpos = pygame.mouse.get_pos()
+        if position.state != 'None':
+            if position.state == 'Drawing':
+                self.X, self.Y = position.previouspos
+                mpos = position.currentpos
                 self.segs.append(self.create_segments(mpos))
+                position.previouspos = position.currentpos
+            if position.state != 'Drawing':
+                position.previouspos = (0, 0)
 
-            if event.type == pygame.MOUSEBUTTONUP and self.gameStart < 1:
+            if position.state == 'Close' and self.gameStart < 1:
                 self.balls.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball'))
                 self.balls.append(self.create_goal())
                 self.gameStart += 1
