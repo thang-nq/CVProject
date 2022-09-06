@@ -51,8 +51,8 @@ class Level:
         shape9 = pymunk.Segment(box_body, (880, 560), (880, 480), 0)
         shape10 = pymunk.Segment(box_body, (880, 480), (1120, 240), 0)
         shape11 = pymunk.Segment(box_body, (1120, 240), (1280, 240), 0)
-        self.platforms.extend(shape1, shape2, shape3, shape4, shape5, shape6, shape7, shape8, shape9, shape10,
-                         shape11)
+        self.platforms.extend([shape1, shape2, shape3, shape4, shape5, shape6, shape7, shape8, shape9, shape10,
+                         shape11])
 
         pygame.draw.line(self.screen, (0, 0, 255), (160, 240), (400, 480), 1)
         pygame.draw.line(self.screen, (0, 0, 255), (880, 480), (1120, 240), 1)

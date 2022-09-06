@@ -16,7 +16,7 @@ class manager:
         self.time_now = 0
         self.next_allowed = 0
         self.DELAY = Constants.DELAY
-
+        self.count = 0
         self.buttonPressed = False
         self.screen = screen
         # self.space = space
@@ -28,6 +28,9 @@ class manager:
         self.settingUI = GameUI.settingUI(self.screen)
         self.inGameUI = GameUI.inGameUI(self.screen)
         self.game = gameV2.Bubble_tea(self.screen)
+        self.wonPanelUI = GameUI.wonPanelUI(self.screen)
+        self.losePanelUI = GameUI.losePanelUI(self.screen)
+
 
     def SetOffButton(self):
         self.buttonPressed = False
@@ -80,3 +83,18 @@ class manager:
 
     def restartGame(self):
         self.game.restart()
+
+    def getWinPanel(self):
+        temp = self.wonPanelUI.checkInput()
+        if temp != self.gameState and self.count <=0:
+            self.count += 1
+            self.gameState = temp
+            self.wonPanelUI.draw()
+            self.game.restart()
+        elif self.count >=0:
+            self.gameState = self.wonPanelUI.checkInput()
+
+
+    def getLosePanel(self):
+        self.losePanelUI.draw()
+        self.gameState = self.losePanelUI.checkInput()

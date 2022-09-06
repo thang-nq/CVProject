@@ -45,7 +45,7 @@ class Bubble_tea:
         # Variables
         self.gameStart = 0
         self.ended = 0
-        self.number = 0
+        self.number = 3
 
         # Arrays
         self.balls = []
@@ -68,7 +68,7 @@ class Bubble_tea:
         self.b2.begin = self.through
         self.b1.separate = self.collide_reset_game
         self.b2.separate = self.collide_reset_game
-        self.level = Level(self.space,1,screen,self.tileSprites, self.platforms)
+        self.level = Level(self.space,self.number,screen,self.tileSprites, self.platforms)
 
 
     # -------COLLISION HANDLER ------------------------------------------
@@ -152,6 +152,14 @@ class Bubble_tea:
             if not(shape in self.platforms):
                 self.space.remove(shape, shape.body)
 
+        self.balls = []
+        self.segs = []
+        self.draw()
+
+    def clear(self):
+        self.gameStart = 0
+        for shape in self.space.shapes:
+            self.space.remove(shape, shape.body)
         self.balls = []
         self.segs = []
         self.draw()

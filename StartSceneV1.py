@@ -41,8 +41,21 @@ def main():
             # gameManager.getAbout()
             gameManager.getGame()
 
+        # elif gameManager.gameState == Constants.UI_STATES["cleared"]:
+        #         gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number
+        #         gameManager.restartGame()
+        #
+        # elif gameManager.gameState == Constants.UI_STATES["next"]:
+        #     gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number + 1
+        #     gameManager.restartGame()
+        #
+        # elif gameManager.gameState == Constants.UI_STATES["lose"]:
+        #     gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number
+        #     gameManager.restartGame()
+
         elif gameManager.gameState >= len(Constants.UI_STATES):
             gameManager.getGame()
+
         elif gameManager.gameState == Constants.UI_STATES["restart"]:
             gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number
             gameManager.restartGame()
