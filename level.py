@@ -1,24 +1,26 @@
 import pygame, pymunk
 from tiles import Tile
-from level_map import tile_size
+import level_map
 
 class Level:
-    def __init__(self, level_num, surface, tilesSprites, platforms):
+    def __init__(self,space, level_num, surface, tilesSprites, platforms):
         self.display_surface = surface
+        self.space = space
         self.tileSprites = tilesSprites
         self.number = level_num
-        level_name = "level_map" + str(level_num)
-        self.setup_level(level_name)
+
+        self.setup_level(level_map.getMap(level_num))
         self.platforms = platforms
-        self.load_level(level_num)
+        self.load_level()
 
     def setup_level(self, layout):
+
         for row_index, row in enumerate(layout):
             for col_index, cell in enumerate(row):
-                x = col_index * tile_size
-                y = row_index * tile_size
+                x = col_index * level_map.tile_size
+                y = row_index * level_map.tile_size
                 if cell == 'X':
-                    self.tileSprites.add(Tile((x, y), tile_size))
+                    self.tileSprites.add(Tile((x, y), level_map.tile_size))
 
     def load_map(self):
         self.tileSprites.draw(self.display_surface)
@@ -171,6 +173,6 @@ class Level:
             build_name = "level" + str(self.number)
             getattr(self, build_name)()
         except AttributeError:
-            self.number = 0
+            self.number = 1
             build_name = "level" + str(self.number)
             getattr(self, build_name)()

@@ -1,4 +1,18 @@
-level_map1 = [
+import Constants
+level_map={}
+level_map["level_map1"] = [
+'                ',
+'                ',
+'                ',
+'                ',
+'                ',
+'                ',
+'                ',
+'                ',
+'XXXXXXXXXXXXXXXXXX'
+]
+
+level_map["level_map2"] =  [
 '                ',
 '                ',
 '                ',
@@ -10,19 +24,7 @@ level_map1 = [
 'XXXXXXXXXXXXXXXX'
 ]
 
-level_map2 = [
-'                ',
-'                ',
-'                ',
-'                ',
-'                ',
-'                ',
-'                ',
-'                ',
-'XXXXXXXXXXXXXXXX'
-]
-
-level_map3 = [
+level_map["level_map3"] =[
 '                ',
 '                ',
 '                ',
@@ -34,7 +36,7 @@ level_map3 = [
 'XXXXXXXXXXXXXXXX'
 ]
 
-level_map4 = [
+level_map["level_map4"] = [
 '                ',
 '                ',
 '                ',
@@ -46,7 +48,7 @@ level_map4 = [
 '        XXXXXXXX'
 ]
 
-level_map5 = [
+level_map["level_map5"] =[
 '                ',
 '                ',
 '       XXXXX    ',
@@ -58,7 +60,7 @@ level_map5 = [
 'XXXXXXXXXXXXXXXX'
 ]
 
-level_map6 = [
+level_map["level_map6"] =[
 '                ',
 '                ',
 '                ',
@@ -70,7 +72,7 @@ level_map6 = [
 'XXXXXXXXXXXXXXXX'
 ]
 
-level_map7 = [
+level_map["level_map7"] = [
 '                ',
 '                ',
 '                ',
@@ -82,7 +84,7 @@ level_map7 = [
 'XXXXXXXXXXXXXXXX'
 ]
 
-level_map8 = [
+level_map["level_map8"] =[
 '                ',
 '                ',
 'X              X',
@@ -94,7 +96,7 @@ level_map8 = [
 'XXXXXXXXXXXXXXXX'
 ]
 
-level_map9 = [
+level_map["level_map9"] = [
 '                ',
 '                ',
 '             XXX',
@@ -106,5 +108,8 @@ level_map9 = [
 'XXXXXXXXXXXXXXXX'
 ]
 tile_size = 80
-screen_w = 1280
-screen_h = 720
+screen_w = Constants.WIDTH
+screen_h = Constants.HEIGHT
+def getMap(number):
+    level_name = "level_map" + str(number)
+    return level_map[level_name]

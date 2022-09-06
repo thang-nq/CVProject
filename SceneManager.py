@@ -69,10 +69,13 @@ class manager:
         self.game.event_hanlder()
         self.game.draw()
         self.inGameUI.draw()
+        if self.game.ended != 0:
+            self.gameState = Constants.UI_STATES["cleared"]
         temp = self.inGameUI.checkInput(self.time_now, self.next_allowed)
         if temp != self.gameState:
             self.gameState = temp
             self.next_allowed = self.time_now + self.DELAY + 1000
+
         self.game.update()
 
     def restartGame(self):
