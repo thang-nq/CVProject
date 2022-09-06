@@ -1,8 +1,6 @@
+
 import pygame, pymunk
 from Button import CompleteButton, IconButton2
-from SceneManager import manager
-import MusicController
-import GameUI
 import Constants
 import HandTrackingModule as htm
 import position
@@ -12,7 +10,9 @@ pygame.init()
 
 # create the screen
 screen = pygame.display.set_mode((Constants.WIDTH, Constants.HEIGHT))
-# space = pymunk.Space()
+
+from SceneManager import manager
+
 #
 # space.gravity = (0, 981)
 
@@ -28,7 +28,7 @@ isHand = False
 # caption
 pygame.display.set_caption("MilkTea")
 
-gameManager = manager(screen)
+gameManager = manager(screen )
 
 
 
@@ -52,22 +52,28 @@ def main():
             position.currentpos = (0, 0)
             isHand = False
         if gameManager.gameState == 0:
+        if gameManager.gameState == Constants.UI_STATES["main"]:
             gameManager.getMainUI()
+            gameManager.checkMainUI()
 
-        elif gameManager.gameState == 1:
+        elif gameManager.gameState == Constants.UI_STATES["levelSelect"]:
             gameManager.getLevelSelect()
 
-        elif gameManager.gameState == 2:
+        elif gameManager.gameState == Constants.UI_STATES["setting"]:
             gameManager.getSetting()
 
-        elif gameManager.gameState == 3:
-            gameManager.getAbout()
+        elif gameManager.gameState == Constants.UI_STATES["about"]:
+            # gameManager.getAbout()
             gameManager.getGame()
 
         elif gameManager.gameState >= len(Constants.UI_STATES):
             gameManager.getGame()
         if isHand:
             pygame.draw.circle(screen, "blue", position.currentpos, 5)
+        elif gameManager.gameState == Constants.UI_STATES["restart"]:
+            gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number
+            gameManager.restartGame()
+
         pygame.display.update()
         clock.tick(FPS)
 
