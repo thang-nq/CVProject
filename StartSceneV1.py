@@ -59,6 +59,7 @@ def main():
         #     gameManager.restartGame()
 
         elif gameManager.gameState >= len(Constants.UI_STATES):
+            gameManager.game.number = gameManager.gameState - len(Constants.UI_STATES)
             gameManager.getGame()
 
         elif gameManager.gameState == Constants.UI_STATES["restart"]:
