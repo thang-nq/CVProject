@@ -29,16 +29,15 @@ class Level:
         self.load_level()
 
     def level1(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = pymunk.Segment(box_body, (0, 640), (1280, 640), 0)
+
+        shape1 = GameObjects.Seg(self.space, 0, 1, (0, 640), (1280, 640), elastic=0).getShape()
         self.platforms.append(shape1)
-        self.space.add(box_body, shape1)
+
 
     def level2(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = pymunk.Segment(box_body, (0, 600), (1280, 640), 0)
+
+        shape1 = GameObjects.Seg(self.space, 0, 1, (0, 600), (1280, 640), elastic=0).getShape()
         self.platforms.append(shape1)
-        self.space.add(box_body, shape1)
 
     def level3(self):
         box_body = pymunk.Body(body_type=pymunk.Body.STATIC)

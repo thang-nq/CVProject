@@ -8,6 +8,7 @@ import Constants
 import GameUI
 from level import Level
 
+
 class Bubble_tea:
     def __init__(self, screen):
         # pygame.init()
@@ -45,7 +46,7 @@ class Bubble_tea:
         # Variables
         self.gameStart = 0
         self.ended = 0
-        self.number = 3
+        self.number = 1
 
         # Arrays
         self.balls = []
@@ -55,21 +56,22 @@ class Bubble_tea:
         self.platforms = []
         self.tileSprites = pygame.sprite.Group()
 
-        #Varibles
+        # Varibles
         self.X, self.Y = 0, 0
         self.x_mouse, self.y_mouse = 0, 0
         self.inGameUI = GameUI.inGameUI(self.screen)
 
         # Setup the collision callback function
         self.h = self.space.add_collision_handler(self.collision['ball'], self.collision['goal'])
+        self.h.begin = self.goal_reached
+        self.h.separate = self.finished
         self.b1 = self.space.add_collision_handler(self.collision['ball'], self.collision['border'])
         self.b2 = self.space.add_collision_handler(self.collision['goal'], self.collision['border'])
         self.b1.begin = self.through
         self.b2.begin = self.through
         self.b1.separate = self.collide_reset_game
         self.b2.separate = self.collide_reset_game
-        self.level = Level(self.space,self.number,screen,self.tileSprites, self.platforms)
-
+        self.level = Level(self.space, self.number, screen, self.tileSprites, self.platforms)
 
     # -------COLLISION HANDLER ------------------------------------------
     # -------START ------------------------------------------
@@ -93,7 +95,7 @@ class Bubble_tea:
 
     def collide_reset_game(self, arbiter, space, data):
         self.gameStart = 0
-        for shape in self.space.shapes:
+        for shape in self.space.shapes: # FIX: CHANGE TO NOT PLATFORMS
             if shape.collision_type != self.collision['border']:
                 self.space.remove(shape, shape.body)
         self.balls = []
@@ -131,8 +133,8 @@ class Bubble_tea:
                 self.segs.append(self.create_segments(mpos))
 
             if event.type == pygame.MOUSEBUTTONUP and self.gameStart < 1:
-                self.balls.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball'))
-                self.balls.append(self.create_goal())
+                self.balls.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball').getShape())
+                self.balls.append(self.create_goal().getShape())
                 self.gameStart += 1
 
     def draw(self):
@@ -149,7 +151,7 @@ class Bubble_tea:
     def restart(self):
         self.gameStart = 0
         for shape in self.space.shapes:
-            if not(shape in self.platforms):
+            if not (shape in self.platforms):
                 self.space.remove(shape, shape.body)
 
         self.balls = []
@@ -159,16 +161,24 @@ class Bubble_tea:
     def clear(self):
         self.gameStart = 0
         for shape in self.platforms:
-            self.space.remove(shape,shape.body)
+            self.space.remove(shape, shape.body)
+        for shape in self.balls:
+            self.space.remove(shape, shape.body)
+        for shape in self.segs:
+            if shape is None:
+                self.segs.remove(shape)
+            else:
+                self.space.remove(shape, shape.body)
         self.balls = []
         self.segs = []
-        self.platforms =[]
+        self.platforms = []
         self.tileSprites.empty()
 
     def load(self):
         self.level.number = self.number
         self.level.platforms = self.platforms
         self.level.built()
+
     # --------------------------------------------------------
 
     # -------END ------------------------------------------
@@ -210,11 +220,9 @@ class Bubble_tea:
             self.segs.append(seg_shape)
 
     def create_goal(self):
-        seg = GameObjects.Dot(self.space, self.RAD, (400, 200), 'goal', color=(255, 0, 0))
-        self.h.begin = self.goal_reached
-        self.h.separate = self.finished
-        return seg
+        ball = GameObjects.Dot(self.space, self.RAD, (400, 200), 'goal', color=(255, 0, 0))
 
+        return ball
 
     # --------------------------------------------------------
     # -------   END  -----------------------------------------
@@ -230,7 +238,7 @@ class Bubble_tea:
 
     def draw_path(self, segments):
         for seg in segments:
-            if(seg is not None):
+            if (seg is not None):
                 point1 = seg.a
                 point2 = seg.b
 
@@ -250,19 +258,18 @@ class Bubble_tea:
 
             pygame.draw.line(self.screen, (0, 0, 0), point1, point2, 5)
 
-    def draw_apples(self, apples):
-        for apple in apples:
-            pos_x = int(apple.body.position.x)
-            pos_y = int(apple.body.position.y)
+    def draw_apples(self, balls):
+        for ball in balls:
+            pos_x = int(ball.body.position.x)
+            pos_y = int(ball.body.position.y)
 
-            pygame.draw.circle(self.screen, apple.color, (pos_x, pos_y), self.RAD)
+            pygame.draw.circle(self.screen,(255,255,0), (pos_x, pos_y), self.RAD)
 
     # --------------------------------------------------------
     # -------   END  -----------------------------------------
 
     # ------   Level loader FUNCTIONS -----------------------------------------
     # --------------------------------------------------------------------------------------
-
 
     # --------------------------------------------------------------------------------------
     # ------   END -----------------------------------------

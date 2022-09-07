@@ -23,7 +23,8 @@ class Dot:
 
     def draw(self, screen):
         pygame.draw.circle(screen, (0, 0, 0), (self.body.position.x, self.body.position.y), self.rad)
-
+    def getShape(self):
+        return self.shape
 
 class Seg:
     """

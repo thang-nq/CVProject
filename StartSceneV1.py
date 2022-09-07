@@ -23,7 +23,7 @@ gameManager = manager(screen )
 
 def main():
     clock = pygame.time.Clock()
-
+    gameManager.gameState = Constants.UI_STATES["levelSelect"]
     # ----------------- Game loop --------------------------------
     while True:
         gameManager.time_now = pygame.time.get_ticks()
