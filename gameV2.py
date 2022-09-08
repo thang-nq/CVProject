@@ -89,7 +89,7 @@ class Bubble_tea:
         print("trigger!")
         self.gameStart = 0
         for shape in self.space.shapes:
-            if shape.collision_type != self.collision['border']:
+            if (shape.collision_type != self.collision['border']):
                 self.space.remove(shape, shape.body)
         self.balls = []
         self.segs = []
