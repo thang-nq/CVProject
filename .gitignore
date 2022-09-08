@@ -1,8 +1,8 @@
-
 .idea/CVProject.iml
 .idea/misc.xml
 *.xml
 *.iml
 *.pyc
-.env
+env/
 .vs
+__pycache__/
