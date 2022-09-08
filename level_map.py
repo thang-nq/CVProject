@@ -107,7 +107,7 @@ level_map["level_map9"] = [
 'XXXXXXXXXXXXXXXX',
 'XXXXXXXXXXXXXXXX'
 ]
-tile_size = 50
+tile_size = 80
 screen_w = Constants.WIDTH
 screen_h = Constants.HEIGHT
 def getMap(number):

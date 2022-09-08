@@ -68,16 +68,24 @@ class manager:
     def loadLevel(self):
         self.game.load()
 
+
     def getGame(self):
         self.game.event_hanlder()
         self.game.draw()
         self.inGameUI.draw()
-        if self.game.ended != 0:
-            self.gameState = Constants.UI_STATES["cleared"]
-        temp = self.inGameUI.checkInput(self.time_now, self.next_allowed)
-        if temp != self.gameState:
-            self.gameState = temp
+        self.gameState = self.inGameUI.checkInput(self.time_now, self.next_allowed)
+        if self.gameState == Constants.UI_STATES["restart"]:
             self.next_allowed = self.time_now + self.DELAY + 1000
+            self.game.restart()
+
+        if self.gameState == Constants.UI_STATES["levelSelect"]:
+            self.next_allowed = self.time_now + self.DELAY + 1000
+            return
+
+        if self.game.ended > 0:
+            self.gameState = Constants.UI_STATES["cleared"]
+        elif self.game.ended < 0:
+            self.gameState = Constants.UI_STATES["lose"]
 
         self.game.update()
 
@@ -86,13 +94,12 @@ class manager:
 
     def getWinPanel(self):
         temp = self.wonPanelUI.checkInput()
-        if temp != self.gameState and self.count <=0:
+        if temp == self.gameState and self.count <=0:
             self.count += 1
             self.gameState = temp
             self.wonPanelUI.draw()
-            self.game.restart()
-        elif self.count >=0:
-            self.gameState = self.wonPanelUI.checkInput()
+        elif self.count >0:
+            self.gameState = temp
 
 
     def getLosePanel(self):

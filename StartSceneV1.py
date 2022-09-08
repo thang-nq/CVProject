@@ -18,7 +18,8 @@ FPS = Constants.FPS
 # caption
 pygame.display.set_caption("MilkTea")
 
-gameManager = manager(screen )
+gameManager = manager(screen)
+
 
 def main():
     clock = pygame.time.Clock()
@@ -34,20 +35,24 @@ def main():
             gameManager.getLevelSelect()
             if gameManager.gameState > len(Constants.UI_STATES):
                 gameManager.game.number = gameManager.gameState - len(Constants.UI_STATES)
+                gameManager.inGameUI.level == gameManager.game.number
                 gameManager.game.clear()
                 gameManager.game.load()
+
                 gameManager.getGame()
 
         elif gameManager.gameState == Constants.UI_STATES["setting"]:
             gameManager.getSetting()
 
         elif gameManager.gameState == Constants.UI_STATES["about"]:
-            # gameManager.getAbout()
-            gameManager.getGame()
+            gameManager.getAbout()
+            # gameManager.getGame()
 
-        # elif gameManager.gameState == Constants.UI_STATES["cleared"]:
-        #         gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number
-        #         gameManager.restartGame()
+        elif gameManager.gameState == Constants.UI_STATES["cleared"]:
+            gameManager.getWinPanel()
+            if gameManager.count == 0:
+                gameManager.game.clear()
+
         #
         # elif gameManager.gameState == Constants.UI_STATES["next"]:
         #     gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number + 1

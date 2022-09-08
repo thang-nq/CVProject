@@ -43,7 +43,7 @@ class mainUI:
         playButton_img = pygame.image.load('MilkTeaImages/PlayButton.png').convert_alpha()
         playButtonScale = 0.6
         playButtonX = WIDTH / 2 - int(playButton_img.get_width() / 2 * playButtonScale)
-        playButtonY = HEIGHT / 2 - int(playButton_img.get_height() / 2 *playButtonScale)
+        playButtonY = HEIGHT / 2 - int(playButton_img.get_height() / 2 * playButtonScale)
         self.play_Button = CompleteButton(playButtonX, playButtonY, playButton_img, playButtonScale)
 
         # Common button
@@ -75,8 +75,6 @@ class mainUI:
         # exit property
         exitButtonX = WIDTH - screenPaddingX - exitIcon_img.get_width() / 2
         exitButtonY = settingButtonY
-
-
 
         self.exitButton = IconButton2(exitButtonX, exitButtonY, squareButton_img, exitIcon_img,
                                       buttonScale, iconButtonScale)
@@ -153,9 +151,9 @@ class selectorUI:
         if time_now > next_allowed:
             if self.returnButton.checkInput():
                 return UI_STATES["main"]
-            for l in self.levels:
-                if l.checkForInput():
-                    return len(Constants.UI_STATES) + l.level
+            for l in range(len(self.levels)):
+                if self.levels[l].checkForInput():
+                    return len(Constants.UI_STATES) + l
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -218,6 +216,7 @@ class aboutUI:
                                       1)
 
         # ----------------------------------- END ----------------------------------------
+
     def checkInput(self):
         if self.cancelButton.checkForInput():
             return UI_STATES["main"]
@@ -234,7 +233,6 @@ class aboutUI:
         self.thang_Box.draw(self.screen)
         self.duc_Box.draw(self.screen)
         self.cancelButton.draw(self.screen)
-
 
 
 class settingUI:
@@ -259,6 +257,7 @@ class settingUI:
         musicSettingX = WIDTH / 2
         musicSettingY = HEIGHT / 2 - 50
         self.musicSetting = SettingCompBox(musicSettingX, musicSettingY, musicIcon_img, "Music", 1)
+
     def draw_UI(self):
         self.screen.blit(self.overlay, (0, 0))
         self.settingPanel.draw(self.screen)
@@ -307,8 +306,9 @@ class inGameUI:
         self.returnButton.draw(self.screen)
         self.restartButton.draw(self.screen)
 
+
 class wonPanelUI:
-    def __init__(self,screen):
+    def __init__(self, screen):
         self.screen = screen
         # -------------- Overlay color ----------------
         self.overlay = pygame.Surface((WIDTH, HEIGHT))
@@ -319,20 +319,20 @@ class wonPanelUI:
         self.aboutPanel = GamePanel(WIDTH / 2, HEIGHT / 2, wonPanel_img, 0.9)
         # -------------- Continue Button ----------------
         conButton_img = pygame.image.load('MilkTeaImages/ContinueButton.png').convert_alpha()
-        conButtonX= WIDTH / 2 -conButton_img.get_width()/2 +250
-        conButtonY = HEIGHT/2 - conButton_img.get_height()/2 +300
-        self.conButton = CompleteButton(conButtonX,conButtonY,conButton_img,1)
+        conButtonX = WIDTH / 2 - conButton_img.get_width() / 2 + 250
+        conButtonY = HEIGHT / 2 - conButton_img.get_height() / 2 + 300
+        self.conButton = CompleteButton(conButtonX, conButtonY, conButton_img, 1)
         # -------------- Selector Button ----------------
         selector = pygame.image.load('MilkTeaImages/YouWon_Selector.png').convert_alpha()
-        selButtonX= WIDTH / 2 -selector.get_width()/2 +70
-        selButtonY = HEIGHT/2 - selector.get_height()/2 +240
-        self.selectorButton = CompleteButton(selButtonX,selButtonY,selector,1)
+        selButtonX = WIDTH / 2 - selector.get_width() / 2 + 70
+        selButtonY = HEIGHT / 2 - selector.get_height() / 2 + 240
+        self.selectorButton = CompleteButton(selButtonX, selButtonY, selector, 1)
 
     def checkInput(self):
         if self.conButton.checkForInput():
             return Constants.UI_STATES["next"]
         if self.selectorButton.checkForInput():
-            return UI_STATES["levelSelect"]
+            return Constants.UI_STATES["levelSelect"]
         return Constants.UI_STATES["cleared"]
 
     def draw(self):
@@ -341,8 +341,9 @@ class wonPanelUI:
         self.conButton.draw(self.screen)
         self.selectorButton.draw(self.screen)
 
+
 class losePanelUI:
-    def __init__(self,screen):
+    def __init__(self, screen):
         self.screen = screen
         # -------------- Overlay color ----------------
         self.overlay = pygame.Surface((WIDTH, HEIGHT))
@@ -353,14 +354,14 @@ class losePanelUI:
         self.aboutPanel = GamePanel(WIDTH / 2, HEIGHT / 2, losePanel_img, 1)
         # -------------- retry Button ----------------
         retry_img = pygame.image.load('MilkTeaImages/YouLoseButton_Retry.png').convert_alpha()
-        conButtonX= WIDTH / 2 -retry_img.get_width()/2 +300
-        conButtonY = HEIGHT/2 - retry_img.get_height()/2 +250
-        self.retryButton = CompleteButton(conButtonX,conButtonY,retry_img,1)
+        conButtonX = WIDTH / 2 - retry_img.get_width() / 2 + 300
+        conButtonY = HEIGHT / 2 - retry_img.get_height() / 2 + 250
+        self.retryButton = CompleteButton(conButtonX, conButtonY, retry_img, 1)
         # -------------- Selector Button ----------------
         selector = pygame.image.load('MilkTeaImages/YouLoseButton_Menu.png').convert_alpha()
-        selButtonX= WIDTH / 2 -selector.get_width()/2 +100
-        selButtonY = HEIGHT/2 - selector.get_height()/2 +200
-        self.selectorButton = CompleteButton(selButtonX,selButtonY,selector,1)
+        selButtonX = WIDTH / 2 - selector.get_width() / 2 + 100
+        selButtonY = HEIGHT / 2 - selector.get_height() / 2 + 200
+        self.selectorButton = CompleteButton(selButtonX, selButtonY, selector, 1)
 
     def checkInput(self):
         if self.retryButton.checkForInput(self.screen):
