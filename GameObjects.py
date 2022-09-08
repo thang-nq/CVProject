@@ -24,6 +24,8 @@ class Dot:
     def draw(self, screen):
         pygame.draw.circle(screen, (0, 0, 0), (self.body.position.x, self.body.position.y), self.rad)
 
+    def getShape(self):
+        return self.shape
 
 class Seg:
     """
@@ -57,3 +59,18 @@ class Seg2:
         self.shape.elasticity = elastic
         self.shape.friction = friction
         space.add(self.body, self.shape)
+
+class Wall:
+    def __init__(self,space):
+        self.borderTop = Seg(space, 1, 1, (0, 0), (0, Constants.HEIGHT), elastic=0, collisionType="border")
+        self.borderBottom=Seg(space, 1, 1, (0, Constants.HEIGHT), (Constants.WIDTH, Constants.HEIGHT), elastic=0, collisionType="border")
+        self.borderRight=Seg(space, 1, 1, (Constants.WIDTH, Constants.HEIGHT), (Constants.WIDTH, 0), elastic=0,collisionType="border")
+        self.borderLeft = Seg(space, 1, 1, (Constants.WIDTH, 0), (0, 0), elastic=0, collisionType="border")
+        self.allBorder = [self.borderTop ,self.borderBottom,self.borderRight,self.borderLeft]
+
+    def draw(self,screen):
+        for seg in self.allBorder:
+            point1 = seg.shape.a
+            point2 = seg.shape.b
+
+            pygame.draw.line(screen, (0, 0, 0), point1, point2, 5)
