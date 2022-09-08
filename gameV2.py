@@ -1,3 +1,4 @@
+from ast import Constant
 import cv2
 import numpy as np
 import os
@@ -22,7 +23,7 @@ class Bubble_tea:
 
         self.space = pymunk.Space()
         # self.space = space
-        self.space.gravity = (0, 500)
+        self.space.gravity = (0, Constants.GRAVITY)
 
         # CONSTANTS
         self.FPS = Constants.FPS
@@ -34,15 +35,7 @@ class Bubble_tea:
         self.collision = Constants.COLLISION_TYPES
 
         # ------- CREATE BORDER ------------------------------------------
-        self.border = []
-        self.border.extend(
-            [GameObjects.Seg(self.space, 1, 1, (0, 0), (0, self.HEIGHT), elastic=0, collisionType="border"),
-             GameObjects.Seg(self.space, 1, 1, (0, self.HEIGHT), (self.WIDTH, self.HEIGHT), elastic=0,
-                             collisionType="border"),
-             GameObjects.Seg(self.space, 1, 1, (self.WIDTH, self.HEIGHT), (self.WIDTH, 0), elastic=0,
-                             collisionType="border"),
-             GameObjects.Seg(self.space, 1, 1, (self.WIDTH, 0), (0, 0), elastic=0, collisionType="border")])
-
+        self.border = GameObjects.Wall(self.space)
         # Variables
         self.gameStart = 0
         self.ended = 0
@@ -94,14 +87,16 @@ class Bubble_tea:
         return True
 
     def collide_reset_game(self, arbiter, space, data):
+        # FIX HERE =============================================
+        print("trigger!")
         self.gameStart = 0
-        for shape in self.space.shapes: # FIX: CHANGE TO NOT PLATFORMS
-            if shape.collision_type != self.collision['border']:
+        for shape in self.space.shapes:
+            if (shape.collision_type != self.collision['border']):
                 self.space.remove(shape, shape.body)
         self.balls = []
         self.segs = []
         self.draw()
-        return False
+
 
     # -------END ------------------------------------------
 
@@ -137,7 +132,7 @@ class Bubble_tea:
                 self.balls.append(self.create_goal().getShape())
                 self.gameStart += 1
 
-    def draw(self):
+    def draw (self):
         self.screen.fill((247, 247, 247))
         if self.gameStart == 0:
             pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
@@ -145,14 +140,17 @@ class Bubble_tea:
 
         self.draw_apples(self.balls)
         self.draw_path(self.segs)
-        self.draw_border(self.border)
+        
+        self.border.draw(self.screen)
         self.tileSprites.draw(self.screen)
 
     def restart(self):
         self.gameStart = 0
-        for shape in self.space.shapes:
-            if not (shape in self.platforms):
-                self.space.remove(shape, shape.body)
+        for ball in self.balls:
+            self.space.remove(ball.shape,ball.shape.body)
+
+        for shape in self.segs:
+            self.space.remove(shape, shape.body)
 
         self.balls = []
         self.segs = []
@@ -160,6 +158,7 @@ class Bubble_tea:
 
     def clear(self):
         self.gameStart = 0
+        
         for shape in self.platforms:
             self.space.remove(shape, shape.body)
         for shape in self.balls:
@@ -170,6 +169,10 @@ class Bubble_tea:
             else:
                 self.space.remove(shape, shape.body)
         self.balls = []
+        if self.ended == 0 :
+            for ball in self.balls:
+                self.space.remove(ball.shape,ball.shape.body)
+        self.balls.clear()
         self.segs = []
         self.platforms = []
         self.tileSprites.empty()
