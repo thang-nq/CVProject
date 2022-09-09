@@ -168,6 +168,25 @@ level_map9 = [
 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 ]
+
+level_map10 = [
+'             XXXX             ',
+'             XXXX             ',
+'             XXXX             ',
+'             XXXX             ',
+'             XXXX             ',
+'             XXXX             ',
+'             XXXX             ',
+'                              ',
+'                              ',
+'         X          X         ',
+'         X          X         ',
+'         X          X         ',
+'         X          X         ',
+'         X          X         ',
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+]
 tile_size = 50
 screen_w = 1500
 screen_h = 800

@@ -57,6 +57,7 @@ class Bubble_tea:
         self.level7 = Level(level_map7, self.screen)
         self.level8 = Level(level_map8, self.screen)
         self.level9 = Level(level_map9, self.screen)
+        self.level10 = Level(level_map10, self.screen)
 
         # self.level2 = Level(level_map2, self.screen)
     # Define collision callback function, will be called when X touches Y
@@ -109,8 +110,8 @@ class Bubble_tea:
 
     def _draw(self):
         self.screen.fill((247, 247, 247))
-        self.level9.load_map()
-        self.level9_map()
+        self.level10.load_map()
+        self.level10_map()
         if not self.gameStart:
             pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
             pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
@@ -246,5 +247,21 @@ class Bubble_tea:
         pygame.draw.polygon(self.screen, (60,61,71), ((1200,150),(1200,700),(600,700)))
         self.space.add(box_body,shape1,shape2,shape3,shape4)
 
+    def level10_map(self):
+        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
+        shape1 = pymunk.Segment(box_body,(0,700),(1500,700),0)
+        shape2 = pymunk.Segment(box_body,(450,700),(450,450),0)
+        shape3 = pymunk.Segment(box_body,(450,450),(500,450),0)
+        shape4 = pymunk.Segment(box_body,(500,450),(500,700),0)
+        shape5 = pymunk.Segment(box_body,(1000,700),(1000,450),0)
+        shape6 = pymunk.Segment(box_body,(1000,450),(1050,450),0)
+        shape7 = pymunk.Segment(box_body,(1050,450),(1050,700),0)
+        shape8 = pymunk.Segment(box_body,(650, 0), (650, 350),0)
+        shape9 = pymunk.Segment(box_body,(650, 350), (850, 350),0)
+        shape10 = pymunk.Segment(box_body,(850, 350), (850,0),0)
+
+        pygame.draw.line(self.screen,(60,61,71),(50,250),(400,225),5)
+        pygame.draw.line(self.screen, (60,61,71), (1450, 250), (1100, 225), 5)
+        self.space.add(box_body, shape1, shape2, shape3, shape4,shape5,shape6,shape7,shape8,shape9,shape10)
 game = Bubble_tea()
 game.main_loop()
