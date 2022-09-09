@@ -1,16 +1,18 @@
+from asyncio import constants
 import pygame, pymunk
 
 import GameObjects
-from tiles import Tile
+from tiles import Tile,Slope
 import level_map
-
+import Constants
 
 class Level:
-    def __init__(self, space, level_num, surface, tilesSprites, platforms):
+    def __init__(self, space, level_num, surface, tilesSprites, platforms,slopes):
         self.screen = surface
         self.space = space
         self.tileSprites = tilesSprites
         self.number = level_num
+        self.slopes = slopes
 
         self.setup_level(level_map.getMap(level_num))
         self.platforms = platforms
@@ -29,145 +31,99 @@ class Level:
         self.load_level()
 
     def level1(self):
-
-        shape1 = GameObjects.Seg(self.space, 0, 1, (0, 640), (1280, 640), elastic=0).getShape()
+        shape1 = GameObjects.Seg(self.space, 2, 1, (0, 700), (Constants.WIDTH, 700), elastic=0).getShape()
         self.platforms.append(shape1)
 
 
     def level2(self):
 
-        shape1 = GameObjects.Seg(self.space, 0, 1, (0, 600), (1280, 640), elastic=0).getShape()
+        shape1 = GameObjects.Seg(self.space, 2, 1, (0, 700), (Constants.WIDTH, 700), elastic=0).getShape()
         self.platforms.append(shape1)
 
     def level3(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = GameObjects.Seg(self.space, 0, 1, (0, 240), (160, 240), elastic=0).getShape()
-        shape2 = GameObjects.Seg(self.space, 0, 1, (160, 240), (400, 480), elastic=0).getShape()
-        shape3 = GameObjects.Seg(self.space, 0, 1, (400, 480), (400, 560), elastic=0).getShape()
-        shape4 = GameObjects.Seg(self.space, 0, 1, (400, 560), (560, 560), elastic=0).getShape()
-        shape5 = GameObjects.Seg(self.space, 0, 1, (560, 560), (560, 480), elastic=0).getShape()
-        shape6 = GameObjects.Seg(self.space, 0, 1, (560, 480), (720, 480), elastic=0).getShape()
-        shape7 = GameObjects.Seg(self.space, 0, 1, (720, 480), (720, 560), elastic=0).getShape()
-        shape8 = GameObjects.Seg(self.space, 0, 1, (720, 560), (880, 560), elastic=0).getShape()
-        shape9 = GameObjects.Seg(self.space, 0, 1, (880, 560), (880, 480), elastic=0).getShape()
-        shape10 = GameObjects.Seg(self.space, 0, 1, (880, 480), (1120, 240), elastic=0).getShape()
-        shape11 = GameObjects.Seg(self.space, 0, 1, (1120, 240), (1280, 240), elastic=0).getShape()
-        self.platforms.extend([shape1, shape2, shape3, shape4, shape5, shape6, shape7, shape8, shape9, shape10,
-                               shape11])
+        shape1 = GameObjects.Seg(self.space, 0, 1, (0, 300), (200, 300), elastic=0).getShape()
+        shape2 = GameObjects.Seg(self.space, 0, 1, (200,300),(600,700), elastic=0).getShape()
+        shape3 = GameObjects.Seg(self.space, 0, 1, (600,700),(700,700), elastic=0).getShape()
+        shape4 = GameObjects.Seg(self.space, 0, 1, (700,700),(700,600), elastic=0).getShape()
+        shape5 = GameObjects.Seg(self.space, 0, 1, (700,600),(800,600), elastic=0).getShape()
+        shape6 = GameObjects.Seg(self.space, 0, 1, (800,600),(800,700), elastic=0).getShape()
+        shape7 = GameObjects.Seg(self.space, 0, 1, (800, 700), (900, 700), elastic=0).getShape()
+        shape8 = GameObjects.Seg(self.space, 0, 1, (900, 700), (1300, 300), elastic=0).getShape()
+        shape9 = GameObjects.Seg(self.space, 0, 1, (1300, 300), (1500, 300), elastic=0).getShape()
+       
+        self.platforms.extend([shape1, shape2, shape3, shape4, shape5, shape6, shape7, shape8, shape9])
 
-        pygame.draw.line(self.screen, (0, 0, 255), (160, 240), (400, 480), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (880, 480), (1120, 240), 1)
+        self.slopes.append(Slope((200,300),(200,700),(600,700)))
+        self.slopes.append(Slope((1300,300),(1300,700),(900,700)))
 
     def level4(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = GameObjects.Seg(self.space, 0, 1, (240, 320), (320, 320), elastic=0).getShape()
-        shape2 = GameObjects.Seg(self.space, 0, 1, (320, 320), (320, 480), elastic=0).getShape()
-        shape3 = GameObjects.Seg(self.space, 0, 1, (320, 480), (160, 480), elastic=0).getShape()
-        shape4 = GameObjects.Seg(self.space, 0, 1, (160, 480), (160, 400), elastic=0).getShape()
-        shape5 = GameObjects.Seg(self.space, 0, 1, (160, 400), (240, 400), elastic=0).getShape()
-        shape6 = GameObjects.Seg(self.space, 0, 1, (240, 400), (240, 320), elastic=0).getShape()
-        shape7 = GameObjects.Seg(self.space, 0, 1, (1280, 240), (1040, 240), elastic=0).getShape()
-        shape8 = GameObjects.Seg(self.space, 0, 1, (1040, 240), (560, 720), elastic=0).getShape()
+
+        shape1 = GameObjects.Seg(self.space, 0, 1, (350,300),(400,300), elastic=0).getShape()
+        shape2 = GameObjects.Seg(self.space, 0, 1, (400,300),(400,450), elastic=0).getShape()
+        shape3 = GameObjects.Seg(self.space, 0, 1, (400,450),(250,450), elastic=0).getShape()
+        shape4 = GameObjects.Seg(self.space, 0, 1, (250,450),(250,400), elastic=0).getShape()
+        shape5 = GameObjects.Seg(self.space, 0, 1, (250,400),(350,400), elastic=0).getShape()
+        shape6 = GameObjects.Seg(self.space, 0, 1, (350,400),(350,300), elastic=0).getShape()
+        shape7 = GameObjects.Seg(self.space, 0, 1, (1500,300), (1300,300), elastic=0).getShape()
+        shape8 = GameObjects.Seg(self.space, 0, 1, (1300,300), (700,800), elastic=0).getShape()
 
 
         self.platforms.extend([shape1, shape2, shape3, shape4, shape5, shape6, shape7, shape8])
-
-        pygame.draw.line(self.screen, (0, 0, 255), (240, 320), (320, 320), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (320, 320), (320, 480), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (320, 480), (160, 480), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (160, 480), (160, 400), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (160, 400), (240, 400), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (240, 400), (240, 320), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (1280, 240), (1040, 240), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (1040, 240), (560, 720), 1)
-
+        self.slopes.append(Slope((1300,300),(1300,800),(700,800)))
 
     def level5(self):
-
-        shape1 = GameObjects.Seg(self.space, 0, 1,(560, 160), (960, 160), elastic=0).getShape()
-        shape2 = GameObjects.Seg(self.space, 0, 1, (960, 160), (960, 240), elastic=0).getShape()
-        shape3 = GameObjects.Seg(self.space, 0, 1, (960, 240), (560, 240), elastic=0).getShape()
-        shape4 = GameObjects.Seg(self.space, 0, 1, (560, 240), (560, 160), elastic=0).getShape()
-        shape5 = GameObjects.Seg(self.space, 0, 1, (0, 480), (480, 480), elastic=0).getShape()
-        shape6 = GameObjects.Seg(self.space, 0, 1, (480, 480), (480, 640), elastic=0).getShape()
-        shape7 = GameObjects.Seg(self.space, 0, 1, (480, 640), (960, 640), elastic=0).getShape()
-        shape8 = GameObjects.Seg(self.space, 0, 1, (960, 640), (960, 560), elastic=0).getShape()
-        shape9 = GameObjects.Seg(self.space, 0, 1, (960, 560), (1280, 560), elastic=0).getShape()
+        shape1 = GameObjects.Seg(self.space, 0, 1,(650,300),(1050,300), elastic=0).getShape()
+        shape2 = GameObjects.Seg(self.space, 0, 1, (1050,300), (1050, 350), elastic=0).getShape()
+        shape3 = GameObjects.Seg(self.space, 0, 1, (1050,350), (650, 350), elastic=0).getShape()
+        shape4 = GameObjects.Seg(self.space, 0, 1, (650, 350), (650,300 ), elastic=0).getShape()
+        shape5 = GameObjects.Seg(self.space, 0, 1, (0, 500), (550,500), elastic=0).getShape()
+        shape6 = GameObjects.Seg(self.space, 0, 1, (550, 500), (550, 700), elastic=0).getShape()
+        shape7 = GameObjects.Seg(self.space, 0, 1,(550, 700), (1050, 700), elastic=0).getShape()
+        shape8 = GameObjects.Seg(self.space, 0, 1, (1050, 700), (1050, 650), elastic=0).getShape()
+        shape9 = GameObjects.Seg(self.space, 0, 1, (1050,650), (1500, 650), elastic=0).getShape()
 
         self.platforms.extend([shape1, shape2, shape3, shape4, shape5, shape6, shape7, shape8, shape9])
 
-        pygame.draw.line(self.screen, (0, 0, 255), (560, 160), (960, 160), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (960, 160), (960, 240), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (960, 240), (560, 240), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (560, 240), (560, 160), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (0, 480), (480, 480), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (480, 480), (480, 640), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (480, 640), (960, 640), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (960, 640), (960, 560), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (960, 560), (1280, 560), 1)
-
-
     def level6(self):
-        shape1 = GameObjects.Seg(self.space, 0, 1,(560, 240), (640, 240), elastic=0).getShape()
-        shape2 = GameObjects.Seg(self.space, 0, 1, (640, 240), (640, 320), elastic=0).getShape()
-        shape3 = GameObjects.Seg(self.space, 0, 1, (640, 320), (560, 320), elastic=0).getShape()
-        shape4 = GameObjects.Seg(self.space, 0, 1, (560, 320), (560, 240), elastic=0).getShape()
-        shape5 = GameObjects.Seg(self.space, 0, 1, (0, 640), (1280, 640), elastic=0).getShape()
 
-        self.platforms.extend([shape1, shape2, shape3, shape4, shape5])
+        shape1 = GameObjects.Seg(self.space, 2, 1, (0, 700), (Constants.WIDTH, 700), elastic=0).getShape()
+        self.platforms.extend([shape1])
 
-        pygame.draw.line(self.screen, (0, 0, 255), (560, 240), (640, 240), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (640, 240), (640, 320), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (640, 320), (560, 320), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (560, 320), (560, 240), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (0, 640), (1280, 640), 1)
 
 
     def level7(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = GameObjects.Seg(self.space, 0, 1, (0, 240), (160, 240), elastic=0).getShape()
-        shape2 = GameObjects.Seg(self.space, 0, 1, (160, 240), (480, 560), elastic=0).getShape()
-        shape3 = GameObjects.Seg(self.space, 0, 1, (480, 560), (960, 560), elastic=0).getShape()
-        shape4 = GameObjects.Seg(self.space, 0, 1, (960, 560), (960, 640), elastic=0).getShape()
-        shape5 = GameObjects.Seg(self.space, 0, 1, (960, 640), (1040, 640), elastic=0).getShape()
-        shape6 = GameObjects.Seg(self.space, 0, 1, (1040, 640), (1040, 480), elastic=0).getShape()
-        shape7 = GameObjects.Seg(self.space, 0, 1, (1040, 480), (1280, 480), elastic=0).getShape()
+        shape1 = GameObjects.Seg(self.space, 0, 1,  (0,300),(200,300), elastic=0).getShape()
+        shape2 = GameObjects.Seg(self.space, 0, 1, (200, 300), (600, 650), elastic=0).getShape()
+        shape3 = GameObjects.Seg(self.space, 0, 1, (600,650),(1050,650), elastic=0).getShape()
+        shape4 = GameObjects.Seg(self.space, 0, 1, (1050, 650), (1050, 700), elastic=0).getShape()
+        shape5 = GameObjects.Seg(self.space, 0, 1, (1050, 700), (1150, 700), elastic=0).getShape()
+        shape6 = GameObjects.Seg(self.space, 0, 1, (1150,700), (1150, 600), elastic=0).getShape()
+        shape7 = GameObjects.Seg(self.space, 0, 1, (1150, 600), (1500, 600), elastic=0).getShape()
 
         self.platforms.extend([shape1, shape2, shape3, shape4, shape5, shape6, shape7])
-
-        pygame.draw.line(self.screen, (0, 0, 255), (0, 240), (160, 240), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (160, 240), (480, 560), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (480, 560), (960, 560), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (960, 560), (960, 640), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (960, 640), (1040, 640), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (1040, 640), (1040, 480), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (1040, 480), (1280, 480), 1)
-
+        self.slopes.append(Slope((200,300),(200,650),(600,650)))
 
     def level8(self):
-
-        shape1 = GameObjects.Seg(self.space, 0, 1, (0, 80), (560, 640), elastic=0).getShape()
-        shape2 = GameObjects.Seg(self.space, 0, 1, (560, 640), (720, 640), elastic=0).getShape()
-        shape3 = GameObjects.Seg(self.space, 0, 1, (720, 640), (1280, 80), elastic=0).getShape()
+        shape1 = GameObjects.Seg(self.space, 0, 1, (0,150),(700,700), elastic=0).getShape()
+        shape2 = GameObjects.Seg(self.space, 0, 1, (700,700), (800, 700), elastic=0).getShape()
+        shape3 = GameObjects.Seg(self.space, 0, 1, (800,700), (1500, 150), elastic=0).getShape()
         self.platforms.extend([shape1, shape2, shape3])
 
-        pygame.draw.line(self.screen, (0, 0, 255), (0, 80), (560, 640), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (560, 640), (720, 640), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (720, 640), (1280, 80), 1)
+        self.slopes.append(Slope((0,150),(0,700),(700,700)))
+        self.slopes.append(Slope((1500,150),(1500,700),(800,700)))
+
 
     def level9(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = GameObjects.Seg(self.space, 0, 1, (0, 160), (400, 560), elastic=0).getShape()
-        shape2 = GameObjects.Seg(self.space, 0, 1, (400, 560), (640, 560), elastic=0).getShape()
-        shape3 = GameObjects.Seg(self.space, 0, 1, (640, 560), (1040, 160), elastic=0).getShape()
-        shape4 = GameObjects.Seg(self.space, 0, 1, (1040, 160), (1280, 160), elastic=0).getShape()
+        shape1 = GameObjects.Seg(self.space, 0, 1,  (0,300),(500,700), elastic=0).getShape()
+        shape2 = GameObjects.Seg(self.space, 0, 1, (500, 700), (600, 700), elastic=0).getShape()
+        shape3 = GameObjects.Seg(self.space, 0, 1, (600,700), (1200, 150), elastic=0).getShape()
+        shape4 = GameObjects.Seg(self.space, 0, 1, (1200, 150), (1500, 150), elastic=0).getShape()
 
         self.platforms.extend([shape1, shape2, shape3, shape4])
 
-        pygame.draw.line(self.screen, (0, 0, 255), (0, 160), (400, 560), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (400, 560), (640, 560), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (640, 560), (1040, 160), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (1040, 160), (1280, 160), 1)
+        self.slopes.append(Slope((0,300),(0,700),(500,700)))
+        self.slopes.append(Slope((1200,150),(1200,700),(600,700)))
+
 
 
     def load_level(self):

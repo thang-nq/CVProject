@@ -46,16 +46,15 @@ def main():
 
         elif gameManager.gameState == Constants.UI_STATES["about"]:
             gameManager.getAbout()
-            # gameManager.getGame()
 
         elif gameManager.gameState == Constants.UI_STATES["cleared"]:
             gameManager.getWinPanel()
             
 
         #
-        # elif gameManager.gameState == Constants.UI_STATES["next"]:
-        #     gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number + 1
-        #     gameManager.restartGame()
+        elif gameManager.gameState == Constants.UI_STATES["next"]:
+            gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number + 1
+            gameManager.restartGame()
         #
         # elif gameManager.gameState == Constants.UI_STATES["lose"]:
         #     gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number

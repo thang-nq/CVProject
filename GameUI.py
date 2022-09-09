@@ -296,7 +296,7 @@ class inGameUI:
 
     def checkInput(self, time_now, next_allowed):
         if self.returnButton.checkInput():
-            return UI_STATES["levelSelect"]
+            return UI_STATES["next"]
         if time_now > next_allowed:
             if self.restartButton.checkInput():
                 return UI_STATES["restart"]

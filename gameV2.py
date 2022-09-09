@@ -47,7 +47,10 @@ class Bubble_tea:
         self.segs = []
         self.death = []
         self.platforms = []
+        self.slopes = []
         self.tileSprites = pygame.sprite.Group()
+
+        self.level = Level(self.space, self.number, screen, self.tileSprites, self.platforms,self.slopes)
 
         # Varibles
         self.X, self.Y = 0, 0
@@ -64,7 +67,7 @@ class Bubble_tea:
         self.b2.begin = self.through
         self.b1.separate = self.collide_reset_game
         self.b2.separate = self.collide_reset_game
-        self.level = Level(self.space, self.number, screen, self.tileSprites, self.platforms)
+
 
     # -------COLLISION HANDLER ------------------------------------------
     # -------START ------------------------------------------
@@ -138,6 +141,7 @@ class Bubble_tea:
 
         self.draw_apples(self.balls)
         self.draw_path(self.segs)
+        self.draw_slopes(self.slopes)
 
         self.border.draw(self.screen)
         self.tileSprites.draw(self.screen)
@@ -167,11 +171,16 @@ class Bubble_tea:
         self.balls.clear()
         self.segs = []
         self.platforms = []
+
+        self.slopes.clear()
         self.tileSprites.empty()
+
 
     def load(self):
         self.level.number = self.number
         self.level.platforms = self.platforms
+        self.level.slopes = self.slopes
+
         self.level.built()
 
     # --------------------------------------------------------
@@ -260,6 +269,13 @@ class Bubble_tea:
 
             pygame.draw.circle(self.screen, ball.color, (pos_x, pos_y), self.RAD)
 
+    def draw_slopes(self,slopes):
+        for slope in slopes:
+            pos_1 = slope.position[0]
+            pos_2 = slope.position[1]
+            pos_3 = slope.position[2]
+
+            pygame.draw.polygon(self.screen,slope.color,(pos_1,pos_2,pos_3))
     # --------------------------------------------------------
     # -------   END  -----------------------------------------
 
