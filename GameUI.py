@@ -136,7 +136,7 @@ class selectorUI:
         for i in range(0, 10):
             if ((i + 1) % 5 == 0):
                 # chocolate box
-                tempLevel = ChocolateLevelBox(originX + spaceX * (i % 5), originY, boxScale, 0, i)
+                tempLevel = ChocolateLevelBox(originX + spaceX * (i % 5), originY, boxScale, 0, i+1)
                 self.levels.append(tempLevel)
                 chocolateOffset += 1
                 # reset
@@ -144,16 +144,16 @@ class selectorUI:
                 originY += spaceY
             else:
                 tempLevel = NormalLevelBox(originX + spaceX * (i % 5), originY,
-                                           i + 1 - chocolateOffset, boxScale, 0, i)
+                                           i + 1 - chocolateOffset, boxScale, 0, i+1)
                 self.levels.append(tempLevel)
 
     def checkInput(self, time_now, next_allowed):
         if time_now > next_allowed:
             if self.returnButton.checkInput():
                 return UI_STATES["main"]
-            for l in range(len(self.levels)):
-                if self.levels[l].checkForInput():
-                    return len(Constants.UI_STATES) + l
+            for l in self.levels:
+                if l.checkForInput():
+                    return len(Constants.UI_STATES) + l.level
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

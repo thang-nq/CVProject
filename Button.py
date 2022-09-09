@@ -13,7 +13,8 @@ class CompleteButton():
     def checkForInput(self):
         pos = pygame.mouse.get_pos()
         action = False
-
+        print(pos)
+        print(self.clicked)
         # check mouse over and clicked condition
 
         if self.rect.collidepoint(pos):

@@ -50,8 +50,7 @@ def main():
 
         elif gameManager.gameState == Constants.UI_STATES["cleared"]:
             gameManager.getWinPanel()
-            if gameManager.count == 0:
-                gameManager.game.clear()
+            
 
         #
         # elif gameManager.gameState == Constants.UI_STATES["next"]:

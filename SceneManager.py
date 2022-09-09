@@ -4,6 +4,7 @@ import time
 import Constants
 import gameV2
 import pymunk
+import pygame
 
 UI_STATES = Constants.UI_STATES
 
@@ -93,13 +94,11 @@ class manager:
         self.game.restart()
 
     def getWinPanel(self):
-        temp = self.wonPanelUI.checkInput()
-        if temp == self.gameState and self.count <=0:
+        # --------------- FIX mpos not updating here -----------------------
+        self.gameState =  self.wonPanelUI.checkInput()
+        if self.count <=0:
             self.count += 1
-            self.gameState = temp
             self.wonPanelUI.draw()
-        elif self.count >0:
-            self.gameState = temp
 
 
     def getLosePanel(self):
