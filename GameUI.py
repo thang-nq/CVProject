@@ -1,3 +1,4 @@
+from ast import Constant
 import pygame
 from Button import CompleteButton, IconButton2
 from LevelBox import NormalLevelBox, ChocolateLevelBox
@@ -276,6 +277,8 @@ class settingUI:
 
 
 class inGameUI:
+
+    #====== FIX HERE ==============
     def __init__(self, screen, level=0):
         self.screen = screen
         self.level = level + len(Constants.UI_STATES)
@@ -300,7 +303,7 @@ class inGameUI:
         if time_now > next_allowed:
             if self.restartButton.checkInput():
                 return UI_STATES["restart"]
-        return self.level
+        return self.level + len(Constants.UI_STATES)
 
     def draw(self):
         self.returnButton.draw(self.screen)

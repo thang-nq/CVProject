@@ -67,8 +67,10 @@ class manager:
         level = gameState - len(Constants.UI_STATES)
 
     def loadLevel(self):
+        self.game.number = self.gameState - len(Constants.UI_STATES)
+        self.inGameUI.level = self.game.number +1
+        self.game.clear()
         self.game.load()
-
 
     def getGame(self):
         self.game.event_hanlder()
@@ -92,6 +94,13 @@ class manager:
 
     def restartGame(self):
         self.game.restart()
+
+    def getNextLevel(self):
+        self.gameState = len(Constants.UI_STATES) + self.game.number + 1
+        self.inGameUI.level = self.game.number + 1 
+        self.game.clear()
+        self.game.load()
+        self.getGame()
 
     def getWinPanel(self):
         # --------------- FIX mpos not updating here -----------------------
