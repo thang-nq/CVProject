@@ -61,7 +61,6 @@ def main():
         elif gameManager.gameState == Constants.UI_STATES["restart"]:
             gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number
             gameManager.restartGame()
-        print(gameManager.game.number)
         pygame.display.update()
         clock.tick(FPS)
 

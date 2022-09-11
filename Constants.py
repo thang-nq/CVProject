@@ -5,4 +5,7 @@ DELAY = 300
 FPS = 30
 DT = 1 / FPS
 GRAVITY = 500
+PLAYER_RAD = 20
+GOAL_RAD = 50
+DEATH_RAD = 15
 COLLISION_TYPES = {"ball": 1, "goal": 2, "border": 3, "die": 4, "line": 5}

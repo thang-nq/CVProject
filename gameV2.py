@@ -8,13 +8,12 @@ import GameObjects
 import Constants
 import GameUI
 from level import Level
-from pprint import pprint
+
 
 class Bubble_tea:
     def __init__(self, screen):
         # pygame.init()
         # pygame.font.init()
-
         self.WIDTH, self.HEIGHT = Constants.WIDTH, Constants.HEIGHT
         self.screen = screen
 
@@ -24,6 +23,9 @@ class Bubble_tea:
         self.space = pymunk.Space()
         # self.space = space
         self.space.gravity = (0, Constants.GRAVITY)
+        self.background = pygame.image.load('MilkTeaImages/Background.png').convert_alpha()
+        self.player_img = pygame.image.load('MilkTeaImages/Bubble_Small.png').convert_alpha()
+        self.goal_img = pygame.image.load('MilkTeaImages/TeaBall.png').convert_alpha()
 
         # CONSTANTS
         self.FPS = Constants.FPS
@@ -48,9 +50,12 @@ class Bubble_tea:
         self.death = []
         self.platforms = []
         self.slopes = []
-        self.tileSprites = pygame.sprite.Group()
 
-        self.level = Level(self.space, self.number, screen, self.tileSprites, self.platforms,self.slopes)
+        self.tileSprites = pygame.sprite.Group()
+        self.tempSprites = pygame.sprite.Group()
+        self.tempBallPos = []
+
+        self.level = Level(self.space, screen, self.number, self.tileSprites, self.platforms, self.slopes, self.tempSprites,self.tempBallPos)
 
         # Varibles
         self.X, self.Y = 0, 0
@@ -67,7 +72,6 @@ class Bubble_tea:
         self.b2.begin = self.through
         self.b1.separate = self.collide_reset_game
         self.b2.separate = self.collide_reset_game
-
 
     # -------COLLISION HANDLER ------------------------------------------
     # -------START ------------------------------------------
@@ -129,15 +133,17 @@ class Bubble_tea:
                 self.segs.append(self.create_segments(mpos))
 
             if event.type == pygame.MOUSEBUTTONUP and self.gameStart < 1:
-                self.balls.append(GameObjects.Dot(self.space, self.RAD, (200, 200), 'ball'))
-                self.balls.append(self.create_goal())
+                self.balls.append(GameObjects.Dot(self.space, self.RAD,self.tempBallPos[0],self.player_img,(self.RAD*2.4,self.RAD*2.4), 'ball'))
+                self.balls.append(GameObjects.Dot(self.space, 50, self.tempBallPos[1], self.goal_img,(Constants.GOAL_RAD*2.2,Constants.GOAL_RAD*2.2), 'goal')
+)
                 self.gameStart += 1
 
     def draw(self):
-        self.screen.fill((247, 247, 247))
+        self.screen.blit(self.background, (0, 0))
         if self.gameStart == 0:
-            pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
-            pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
+            # pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
+            # pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
+            self.tempSprites.draw(self.screen)
 
         self.draw_apples(self.balls)
         self.draw_path(self.segs)
@@ -152,7 +158,6 @@ class Bubble_tea:
         if self.ended == 0:
             for ball in self.balls:
                 self.space.remove(ball.shape, ball.shape.body)
-
         self.balls = []
         self.segs = []
         self.draw()
@@ -170,17 +175,17 @@ class Bubble_tea:
                 self.space.remove(ball.shape, ball.shape.body)
         self.balls.clear()
         self.segs = []
+        self.tempBallPos = []
         self.platforms = []
-
         self.slopes.clear()
         self.tileSprites.empty()
-
+        self.tempSprites.empty()
 
     def load(self):
         self.level.number = self.number
         self.level.platforms = self.platforms
         self.level.slopes = self.slopes
-
+        self.level.tempPos = self.tempBallPos
         self.level.built()
 
     # --------------------------------------------------------
@@ -224,8 +229,6 @@ class Bubble_tea:
             self.segs.append(seg_shape)
 
     def create_goal(self):
-        ball = GameObjects.Dot(self.space, self.RAD, (400, 200), 'goal', color=(255, 0, 0))
-
         return ball
 
     # --------------------------------------------------------
@@ -264,18 +267,19 @@ class Bubble_tea:
 
     def draw_apples(self, balls):
         for ball in balls:
-            pos_x = int(ball.body.position.x)
-            pos_y = int(ball.body.position.y)
+            # pos_x = int(ball.body.position.x)
+            # pos_y = int(ball.body.position.y)
+            ball.draw(self.screen)
+            # pygame.draw.circle(self.screen, ball.color, (pos_x, pos_y), self.RAD)
 
-            pygame.draw.circle(self.screen, ball.color, (pos_x, pos_y), self.RAD)
-
-    def draw_slopes(self,slopes):
+    def draw_slopes(self, slopes):
         for slope in slopes:
             pos_1 = slope.position[0]
             pos_2 = slope.position[1]
             pos_3 = slope.position[2]
 
-            pygame.draw.polygon(self.screen,slope.color,(pos_1,pos_2,pos_3))
+            pygame.draw.polygon(self.screen, slope.color, (pos_1, pos_2, pos_3))
+
     # --------------------------------------------------------
     # -------   END  -----------------------------------------
 
