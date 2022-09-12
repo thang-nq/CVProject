@@ -53,7 +53,6 @@ def main():
             gameManager.getLosePanel()
 
         elif gameManager.gameState >= len(Constants.UI_STATES):
-            print(gameManager.game.number)
 
             gameManager.game.number = gameManager.gameState - len(Constants.UI_STATES)
 
