@@ -32,12 +32,12 @@ class Dot:
         space.add(self.body, self.shape)
 
     def draw(self, screen):
-        self.rect.center = self.body.position
-        self.image = pygame.transform.rotate(
-            self.orig_image, math.degrees(self.body.angle))
-        self.rect = self.image.get_rect(center=self.rect.center)
-        # pygame.draw.circle(screen, (0, 0, 0), (self.body.position.x, self.body.position.y), self.rad)
-        screen.blit(self.image, (self.rect.x,self.rect.y))
+        # self.rect.center = self.body.position
+        # self.image = pygame.transform.rotate(
+        #     self.orig_image, math.degrees(self.body.angle))
+        # self.rect = self.image.get_rect(center=self.rect.center)
+        pygame.draw.circle(screen,self.color, (self.body.position.x, self.body.position.y), self.rad)
+        # screen.blit(self.image, (self.rect.x,self.rect.y))
 
     def getShape(self):
         return self.shape
@@ -66,14 +66,17 @@ class Seg2:
     """
 
     def __init__(self, space, radius, density, pos1, pos2, elastic=0.5, friction=0, collisionType = 'line'):
-        self.body = pymunk.Body(1)
+        self.body = pymunk.Body(2,body_type=pymunk.Body.DYNAMIC)
         self.radius = radius
-        self.shape = pymunk.Segment(self.body, pos1, pos2, radius= self.radius)
+        self.shape = pymunk.Segment(self.body, pos1, pos2, radius=self.radius)
         self.shape.collision_type = collision[collisionType]
         self.shape.density = density
         self.shape.elasticity = elastic
         self.shape.friction = friction
         space.add(self.body, self.shape)
+
+    def getShape(self):
+        return self.shape
 
 class Wall:
     def __init__(self,space):

@@ -23,7 +23,7 @@ gameManager = manager(screen)
 
 def main():
     clock = pygame.time.Clock()
-    gameManager.gameState = Constants.UI_STATES["levelSelect"]
+    gameManager.gameState = Constants.UI_STATES["main"]
     # ----------------- Game loop --------------------------------
     while True:
         gameManager.time_now = pygame.time.get_ticks()
@@ -45,22 +45,24 @@ def main():
 
         elif gameManager.gameState == Constants.UI_STATES["cleared"]:
             gameManager.getWinPanel()
-            
-        
+
         elif gameManager.gameState == Constants.UI_STATES["next"]:
             gameManager.getNextLevel()
-        #
-        # elif gameManager.gameState == Constants.UI_STATES["lose"]:
-        #     gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number
-        #     gameManager.restartGame()
+
+        elif gameManager.gameState == Constants.UI_STATES["lose"]:
+            gameManager.getLosePanel()
 
         elif gameManager.gameState >= len(Constants.UI_STATES):
+            print(gameManager.game.number)
+
             gameManager.game.number = gameManager.gameState - len(Constants.UI_STATES)
+
             gameManager.getGame()
-        
+
         elif gameManager.gameState == Constants.UI_STATES["restart"]:
             gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number
             gameManager.restartGame()
+
         pygame.display.update()
         clock.tick(FPS)
 

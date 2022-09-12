@@ -26,6 +26,7 @@ class Bubble_tea:
         self.background = pygame.image.load('MilkTeaImages/Background.png').convert_alpha()
         self.player_img = pygame.image.load('MilkTeaImages/Bubble_Small.png').convert_alpha()
         self.goal_img = pygame.image.load('MilkTeaImages/TeaBall.png').convert_alpha()
+        self.die_img = pygame.image.load('MilkTeaImages/MilkBall.png').convert_alpha()
 
         # CONSTANTS
         self.FPS = Constants.FPS
@@ -49,13 +50,16 @@ class Bubble_tea:
         self.segs = []
         self.death = []
         self.platforms = []
+        # self.platforms2 = []
+        self.platformtemp = []
         self.slopes = []
 
         self.tileSprites = pygame.sprite.Group()
         self.tempSprites = pygame.sprite.Group()
         self.tempBallPos = []
 
-        self.level = Level(self.space, screen, self.number, self.tileSprites, self.platforms, self.slopes, self.tempSprites,self.tempBallPos)
+        self.level = Level(self.space, screen, self.number, self.tileSprites, self.platforms,self.platformtemp, self.slopes,
+                           self.tempSprites, self.tempBallPos)
 
         # Varibles
         self.X, self.Y = 0, 0
@@ -72,6 +76,8 @@ class Bubble_tea:
         self.b2.begin = self.through
         self.b1.separate = self.collide_reset_game
         self.b2.separate = self.collide_reset_game
+        self.d = self.space.add_collision_handler(self.collision['ball'], self.collision['die'])
+        self.d.begin = self.die_reached
 
     # -------COLLISION HANDLER ------------------------------------------
     # -------START ------------------------------------------
@@ -81,16 +87,24 @@ class Bubble_tea:
 
     def goal_reached(self, arbiter, space, data):
         if self.ended == 0:
-            print("you reached the goal!")
+            # print("you reached the goal!")
             self.ended += 1
+        return True
+
+    def die_reached(self, arbiter, space, data):
+        if self.ended == 0:
+            # print("you die!")
+            self.ended -= 1
         return True
 
     # Define collision callback function, will be called when X touches Y
     def finished(self, arbiter, space, data):
-        ball_shape1 = arbiter.shapes[0]
-        space.remove(ball_shape1, ball_shape1.body)
-        ball_shape2 = arbiter.shapes[1]
-        space.remove(ball_shape2, ball_shape2.body)
+        for ball in self.balls:
+            self.space.remove(ball.shape, ball.shape.body)
+        # ball_shape1 = arbiter.shapes[0]
+        # space.remove(ball_shape1, ball_shape1.body)
+        # ball_shape2 = arbiter.shapes[1]
+        # space.remove(ball_shape2, ball_shape2.body)
         return True
 
     def collide_reset_game(self, arbiter, space, data):
@@ -132,11 +146,23 @@ class Bubble_tea:
                 mpos = pygame.mouse.get_pos()
                 self.segs.append(self.create_segments(mpos))
 
-            if event.type == pygame.MOUSEBUTTONUP and self.gameStart < 1:
-                self.balls.append(GameObjects.Dot(self.space, self.RAD,self.tempBallPos[0],self.player_img,(self.RAD*2.4,self.RAD*2.4), 'ball'))
-                self.balls.append(GameObjects.Dot(self.space, 50, self.tempBallPos[1], self.goal_img,(Constants.GOAL_RAD*2.2,Constants.GOAL_RAD*2.2), 'goal')
-)
-                self.gameStart += 1
+            if event.type == pygame.MOUSEBUTTONUP :
+                if self.gameStart < 1:
+                    self.balls.append(GameObjects.Dot(self.space, self.RAD, self.tempBallPos[0], self.player_img,
+                                                      (self.RAD * 2.4, self.RAD * 2.4), 'ball',color=(103,192,169)))
+                    self.balls.append(GameObjects.Dot(self.space, 50, self.tempBallPos[1], self.goal_img,
+                                                      (Constants.GOAL_RAD * 2.2, Constants.GOAL_RAD * 2.2), 'goal',color=(241,186,80)))
+                    if len(self.tempBallPos) > 2:
+                        for i in range(2, len(self.tempBallPos)):
+                            self.balls.append(GameObjects.Dot(self.space, self.RAD, self.tempBallPos[i], self.die_img,
+                                                              (self.RAD * 2.4, self.RAD * 2.4), 'die', color=(0,0,0)))
+                    # self.platforms2.append(GameObjects.Seg2(self.space, 5, 1, pos1=self.platformtemp[0][0],pos2=self.platformtemp[0][1], elastic=0).getShape())
+                    # self.platforms2.append(
+                    #     GameObjects.Seg2(self.space, 5, 1, pos1=self.platformtemp[1][0], pos2=self.platformtemp[1][1],
+                    #                       elastic=0).getShape())
+                    self.gameStart += 1
+                else:
+                    self.gameStart += 1
 
     def draw(self):
         self.screen.blit(self.background, (0, 0))
@@ -148,6 +174,7 @@ class Bubble_tea:
         self.draw_apples(self.balls)
         self.draw_path(self.segs)
         self.draw_slopes(self.slopes)
+        # self.draw_path(self.platforms2)
 
         self.border.draw(self.screen)
         self.tileSprites.draw(self.screen)
@@ -155,28 +182,31 @@ class Bubble_tea:
     def restart(self):
         self.gameStart = 0
         self.remove_segs()
-        if self.ended == 0:
+        if self.ended <= 0:
             for ball in self.balls:
                 self.space.remove(ball.shape, ball.shape.body)
         self.balls = []
+        # self.platforms2 = []
         self.segs = []
         self.draw()
 
     def clear(self):
         self.gameStart = 0
-
         for shape in self.platforms:
             self.space.remove(shape, shape.body)
-
+        # if len(self.platforms2) > 0:
+        #     for shape in self.platforms2:
+        #         self.space.remove(shape, shape.body)
         self.remove_segs()
 
-        if self.ended == 0:
+        if self.ended <= 0:
             for ball in self.balls:
                 self.space.remove(ball.shape, ball.shape.body)
         self.balls.clear()
         self.segs = []
         self.tempBallPos = []
         self.platforms = []
+        # self.platforms2 = []
         self.slopes.clear()
         self.tileSprites.empty()
         self.tempSprites.empty()
@@ -184,6 +214,7 @@ class Bubble_tea:
     def load(self):
         self.level.number = self.number
         self.level.platforms = self.platforms
+        self.level.platformtemp = self.platformtemp
         self.level.slopes = self.slopes
         self.level.tempPos = self.tempBallPos
         self.level.built()
@@ -220,13 +251,6 @@ class Bubble_tea:
             self.X, self.Y = x1, y1  # after drawing, the current position become previous position
             return seg_shape
 
-    def create_segments2(self, segs_coor):
-        for seg in segs_coor:
-            pos1 = seg[0]
-            pos2 = seg[1]
-            seg = GameObjects.Seg2(self.space, 5, 1, pos1, pos2)
-            seg_shape = seg.shape
-            self.segs.append(seg_shape)
 
     def create_goal(self):
         return ball

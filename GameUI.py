@@ -125,7 +125,7 @@ class selectorUI:
 
         # level_1=NormalLevelBox(400,400,"1",0.6,0)
         self.levels = []
-
+        self.score = Constants.LEVELS_SCORE
         # append data
         boxScale = 0.9
         spaceX = 250
@@ -137,7 +137,7 @@ class selectorUI:
         for i in range(0, 10):
             if ((i + 1) % 5 == 0):
                 # chocolate box
-                tempLevel = ChocolateLevelBox(originX + spaceX * (i % 5), originY, boxScale, 0, i+1)
+                tempLevel = ChocolateLevelBox(originX + spaceX * (i % 5), originY, boxScale, self.score[i], i + 1)
                 self.levels.append(tempLevel)
                 chocolateOffset += 1
                 # reset
@@ -145,7 +145,7 @@ class selectorUI:
                 originY += spaceY
             else:
                 tempLevel = NormalLevelBox(originX + spaceX * (i % 5), originY,
-                                           i + 1 - chocolateOffset, boxScale, 0, i+1)
+                                           i + 1 - chocolateOffset, boxScale, self.score[i], i + 1)
                 self.levels.append(tempLevel)
 
     def checkInput(self, time_now, next_allowed):
@@ -166,6 +166,8 @@ class selectorUI:
         for l in self.levels:
             l.draw(self.screen)
 
+    def setStar(self,num):
+        self.levels[num].star = self.score[num]
 
 class aboutUI:
     def __init__(self, screen):
@@ -278,7 +280,7 @@ class settingUI:
 
 class inGameUI:
 
-    #====== FIX HERE ==============
+    # ====== FIX HERE ==============
     def __init__(self, screen, level=0):
         self.screen = screen
         self.level = level + len(Constants.UI_STATES)
@@ -332,10 +334,11 @@ class wonPanelUI:
         self.selectorButton = CompleteButton(selButtonX, selButtonY, selector, 1)
 
     def checkInput(self):
-        if self.conButton.checkForInput():
-            return Constants.UI_STATES["next"]
+        pygame.event.pump()
         if self.selectorButton.checkForInput():
             return Constants.UI_STATES["levelSelect"]
+        if self.conButton.checkForInput():
+            return Constants.UI_STATES["next"]
         return Constants.UI_STATES["cleared"]
 
     def draw(self):
@@ -367,9 +370,10 @@ class losePanelUI:
         self.selectorButton = CompleteButton(selButtonX, selButtonY, selector, 1)
 
     def checkInput(self):
-        if self.retryButton.checkForInput(self.screen):
+        pygame.event.pump()
+        if self.retryButton.checkForInput():
             return Constants.UI_STATES["restart"]
-        if self.selectorButton.checkForInput(self.screen):
+        if self.selectorButton.checkForInput():
             return UI_STATES["levelSelect"]
         return Constants.UI_STATES["lose"]
 

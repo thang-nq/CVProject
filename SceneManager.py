@@ -32,7 +32,6 @@ class manager:
         self.wonPanelUI = GameUI.wonPanelUI(self.screen)
         self.losePanelUI = GameUI.losePanelUI(self.screen)
 
-
     def SetOffButton(self):
         self.buttonPressed = False
 
@@ -68,15 +67,19 @@ class manager:
 
     def loadLevel(self):
         self.game.number = self.gameState - len(Constants.UI_STATES)
-        self.inGameUI.level = self.game.number +1
+        self.inGameUI.level = self.game.number
         self.game.clear()
+        self.game.ended = 0
         self.game.load()
 
     def getGame(self):
+
+
         self.game.event_hanlder()
         self.game.draw()
         self.inGameUI.draw()
         self.gameState = self.inGameUI.checkInput(self.time_now, self.next_allowed)
+
         if self.gameState == Constants.UI_STATES["restart"]:
             self.next_allowed = self.time_now + self.DELAY + 1000
             self.game.restart()
@@ -87,8 +90,10 @@ class manager:
 
         if self.game.ended > 0:
             self.gameState = Constants.UI_STATES["cleared"]
+            self.wonPanelUI.draw()
         elif self.game.ended < 0:
             self.gameState = Constants.UI_STATES["lose"]
+            self.losePanelUI.draw()
 
         self.game.update()
 
@@ -96,20 +101,27 @@ class manager:
         self.game.restart()
 
     def getNextLevel(self):
-        self.gameState = len(Constants.UI_STATES) + self.game.number + 1
-        self.inGameUI.level = self.game.number + 1 
+        self.game.number +=1
+        self.gameState = len(Constants.UI_STATES) + self.game.number
+        self.inGameUI.level = self.game.number
+
         self.game.clear()
+        self.game.ended = 0
         self.game.load()
         self.getGame()
 
     def getWinPanel(self):
-        # --------------- FIX mpos not updating here -----------------------
-        self.gameState =  self.wonPanelUI.checkInput()
-        if self.count <=0:
-            self.count += 1
-            self.wonPanelUI.draw()
+        self.gameState = self.wonPanelUI.checkInput()
+        if self.gameState == Constants.UI_STATES["levelSelect"] or self.gameState == Constants.UI_STATES["next"]:
+            self.next_allowed = self.time_now + self.DELAY
+            self.levelsUI.score[self.game.number-1] = 4 - self.game.gameStart +1
+            self.levelsUI.setStar(self.game.number-1)
+
 
 
     def getLosePanel(self):
-        self.losePanelUI.draw()
         self.gameState = self.losePanelUI.checkInput()
+        if self.gameState == Constants.UI_STATES["levelSelect"] or self.gameState == Constants.UI_STATES["restart"]:
+            self.next_allowed = self.time_now + self.DELAY
+            if self.gameState == Constants.UI_STATES["restart"]:
+                self.game.ended =0
