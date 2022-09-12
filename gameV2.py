@@ -148,9 +148,9 @@ class Bubble_tea:
                 self.X, self.Y = position.previouspos
                 mpos = position.currentpos
                 self.segs.append(self.create_segments(mpos))
-                position.previouspos = position.currentpos
-            if position.state != 'Drawing':
-                position.previouspos = (0, 0)
+                # position.previouspos = position.currentpos
+            # if position.state != 'Drawing':
+            #     # position.previouspos = (0, 0)
 
 
             if position.state == 'Close':

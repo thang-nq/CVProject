@@ -5,6 +5,7 @@ from LevelBox import NormalLevelBox, ChocolateLevelBox
 from Panel import GamePanel, AboutUsCompBox, SettingCompBox
 import MusicController
 import Constants
+import position
 
 WIDTH = Constants.WIDTH
 HEIGHT = Constants.HEIGHT
@@ -332,6 +333,7 @@ class wonPanelUI:
         selButtonX = WIDTH / 2 - selector.get_width() / 2 + 70
         selButtonY = HEIGHT / 2 - selector.get_height() / 2 + 240
         self.selectorButton = CompleteButton(selButtonX, selButtonY, selector, 1)
+
 
     def checkInput(self):
         pygame.event.pump()

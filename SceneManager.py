@@ -5,6 +5,7 @@ import Constants
 import gameV2
 import pymunk
 import pygame
+import position
 
 UI_STATES = Constants.UI_STATES
 
@@ -12,7 +13,7 @@ buttonDelay = 1
 
 
 class manager:
-    def __init__(self, screen):
+    def __init__(self, screen, controlCanvas):
         self.gameState = UI_STATES['main']
         self.time_now = 0
         self.next_allowed = 0
@@ -20,6 +21,7 @@ class manager:
         self.count = 0
         self.buttonPressed = False
         self.screen = screen
+        self.controlCanvas = controlCanvas
         # self.space = space
 
         # ------------------- UIs ---------------------

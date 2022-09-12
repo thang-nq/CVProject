@@ -104,7 +104,7 @@ class ChocolateLevelBox():
         action = False
         # check mouse over and clicked condition
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+            if position.state == 'Selecting' and self.clicked == False:
                 self.clicked = True
                 action = True
         if pygame.mouse.get_pressed()[0] == 0:
