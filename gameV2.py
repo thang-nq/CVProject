@@ -153,7 +153,7 @@ class Bubble_tea:
                 position.previouspos = (0, 0)
 
 
-            if position.state == 'Close'
+            if position.state == 'Close':
                 if self.gameStart < 1:
                     self.balls.append(GameObjects.Dot(self.space, self.RAD, self.tempBallPos[0], self.player_img,
                                                       (self.RAD * 2.4, self.RAD * 2.4), 'ball',color=(103,192,169)))
