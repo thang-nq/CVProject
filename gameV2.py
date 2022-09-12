@@ -23,10 +23,10 @@ class Bubble_tea:
         self.space = pymunk.Space()
         # self.space = space
         self.space.gravity = (0, Constants.GRAVITY)
-        self.background = pygame.image.load('MilkTeaImages/Background.png').convert_alpha()
-        self.player_img = pygame.image.load('MilkTeaImages/Bubble_Small.png').convert_alpha()
-        self.goal_img = pygame.image.load('MilkTeaImages/TeaBall.png').convert_alpha()
-        self.die_img = pygame.image.load('MilkTeaImages/MilkBall.png').convert_alpha()
+        self.background = pygame.image.load('assets/MilkTeaImages/Background.png').convert_alpha()
+        self.player_img = pygame.image.load('assets/MilkTeaImages/Bubble_Small.png').convert_alpha()
+        self.goal_img = pygame.image.load('assets/MilkTeaImages/TeaBall.png').convert_alpha()
+        self.die_img = pygame.image.load('assets/MilkTeaImages/MilkBall.png').convert_alpha()
 
         # CONSTANTS
         self.FPS = Constants.FPS
@@ -150,7 +150,7 @@ class Bubble_tea:
                 if self.gameStart < 1:
                     self.balls.append(GameObjects.Dot(self.space, self.RAD, self.tempBallPos[0], self.player_img,
                                                       (self.RAD * 2.4, self.RAD * 2.4), 'ball',color=(103,192,169)))
-                    self.balls.append(GameObjects.Dot(self.space, 50, self.tempBallPos[1], self.goal_img,
+                    self.balls.append(GameObjects.Dot(self.space, Constants.GOAL_RAD, self.tempBallPos[1], self.goal_img,
                                                       (Constants.GOAL_RAD * 2.2, Constants.GOAL_RAD * 2.2), 'goal',color=(241,186,80)))
                     if len(self.tempBallPos) > 2:
                         for i in range(2, len(self.tempBallPos)):
@@ -167,9 +167,13 @@ class Bubble_tea:
     def draw(self):
         self.screen.blit(self.background, (0, 0))
         if self.gameStart == 0:
-            # pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
-            # pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
-            self.tempSprites.draw(self.screen)
+            pygame.draw.circle(self.screen, (103,192,169), self.tempBallPos[0], self.RAD)
+            pygame.draw.circle(self.screen, (241,186,80), self.tempBallPos[1], Constants.GOAL_RAD)
+
+            if len(self.tempBallPos) > 2:
+                for i in range(2, len(self.tempBallPos)):
+                    pygame.draw.circle(self.screen, (0, 0, 0), self.tempBallPos[i], self.RAD)
+            # self.tempSprites.draw(self.screen)
 
         self.draw_apples(self.balls)
         self.draw_path(self.segs)

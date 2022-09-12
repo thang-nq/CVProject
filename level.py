@@ -18,9 +18,9 @@ class Level:
         self.tempPos = ballsPos
         self.platforms = platforms
         self.platformtemp = platformtemp
-        self.player = pygame.image.load('MilkTeaImages/Bubble_Small.png').convert_alpha()
-        self.goal_img = pygame.image.load('MilkTeaImages/TeaBall.png').convert_alpha()
-        self.die_img = pygame.image.load('MilkTeaImages/MilkBall.png').convert_alpha()
+        self.player = pygame.image.load('assets/MilkTeaImages/Bubble_Small.png').convert_alpha()
+        self.goal_img = pygame.image.load('assets/MilkTeaImages/TeaBall.png').convert_alpha()
+        self.die_img = pygame.image.load('assets/MilkTeaImages/MilkBall.png').convert_alpha()
 
         self.setup_level(level_map.getMap(level_num))
         self.load_level()
@@ -41,10 +41,10 @@ class Level:
         shape1 = GameObjects.Seg(self.space, 2, 1, (0, 700), (Constants.WIDTH, 700), elastic=0).getShape()
         self.tempPos.append((Constants.WIDTH * 0.35, 200))
         self.tempPos.append((Constants.WIDTH * 0.65, 200))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
 
         self.platforms.append(shape1)
 
@@ -53,10 +53,10 @@ class Level:
         self.platforms.append(shape1)
         self.tempPos.append((Constants.WIDTH * 0.35, 200))
         self.tempPos.append((Constants.WIDTH * 0.65, 650))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player, color=(103,192,169)))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img, color=(241,186,80)))
 
     def level3(self):
         shape1 = GameObjects.Seg(self.space, 0, 1, (0, 300), (200, 300), elastic=0).getShape()
@@ -76,10 +76,10 @@ class Level:
 
         self.tempPos.append((210, 250))
         self.tempPos.append((1290, 250))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
 
     def level4(self):
 
@@ -97,10 +97,10 @@ class Level:
 
         self.tempPos.append((150, 300))
         self.tempPos.append((1290, 250))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
 
     def level5(self):
         shape1 = GameObjects.Seg(self.space, 0, 1, (650, 300), (1050, 300), elastic=0).getShape()
@@ -118,10 +118,10 @@ class Level:
         self.tempPos.append((1030, 630))
         self.tempPos.append((Constants.WIDTH * 0.65, 150))
 
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
 
     def level6(self):
 
@@ -132,12 +132,12 @@ class Level:
         self.tempPos.append((Constants.WIDTH * 0.65, 200))
         self.tempPos.append((Constants.WIDTH * 0.5, 200))
 
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[2], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[2], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
 
     def level7(self):
         shape1 = GameObjects.Seg(self.space, 0, 1, (0, 300), (200, 300), elastic=0).getShape()
@@ -155,12 +155,12 @@ class Level:
         self.tempPos.append((1100, 650))
         self.tempPos.append((400, 200))
 
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[2], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[2], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
 
     def level8(self):
         shape1 = GameObjects.Seg(self.space, 0, 1, (0, 150), (700, 700), elastic=0).getShape()
@@ -175,12 +175,12 @@ class Level:
         self.tempPos.append((750, 650))
         self.tempPos.append((1150, 200))
 
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[2], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[2], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
 
     def level9(self):
         shape1 = GameObjects.Seg(self.space, 0, 1, (0, 300), (500, 700), elastic=0).getShape()
@@ -197,14 +197,15 @@ class Level:
         self.tempPos.append((550, 650))
         self.tempPos.append((1050, 200))
         self.tempPos.append((200, 100))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[2], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[3], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
+
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[2], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[3], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
 
     def level10(self):
         shape1 = GameObjects.Seg(self.space, 5, 1, (0, 700), (1500, 700), elastic=0).getShape()
@@ -232,14 +233,14 @@ class Level:
         self.tempPos.append((300, 200))
         self.tempPos.append((1200, 200))
 
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[2], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
-        self.balls.add(
-            GameSprites.Ball(self.tempPos[3], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[0], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.player))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[1], (Constants.GOAL_RAD * 2.18, Constants.GOAL_RAD * 2.18), self.goal_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[2], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
+        # self.balls.add(
+        #     GameSprites.Ball(self.tempPos[3], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
 
         pygame.draw.line(self.screen, (60, 61, 71), (50, 250), (400, 225), 5)
         pygame.draw.line(self.screen, (60, 61, 71), (1450, 250), (1100, 225), 5)

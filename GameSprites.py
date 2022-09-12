@@ -21,4 +21,3 @@ class Ball(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         self.rect.center = pos
-

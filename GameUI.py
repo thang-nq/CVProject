@@ -11,18 +11,18 @@ HEIGHT = Constants.HEIGHT
 UI_STATES = Constants.UI_STATES
 
 # ---------------------------------- BACKGROUND IMG ----------------------------------
-menuBackground = pygame.image.load('MilkTeaImages/IntroBackground.png').convert_alpha()
+menuBackground = pygame.image.load('assets/MilkTeaImages/IntroBackground.png').convert_alpha()
 screenPaddingX = 50
 screenPaddingY = 50
 
 # ---------------------------------- Common button ----------------------------------
-squareButton_img = pygame.image.load('MilkTeaImages/Button_Square.png').convert_alpha()
+squareButton_img = pygame.image.load('assets/MilkTeaImages/Button_Square.png').convert_alpha()
 squareWidth = squareButton_img.get_width()
 squareHeight = squareButton_img.get_height()
 
 # ---------------------------------- END ---------------------------------------------
 # ---------------------------------- Cancel button ---------------------------------------------
-cancel_img = pygame.image.load('MilkTeaImages/QuitButton.png').convert_alpha()
+cancel_img = pygame.image.load('assets/MilkTeaImages/QuitButton.png').convert_alpha()
 
 
 class mainUI:
@@ -34,14 +34,14 @@ class mainUI:
         # ---------------------------------- End ----------------------------------------------
 
         # ---------------------------------- TITLE IMG ----------------------------------------------
-        title = pygame.image.load('MilkTeaImages/IntroTitle.png').convert_alpha()
+        title = pygame.image.load('assets/MilkTeaImages/IntroTitle.png').convert_alpha()
         titleX = WIDTH / 2 - title.get_width() / 2
         titleY = 200 - title.get_height() / 2
 
         # ---------------------------------- End ----------------------------------------------
 
         # Play button
-        playButton_img = pygame.image.load('MilkTeaImages/PlayButton.png').convert_alpha()
+        playButton_img = pygame.image.load('assets/MilkTeaImages/PlayButton.png').convert_alpha()
         playButtonScale = 0.6
         playButtonX = WIDTH / 2 - int(playButton_img.get_width() / 2 * playButtonScale)
         playButtonY = HEIGHT / 2 - int(playButton_img.get_height() / 2 * playButtonScale)
@@ -56,14 +56,14 @@ class mainUI:
         iconButtonScale = 0.5
 
         # Setting button
-        settingIcon_img = pygame.image.load('MilkTeaImages/SettingIcon.png').convert_alpha()
+        settingIcon_img = pygame.image.load('assets/MilkTeaImages/SettingIcon.png').convert_alpha()
         settingButtonX = screenPaddingX
         settingButtonY = HEIGHT - screenPaddingY - int(squareWidth * buttonScale)
         self.settingButton = IconButton2(settingButtonX, settingButtonY, squareButton_img,
                                          settingIcon_img, buttonScale,
                                          iconButtonScale)
         # About button
-        aboutIcon_img = pygame.image.load('MilkTeaImages/AboutIcon.png').convert_alpha()
+        aboutIcon_img = pygame.image.load('assets/MilkTeaImages/AboutIcon.png').convert_alpha()
         aboutButtonX = settingButtonX + 150
         aboutButtonY = settingButtonY
 
@@ -71,7 +71,7 @@ class mainUI:
                                        buttonScale,
                                        iconButtonScale)
         # about property
-        exitIcon_img = pygame.image.load("MilkTeaImages/ExitIcon.png").convert_alpha()
+        exitIcon_img = pygame.image.load("assets/MilkTeaImages/ExitIcon.png").convert_alpha()
 
         # exit property
         exitButtonX = WIDTH - screenPaddingX - exitIcon_img.get_width() / 2
@@ -113,7 +113,7 @@ class selectorUI:
         buttonScale = 0.8
 
         # icon
-        returnIcon = pygame.image.load('MilkTeaImages/ReturnIcon.png').convert_alpha()
+        returnIcon = pygame.image.load('assets/MilkTeaImages/ReturnIcon.png').convert_alpha()
         returnButtonX = screenPaddingX
         returnButtonY = screenPaddingY
         iconScale = 0.5
@@ -179,7 +179,7 @@ class aboutUI:
         self.overlay.fill((0, 0, 0))
 
         # -------------- Overlay Panel ----------------
-        aboutPanel_img = pygame.image.load('MilkTeaImages/AboutUs.png').convert_alpha()
+        aboutPanel_img = pygame.image.load('assets/MilkTeaImages/AboutUs.png').convert_alpha()
         self.aboutPanel = GamePanel(WIDTH / 2, HEIGHT / 2, aboutPanel_img, 1)
 
         # ------------------------ Cancel Panel ------------------------
@@ -191,10 +191,10 @@ class aboutUI:
         # --------------------------- END -------------------------------
 
         # ------------------------------- AVATARS -------------------------------
-        avatarSample1 = pygame.image.load('MilkTeaImages/Avatar_Beereel.png').convert_alpha()
-        avatarSample2 = pygame.image.load('MilkTeaImages/Avatar_Princess.png').convert_alpha()
-        avatarSample3 = pygame.image.load('MilkTeaImages/Avatar_Tinia.png').convert_alpha()
-        avatarSample4 = pygame.image.load('MilkTeaImages/Avatar_Scyn.png').convert_alpha()
+        avatarSample1 = pygame.image.load('assets/MilkTeaImages/Avatar_Beereel.png').convert_alpha()
+        avatarSample2 = pygame.image.load('assets/MilkTeaImages/Avatar_Princess.png').convert_alpha()
+        avatarSample3 = pygame.image.load('assets/MilkTeaImages/Avatar_Tinia.png').convert_alpha()
+        avatarSample4 = pygame.image.load('assets/MilkTeaImages/Avatar_Scyn.png').convert_alpha()
 
         khoaX = WIDTH / 2 - 250
         khoaY = HEIGHT / 2 - 50
@@ -246,7 +246,7 @@ class settingUI:
         self.overlay.set_alpha(80)
         self.overlay.fill((0, 0, 0))
         # -------------- Overlay Panel ----------------
-        settingPanel_img = pygame.image.load('MilkTeaImages/Setting.png').convert_alpha()
+        settingPanel_img = pygame.image.load('assets/MilkTeaImages/Setting.png').convert_alpha()
         self.settingPanel = GamePanel(WIDTH / 2, HEIGHT / 2, settingPanel_img, 1)
 
         # -------------- Cancel symbol ----------------
@@ -256,7 +256,7 @@ class settingUI:
         cancelY = HEIGHT / 2 - 240
         self.cancelButton = CompleteButton(cancelX, cancelY, self.cancel_img, 0.8)
         # -------------- Music icon ----------------
-        musicIcon_img = pygame.image.load('MilkTeaImages/MusicIcon.png').convert_alpha()
+        musicIcon_img = pygame.image.load('assets/MilkTeaImages/MusicIcon.png').convert_alpha()
         musicSettingX = WIDTH / 2
         musicSettingY = HEIGHT / 2 - 50
         self.musicSetting = SettingCompBox(musicSettingX, musicSettingY, musicIcon_img, "Music", 1)
@@ -287,14 +287,14 @@ class inGameUI:
         buttonScale = 0.6
         iconScale = 0.3
         # ------------------------ Restart Button ------------------------
-        restartIcon = pygame.image.load('MilkTeaImages/RestartIcon.png').convert_alpha()
+        restartIcon = pygame.image.load('assets/MilkTeaImages/RestartIcon.png').convert_alpha()
         restartPosX = Constants.WIDTH - screenPaddingX - restartIcon.get_width() / 2
         restartPosY = screenPaddingY
         self.restartButton = IconButton2(restartPosX, restartPosY, squareButton_img, restartIcon, buttonScale,
                                          iconScale)
 
         # ------------------------ Return Button ------------------------
-        returnIcon = pygame.image.load('MilkTeaImages/ReturnIcon.png').convert_alpha()
+        returnIcon = pygame.image.load('assets/MilkTeaImages/ReturnIcon.png').convert_alpha()
         returnPosX = screenPaddingX
         returnPosY = screenPaddingY
         self.returnButton = IconButton2(returnPosX, returnPosY, squareButton_img, returnIcon, buttonScale, iconScale)
@@ -320,15 +320,15 @@ class wonPanelUI:
         self.overlay.set_alpha(80)
         self.overlay.fill((0, 0, 0))
         # -------------- Overlay Panel ----------------
-        wonPanel_img = pygame.image.load('MilkTeaImages/YouWon.png').convert_alpha()
+        wonPanel_img = pygame.image.load('assets/MilkTeaImages/YouWon.png').convert_alpha()
         self.aboutPanel = GamePanel(WIDTH / 2, HEIGHT / 2, wonPanel_img, 0.9)
         # -------------- Continue Button ----------------
-        conButton_img = pygame.image.load('MilkTeaImages/ContinueButton.png').convert_alpha()
+        conButton_img = pygame.image.load('assets/MilkTeaImages/ContinueButton.png').convert_alpha()
         conButtonX = WIDTH / 2 - conButton_img.get_width() / 2 + 250
         conButtonY = HEIGHT / 2 - conButton_img.get_height() / 2 + 300
         self.conButton = CompleteButton(conButtonX, conButtonY, conButton_img, 1)
         # -------------- Selector Button ----------------
-        selector = pygame.image.load('MilkTeaImages/YouWon_Selector.png').convert_alpha()
+        selector = pygame.image.load('assets/MilkTeaImages/YouWon_Selector.png').convert_alpha()
         selButtonX = WIDTH / 2 - selector.get_width() / 2 + 70
         selButtonY = HEIGHT / 2 - selector.get_height() / 2 + 240
         self.selectorButton = CompleteButton(selButtonX, selButtonY, selector, 1)
@@ -356,15 +356,15 @@ class losePanelUI:
         self.overlay.set_alpha(80)
         self.overlay.fill((0, 0, 0))
         # -------------- Overlay Panel ----------------
-        losePanel_img = pygame.image.load('MilkTeaImages/YouLose.png').convert_alpha()
+        losePanel_img = pygame.image.load('assets/MilkTeaImages/YouLose.png').convert_alpha()
         self.aboutPanel = GamePanel(WIDTH / 2, HEIGHT / 2, losePanel_img, 1)
         # -------------- retry Button ----------------
-        retry_img = pygame.image.load('MilkTeaImages/YouLoseButton_Retry.png').convert_alpha()
+        retry_img = pygame.image.load('assets/MilkTeaImages/YouLoseButton_Retry.png').convert_alpha()
         conButtonX = WIDTH / 2 - retry_img.get_width() / 2 + 300
         conButtonY = HEIGHT / 2 - retry_img.get_height() / 2 + 250
         self.retryButton = CompleteButton(conButtonX, conButtonY, retry_img, 1)
         # -------------- Selector Button ----------------
-        selector = pygame.image.load('MilkTeaImages/YouLoseButton_Menu.png').convert_alpha()
+        selector = pygame.image.load('assets/MilkTeaImages/YouLoseButton_Menu.png').convert_alpha()
         selButtonX = WIDTH / 2 - selector.get_width() / 2 + 100
         selButtonY = HEIGHT / 2 - selector.get_height() / 2 + 200
         self.selectorButton = CompleteButton(selButtonX, selButtonY, selector, 1)

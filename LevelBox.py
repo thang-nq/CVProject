@@ -5,11 +5,11 @@ pygame.init()
 font = pygame.font.SysFont("Ravie", 90)
 
 # level box
-levelBox_img = pygame.image.load('MilkTeaImages/GreenLevelSelection.png')
+levelBox_img = pygame.image.load('assets/MilkTeaImages/GreenLevelSelection.png')
 
 
 # challenge box
-challengeBox_img = pygame.image.load('MilkTeaImages/ChallengeLevelSelection.png')
+challengeBox_img = pygame.image.load('assets/MilkTeaImages/ChallengeLevelSelection.png')
 
 
 # box shared property
@@ -25,10 +25,10 @@ textOffsetY = 5
 
 
 # milktea
-milktea_img = pygame.image.load('MilkTeaImages/MilkTea_Normal_Small.png')
-milkteaBackground_img = pygame.image.load('MilkTeaImages/MilkTeaBackground_Normal.png')
-chocotea_img = pygame.image.load('MilkTeaImages/MilkTea_Chocolate_Small.png')
-chocoteaBackground_img = pygame.image.load('MilkTeaImages/MilkTeaBackground_Chocolate.png')
+milktea_img = pygame.image.load('assets/MilkTeaImages/MilkTea_Normal_Small.png')
+milkteaBackground_img = pygame.image.load('assets/MilkTeaImages/MilkTeaBackground_Normal.png')
+chocotea_img = pygame.image.load('assets/MilkTeaImages/MilkTea_Chocolate_Small.png')
+chocoteaBackground_img = pygame.image.load('assets/MilkTeaImages/MilkTeaBackground_Chocolate.png')
 
 
 # compute shared property of milktea
