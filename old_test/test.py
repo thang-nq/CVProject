@@ -205,7 +205,7 @@ class PhysicsDemo:
                     p = self.flipyv(Vec2d(*event.pos))
                     self.balls.append(self.create_ball(p))
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:  # RMB
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:  # RMB
                 if pygame.key.get_mods() & pygame.KMOD_SHIFT:
                     pass
 
@@ -232,10 +232,8 @@ class PhysicsDemo:
                 ### Create Wall
                 self.create_wall_segments(self.wall_points)
                 self.wall_points = []
-            elif event.type == pygame.KEYUP and event.key in (
-                pygame.K_RSHIFT,
-                pygame.K_LSHIFT,
-            ):
+
+            elif event.type == pygame.KEYUP and event.key in (pygame.K_RSHIFT,pygame.K_LSHIFT,):
                 ### Create Polygon
 
                 if len(self.poly_points) > 0:
@@ -249,6 +247,8 @@ class PhysicsDemo:
                     self.poly_points = u.poly_vectors_around_center(self.poly_points)
                     self.polys.append(self.create_poly(self.poly_points, pos=center))
                 self.poly_points = []
+
+
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.run_physics = not self.run_physics
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_k:
