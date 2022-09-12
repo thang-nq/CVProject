@@ -1,4 +1,3 @@
-
 import pygame, pymunk
 from Button import CompleteButton, IconButton2
 import Constants
@@ -28,14 +27,15 @@ isHand = False
 # caption
 pygame.display.set_caption("MilkTea")
 
-gameManager = manager(screen )
+gameManager = manager(screen)
+
 
 
 
 def main():
     global isHand
     clock = pygame.time.Clock()
-
+    gameManager.gameState = Constants.UI_STATES["main"]
     # ----------------- Game loop --------------------------------
     while True:
         gameManager.time_now = pygame.time.get_ticks()
@@ -59,15 +59,29 @@ def main():
 
         elif gameManager.gameState == Constants.UI_STATES["levelSelect"]:
             gameManager.getLevelSelect()
+            if gameManager.gameState > len(Constants.UI_STATES):
+                gameManager.loadLevel()
+                gameManager.getGame()
 
         elif gameManager.gameState == Constants.UI_STATES["setting"]:
             gameManager.getSetting()
 
         elif gameManager.gameState == Constants.UI_STATES["about"]:
             gameManager.getAbout()
-            gameManager.getGame()
+
+        elif gameManager.gameState == Constants.UI_STATES["cleared"]:
+            gameManager.getWinPanel()
+
+        elif gameManager.gameState == Constants.UI_STATES["next"]:
+            gameManager.getNextLevel()
+
+        elif gameManager.gameState == Constants.UI_STATES["lose"]:
+            gameManager.getLosePanel()
 
         elif gameManager.gameState >= len(Constants.UI_STATES):
+
+            gameManager.game.number = gameManager.gameState - len(Constants.UI_STATES)
+
             gameManager.getGame()
 
         elif gameManager.gameState == Constants.UI_STATES["restart"]:

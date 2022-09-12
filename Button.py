@@ -13,7 +13,6 @@ class CompleteButton():
     def checkForInput(self):
         pos = position.currentpos
         action = False
-
         # check mouse over and clicked condition
 
         if self.rect.collidepoint(pos):
