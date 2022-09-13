@@ -142,6 +142,7 @@ class Bubble_tea:
     def event_hanlder(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.quit()
                 return
         if position.state != 'None':
             if position.state == 'Drawing':
