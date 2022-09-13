@@ -13,7 +13,7 @@ buttonDelay = 1
 
 
 class manager:
-    def __init__(self, screen, controlCanvas):
+    def __init__(self, screen):
         self.gameState = UI_STATES['main']
         self.time_now = 0
         self.next_allowed = 0
@@ -21,7 +21,6 @@ class manager:
         self.count = 0
         self.buttonPressed = False
         self.screen = screen
-        self.controlCanvas = controlCanvas
         # self.space = space
 
         # ------------------- UIs ---------------------
@@ -114,6 +113,7 @@ class manager:
 
     def getWinPanel(self):
         self.gameState = self.wonPanelUI.checkInput()
+        self.wonPanelUI.draw()
         if self.gameState == Constants.UI_STATES["levelSelect"] or self.gameState == Constants.UI_STATES["next"]:
             self.next_allowed = self.time_now + self.DELAY
             self.levelsUI.score[self.game.number-1] = 4 - self.game.gameStart +1
@@ -123,6 +123,7 @@ class manager:
 
     def getLosePanel(self):
         self.gameState = self.losePanelUI.checkInput()
+        self.losePanelUI.draw()
         if self.gameState == Constants.UI_STATES["levelSelect"] or self.gameState == Constants.UI_STATES["restart"]:
             self.next_allowed = self.time_now + self.DELAY
             if self.gameState == Constants.UI_STATES["restart"]:
