@@ -5,7 +5,7 @@ import mediapipe as mp
 
 
 class handDetector():
-    def __init__(self, mode=False, maxHands=1, detectCon=0.5, trackCon=0.5,):
+    def __init__(self, mode=False, maxHands=1, detectCon=0.5, trackCon=0.5):
         self.mode = mode
         self.maxHands = maxHands
         self.detectCon = detectCon
@@ -89,21 +89,20 @@ class handDetector():
         self.handState = 'Navigate'
         if self.results.multi_hand_landmarks:
             fingers = self.fingersUp()
-
             if self.gestureMode == 'Menu':
-                if not fingers[0] and fingers[1] and not fingers[2] and not fingers[3] and not fingers[4]:
+                if fingers == [0, 1, 0, 0, 0]:
                     self.handState = 'Selecting'
                     return self.handState
-                if not fingers[0] and fingers[1] and not fingers[3] and not fingers[4]:
+                if fingers == [0, 1, 1, 0, 0]:
                     self.handState = 'Navigate'
             if self.gestureMode == 'Gameplay':
-                if not fingers[0] and fingers[1] and fingers[2] and not fingers[3] and not fingers[4]:
+                if fingers == [0, 1, 1, 0, 0]:
                     self.handState = "Drawing"
                     return self.handState
-                if all(not finger for finger in fingers):
+                if fingers == [0, 0, 0, 0, 0]:
                     self.handState = "Close"
                     return self.handState
-                if not fingers[0] and fingers[1] and not fingers[2] and not fingers[3] and not fingers[4]:
+                if fingers == [0, 1, 0, 0, 0]:
                     self.handState = 'Selecting'
                     return self.handState
 
