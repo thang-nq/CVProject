@@ -24,10 +24,10 @@ class Bubble_tea:
         self.space = pymunk.Space()
         # self.space = space
         self.space.gravity = (0, Constants.GRAVITY)
-        self.background = pygame.image.load('MilkTeaImages/Background.png').convert_alpha()
-        self.player_img = pygame.image.load('MilkTeaImages/Bubble_Small.png').convert_alpha()
-        self.goal_img = pygame.image.load('MilkTeaImages/TeaBall.png').convert_alpha()
-        self.die_img = pygame.image.load('MilkTeaImages/MilkBall.png').convert_alpha()
+        self.background = pygame.image.load('assets/MilkTeaImages/Background.png').convert_alpha()
+        self.player_img = pygame.image.load('assets/MilkTeaImages/Bubble_Small.png').convert_alpha()
+        self.goal_img = pygame.image.load('assets/MilkTeaImages/TeaBall.png').convert_alpha()
+        self.die_img = pygame.image.load('assets/MilkTeaImages/MilkBall.png').convert_alpha()
 
         # CONSTANTS
         self.FPS = Constants.FPS

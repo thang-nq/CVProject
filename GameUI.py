@@ -317,7 +317,7 @@ class wonPanelUI:
     def __init__(self, screen):
         self.screen = screen
         # -------------- Overlay color ----------------
-        self.overlay = pygame.image.load('MilkTeaImages/Background.png').convert_alpha()
+        self.overlay = pygame.image.load('assets/MilkTeaImages/Background.png').convert_alpha()
         # self.overlay.set_alpha(0)
 
         # -------------- Overlay Panel ----------------
