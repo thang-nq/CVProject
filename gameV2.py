@@ -8,6 +8,7 @@ import GameObjects
 import Constants
 import GameUI
 from level import Level
+import position
 
 
 class Bubble_tea:
@@ -23,10 +24,10 @@ class Bubble_tea:
         self.space = pymunk.Space()
         # self.space = space
         self.space.gravity = (0, Constants.GRAVITY)
-        self.background = pygame.image.load('assets/MilkTeaImages/Background.png').convert_alpha()
-        self.player_img = pygame.image.load('assets/MilkTeaImages/Bubble_Small.png').convert_alpha()
-        self.goal_img = pygame.image.load('assets/MilkTeaImages/TeaBall.png').convert_alpha()
-        self.die_img = pygame.image.load('assets/MilkTeaImages/MilkBall.png').convert_alpha()
+        self.background = pygame.image.load('MilkTeaImages/Background.png').convert_alpha()
+        self.player_img = pygame.image.load('MilkTeaImages/Bubble_Small.png').convert_alpha()
+        self.goal_img = pygame.image.load('MilkTeaImages/TeaBall.png').convert_alpha()
+        self.die_img = pygame.image.load('MilkTeaImages/MilkBall.png').convert_alpha()
 
         # CONSTANTS
         self.FPS = Constants.FPS
@@ -76,6 +77,9 @@ class Bubble_tea:
         self.b2.begin = self.through
         self.b1.separate = self.collide_reset_game
         self.b2.separate = self.collide_reset_game
+        # self.level = Level(1, screen, self.tileSprites, self.platforms)
+        # self.level1 = Level(level_map1, self.screen)
+        # self.level2 = Level(level_map2, self.screen)
         self.d = self.space.add_collision_handler(self.collision['ball'], self.collision['die'])
         self.d.begin = self.die_reached
 
@@ -139,14 +143,18 @@ class Bubble_tea:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    self.X, self.Y = pygame.mouse.get_pos()
-            if pygame.mouse.get_pressed()[0]:
-                mpos = pygame.mouse.get_pos()
+                return
+        if position.state != 'None':
+            if position.state == 'Drawing':
+                self.X, self.Y = position.previouspos
+                mpos = position.currentpos
                 self.segs.append(self.create_segments(mpos))
+                # position.previouspos = position.currentpos
+            # if position.state != 'Drawing':
+            #     # position.previouspos = (0, 0)
 
-            if event.type == pygame.MOUSEBUTTONUP :
+
+            if position.state == 'Close':
                 if self.gameStart < 1:
                     self.balls.append(GameObjects.Dot(self.space, self.RAD, self.tempBallPos[0], self.player_img,
                                                       (self.RAD * 2.4, self.RAD * 2.4), 'ball',color=(103,192,169)))
@@ -168,12 +176,11 @@ class Bubble_tea:
         self.screen.blit(self.background, (0, 0))
         if self.gameStart == 0:
             pygame.draw.circle(self.screen, (103,192,169), self.tempBallPos[0], self.RAD)
-            pygame.draw.circle(self.screen, (241,186,80), self.tempBallPos[1], Constants.GOAL_RAD)
-
+            pygame.draw.circle(self.screen, (241,186,80),self.tempBallPos[1], Constants.GOAL_RAD)
+            # self.tempSprites.draw(self.screen)
             if len(self.tempBallPos) > 2:
                 for i in range(2, len(self.tempBallPos)):
                     pygame.draw.circle(self.screen, (0, 0, 0), self.tempBallPos[i], self.RAD)
-            # self.tempSprites.draw(self.screen)
 
         self.draw_apples(self.balls)
         self.draw_path(self.segs)

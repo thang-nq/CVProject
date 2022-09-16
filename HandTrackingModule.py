@@ -19,7 +19,8 @@ class handDetector():
         self.mpDrawingStyle = mp.solutions.drawing_styles
         self.tipIds = [4, 8, 12, 16, 20]
         self.handType = 'None'
-        self.handState = 'Resting'
+        self.handState = 'None'
+        self.gestureMode = 'None'
         # Video capture
         # self.pTime = 0
         # self.cTime = 0
@@ -41,7 +42,8 @@ class handDetector():
                                                self.mpDrawingStyle.get_default_hand_landmarks_style(),
                                                self.mpDrawingStyle.get_default_hand_connections_style())
         return img
-    def findPosition(self, img, handNo = 0, handL = 8, draw = True):
+    def findPosition(self, img, handNo = 0, handL = 8, draw = True, gestureMode = 'Menu'):
+        self.gestureMode = gestureMode
         self.lmList = []
         if self.results.multi_hand_landmarks:
             myHand = self.results.multi_hand_landmarks[handNo]
@@ -84,14 +86,24 @@ class handDetector():
 
     #Get current hand state by checking the finger array
     def getHandState(self):
-        self.handState = 'Unmapped'
+        self.handState = 'Navigate'
         if self.results.multi_hand_landmarks:
             fingers = self.fingersUp()
-            if fingers[1] and fingers[2] and not fingers[3] and not fingers[4]:
-                self.handState = "Selecting"
-                return self.handState
-            if fingers[1] and not fingers[2] and not fingers[3] and not fingers[4]:
-                self.handState = "Drawing"
-                return self.handState
+            if self.gestureMode == 'Menu':
+                if fingers == [0, 1, 0, 0, 0]:
+                    self.handState = 'Selecting'
+                    return self.handState
+                if fingers == [0, 1, 1, 0, 0]:
+                    self.handState = 'Navigate'
+            if self.gestureMode == 'Gameplay':
+                if fingers == [0, 1, 1, 0, 0]:
+                    self.handState = "Drawing"
+                    return self.handState
+                if fingers == [0, 0, 0, 0, 0]:
+                    self.handState = "Close"
+                    return self.handState
+                if fingers == [0, 1, 0, 0, 0]:
+                    self.handState = 'Selecting'
+                    return self.handState
 
         return self.handState

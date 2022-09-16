@@ -5,6 +5,7 @@ from LevelBox import NormalLevelBox, ChocolateLevelBox
 from Panel import GamePanel, AboutUsCompBox, SettingCompBox
 import MusicController
 import Constants
+import position
 
 WIDTH = Constants.WIDTH
 HEIGHT = Constants.HEIGHT
@@ -316,9 +317,9 @@ class wonPanelUI:
     def __init__(self, screen):
         self.screen = screen
         # -------------- Overlay color ----------------
-        self.overlay = pygame.Surface((WIDTH, HEIGHT))
-        self.overlay.set_alpha(80)
-        self.overlay.fill((0, 0, 0))
+        self.overlay = pygame.image.load('MilkTeaImages/Background.png').convert_alpha()
+        # self.overlay.set_alpha(0)
+
         # -------------- Overlay Panel ----------------
         wonPanel_img = pygame.image.load('assets/MilkTeaImages/YouWon.png').convert_alpha()
         self.aboutPanel = GamePanel(WIDTH / 2, HEIGHT / 2, wonPanel_img, 0.9)
@@ -332,6 +333,7 @@ class wonPanelUI:
         selButtonX = WIDTH / 2 - selector.get_width() / 2 + 70
         selButtonY = HEIGHT / 2 - selector.get_height() / 2 + 240
         self.selectorButton = CompleteButton(selButtonX, selButtonY, selector, 1)
+
 
     def checkInput(self):
         pygame.event.pump()

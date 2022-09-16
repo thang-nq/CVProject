@@ -1,5 +1,5 @@
 import pygame
-
+import position
 # property-----------------------------------------------------------------------------------------------------
 pygame.init()
 font = pygame.font.SysFont("Ravie", 90)
@@ -57,14 +57,14 @@ class NormalLevelBox():
         self.clicked = False
 
     def checkForInput(self):
-        pos = pygame.mouse.get_pos()
+        pos = position.currentpos
         action = False
         # check mouse over and clicked condition
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+            if position.state == 'Selecting' and self.clicked == False:
                 self.clicked = True
                 action = True
-        if pygame.mouse.get_pressed()[0] == 0:
+        else:
             self.clicked = False
         return action
 
@@ -100,11 +100,11 @@ class ChocolateLevelBox():
         self.clicked = False
 
     def checkForInput(self):
-        pos = pygame.mouse.get_pos()
+        pos = position.currentpos
         action = False
         # check mouse over and clicked condition
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+            if position.state == 'Selecting' and self.clicked == False:
                 self.clicked = True
                 action = True
         if pygame.mouse.get_pressed()[0] == 0:

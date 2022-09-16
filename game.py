@@ -72,7 +72,7 @@ class Bubble_tea:
         self.capture = cv2.VideoCapture(0)
         self.capture.set(3, 1280)
         self.capture.set(4, 720)
-        self.detector = htm.handDetector(detectCon=0.85)
+        self.detector = htm.handDetector(detectCon=0.5)
 
         # Level init
         # self.level1 = Level(level_map1, self.screen)
@@ -138,7 +138,7 @@ class Bubble_tea:
             self.X, self.Y = self.cX, self.cY
             print(self.X, self.Y)
         if handState == "Selecting" and self.gameStart < 1:
-            self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200), self.COLLTYPE_BALL))
+            self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200)))
             self.apples.append(self.create_goal())
             self.gameStart += 1
 
