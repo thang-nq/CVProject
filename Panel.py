@@ -2,8 +2,8 @@ import pygame
 pygame.init()
 # property------------------------------------------------------------------------------------------
 font = pygame.font.SysFont("Ravie", 40)
-tickBox_img = pygame.image.load('MilkTeaImages/TickBox.png')
-tick_img = pygame.image.load('MilkTeaImages/Tick.png')
+tickBox_img = pygame.image.load('assets/MilkTeaImages/TickBox.png')
+tick_img = pygame.image.load('assets/MilkTeaImages/Tick.png')
 iconX = -180
 contentX = -80
 tickBoxX = 150
