@@ -19,7 +19,7 @@ class handDetector():
         self.mpDrawingStyle = mp.solutions.drawing_styles
         self.tipIds = [4, 8, 12, 16, 20]
         self.handType = 'None'
-        self.handState = 'Resting'
+        self.handState = 'None'
         self.gestureMode = 'None'
         # Video capture
         # self.pTime = 0
