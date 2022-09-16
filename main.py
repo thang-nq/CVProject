@@ -1,10 +1,11 @@
 import cv2
 import numpy as np
 import os
-import pygame
+import pygame, sys
 import pymunk
 import GameObjects
-import game as g
+from settings import *
+from level import Level
 
 pygame.init()
 pygame.font.init()
@@ -17,11 +18,11 @@ pygame.display.set_caption("First Game!")
 space = pymunk.Space()
 space.gravity = (0, 981)
 x, y = 0, 0
-collision = {"ball": 1, "goal": 2, "border": 3, "line": 4}
+
 FPS = 60
 VEL = 5
 DT = 1 / FPS
-
+level = Level(level_map, screen)
 # Add a new collision type
 COLLTYPE_BALL = 2
 COLLTYPE_GOAL = 3
@@ -41,7 +42,7 @@ h.begin = goal_reached
 # Create and add the "goal"
 
 def create_goal():
-    seg = GameObjects.Dot(space, RAD, (400, 200), collisionType="goal", color=(255, 0, 0),)
+    seg = GameObjects.Dot(space, RAD, (400, 200), COLLTYPE_GOAL, color=(255, 0, 0))
     seg_shape = seg.shape
     return seg
 
@@ -105,7 +106,16 @@ def draw_path2(segments):
 
         pygame.draw.line(screen, (0, 0, 0), point1, point2, 5)
 
+def draw_box():
+    box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
+    box_shape = pymunk.Segment(box_body,(150,250),(500,250),0)
+    box_shape1 = pymunk.Segment(box_body, (500, 350), (650, 350), 0)
+    box_shape2 = pymunk.Segment(box_body, (700, 400), (850, 400), 0)
+    space.add(box_body,box_shape)
+    space.add(box_shape1)
+    space.add(box_shape2)
 
+    
 apples = []
 dots = []
 segs = []
@@ -118,6 +128,7 @@ segs = []
 
 
 def game():
+
     clock = pygame.time.Clock()
     run = True
     goal = create_goal()
@@ -125,6 +136,9 @@ def game():
 
     while run:
         screen.fill((247, 247, 247))
+        pygame.draw.line(screen,(0,255,0),(150,250),(500,250),10 )
+        pygame.draw.line(screen, (0, 255, 0), (500, 350), (650, 350), 10)
+        pygame.draw.line(screen, (0, 255, 0), (700, 400), (850, 400), 10)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
@@ -139,7 +153,8 @@ def game():
 
                     # dots.append(create_dot(space, (x,y)))
                 # elif event.button == 3:
-                # apples.append(create_apple(space, event.pos))
+                    # apples.append(create_apple(space, event.pos))
+
 
                     # dot = GameObjects.Dot(space, RAD, event.pos, COLLTYPE_BALL)
                 # dots.append(draw_path(event.pos))
@@ -152,22 +167,25 @@ def game():
             mpos = pygame.mouse.get_pos()
             # dots.append(create_dot(space, mpos))
             segs.append(create_segments(mpos))
+
         if not gameStart:
-            pygame.draw.circle(screen, (0, 255, 255), (50, 150), RAD)
             pygame.draw.circle(screen, (0, 0, 0), (200, 200), RAD)
             pygame.draw.circle(screen, (255, 0, 0), (400, 200), RAD)
 
-        draw_goal(goal)
+        # draw_goal(goal)
         draw_apples(apples)
         draw_path2(segs)
 
         # space.debug_draw(draw_options)
-        space.step(DT)
 
+        space.step(DT)
+        level.load_map()
+        draw_box()
         pygame.display.update()
         # pygame.display.flip()
         clock.tick(FPS)
 
 
 game()
+
 pygame.quit()
