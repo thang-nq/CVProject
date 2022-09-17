@@ -7,3 +7,4 @@ env/
 .vs
 __pycache__/
 build/
+main.exe
