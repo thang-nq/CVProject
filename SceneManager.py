@@ -2,7 +2,7 @@ import threading
 import GameUI
 import time
 import Constants
-import gameV2
+import game
 import pymunk
 import pygame
 import position
@@ -29,7 +29,7 @@ class manager:
         self.aboutUI = GameUI.aboutUI(self.screen)
         self.settingUI = GameUI.settingUI(self.screen)
         self.inGameUI = GameUI.inGameUI(self.screen)
-        self.game = gameV2.Bubble_tea(self.screen)
+        self.game = game.Bubble_tea(self.screen)
         self.wonPanelUI = GameUI.wonPanelUI(self.screen)
         self.losePanelUI = GameUI.losePanelUI(self.screen)
 

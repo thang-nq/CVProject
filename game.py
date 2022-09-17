@@ -1,24 +1,33 @@
+from ast import Constant
 import cv2
 import numpy as np
 import os
 import pygame
 import pymunk
 import GameObjects
-import HandTrackingModule as htm
 import Constants
 import GameUI
+from level import Level
+import position
+
 
 class Bubble_tea:
-    def __init__(self):
-        pygame.init()
-        pygame.font.init()
-
+    def __init__(self, screen):
+        # pygame.init()
+        # pygame.font.init()
         self.WIDTH, self.HEIGHT = Constants.WIDTH, Constants.HEIGHT
-        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        self.clock = pygame.time.Clock()
-        pygame.display.set_caption("First Game!")
+        self.screen = screen
+
+        # self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
+        # self.clock = pygame.time.Clock()
+
         self.space = pymunk.Space()
-        self.space.gravity = (0, 981)
+        # self.space = space
+        self.space.gravity = (0, Constants.GRAVITY)
+        self.background = pygame.image.load('assets/MilkTeaImages/Background.png').convert_alpha()
+        self.player_img = pygame.image.load('assets/MilkTeaImages/Bubble_Small.png').convert_alpha()
+        self.goal_img = pygame.image.load('assets/MilkTeaImages/TeaBall.png').convert_alpha()
+        self.die_img = pygame.image.load('assets/MilkTeaImages/MilkBall.png').convert_alpha()
 
         # CONSTANTS
         self.FPS = Constants.FPS
@@ -26,297 +35,301 @@ class Bubble_tea:
         self.DT = 1 / self.FPS
         self.RAD = 20
         self.LINE_WEIGHT = 10
-
         # Add a new collision type
         self.collision = Constants.COLLISION_TYPES
 
+        # ------- CREATE BORDER ------------------------------------------
+        self.border = GameObjects.Wall(self.space)
         # Variables
         self.gameStart = 0
-        self.X, self.Y = 0, 0
-        self.cX, self.cY = 0, 0
-        self.stroke = 0
         self.ended = 0
+        self.number = 1
+
+        # Arrays
+        self.balls = []
+        self.blocks = []
+        self.segs = []
+        self.death = []
+        self.platforms = []
+        # self.platforms2 = []
+        self.platformtemp = []
+        self.slopes = []
+
+        self.tileSprites = pygame.sprite.Group()
+        self.tempSprites = pygame.sprite.Group()
+        self.tempBallPos = []
+
+        self.level = Level(self.space, screen, self.number, self.tileSprites, self.platforms,self.platformtemp, self.slopes,
+                           self.tempSprites, self.tempBallPos)
+
+        # Varibles
+        self.X, self.Y = 0, 0
+        self.x_mouse, self.y_mouse = 0, 0
         self.inGameUI = GameUI.inGameUI(self.screen)
 
-        self.apples = []
-        self.dots = []
-        self.segs = []
-
-
-        # ------------------------------------------ CREATE BORDER ------------------------------------------
-        self.border = []
-        self.border.append(
-            GameObjects.Seg(self.space, 1, 1, (0, 0), (0, self.HEIGHT), elastic=0, collisionType="border"))
-        self.border.append(GameObjects.Seg(self.space, 1, 1, (0, self.HEIGHT), (self.WIDTH, self.HEIGHT), elastic=0,
-                                           collisionType="border"))
-        self.border.append(GameObjects.Seg(self.space, 1, 1, (self.WIDTH, self.HEIGHT), (self.WIDTH, 0), elastic=0,
-                                           collisionType="border"))
-        self.border.append(
-            GameObjects.Seg(self.space, 1, 1, (self.WIDTH, 0), (0, 0), elastic=0, collisionType="border"))
-
-        # ------------------------------------------ END BORDER ------------------------------------------
-        # Set up the collision callback function
+        # Setup the collision callback function
         self.h = self.space.add_collision_handler(self.collision['ball'], self.collision['goal'])
         self.h.begin = self.goal_reached
         self.h.separate = self.finished
-
         self.b1 = self.space.add_collision_handler(self.collision['ball'], self.collision['border'])
         self.b2 = self.space.add_collision_handler(self.collision['goal'], self.collision['border'])
         self.b1.begin = self.through
         self.b2.begin = self.through
-        self.b1.separate = self.reset_game
-        self.b2.separate = self.reset_game
-
-
-        # Tracking module config
-        self.capture = cv2.VideoCapture(0)
-        self.capture.set(3, 1280)
-        self.capture.set(4, 720)
-        self.detector = htm.handDetector(detectCon=0.5)
-
-        # Level init
+        self.b1.separate = self.collide_reset_game
+        self.b2.separate = self.collide_reset_game
+        # self.level = Level(1, screen, self.tileSprites, self.platforms)
         # self.level1 = Level(level_map1, self.screen)
         # self.level2 = Level(level_map2, self.screen)
+        self.d = self.space.add_collision_handler(self.collision['ball'], self.collision['die'])
+        self.d.begin = self.die_reached
 
-
-    # ==================================================================================================================
+    # -------COLLISION HANDLER ------------------------------------------
+    # -------START ------------------------------------------
     # Define collision callback function, will be called when X touches Y
     def through(self, arbiter, space, data):
         return False
 
     def goal_reached(self, arbiter, space, data):
         if self.ended == 0:
-            print("you reached the goal!")
+            # print("you reached the goal!")
             self.ended += 1
         return True
 
-    def finished(self, arbiter, space, data):
-        ball_shape1 = arbiter.shapes[0]
-        space.remove(ball_shape1, ball_shape1.body)
-        ball_shape2 = arbiter.shapes[1]
-        space.remove(ball_shape2, ball_shape2.body)
+    def die_reached(self, arbiter, space, data):
+        if self.ended == 0:
+            # print("you die!")
+            self.ended -= 1
         return True
 
+    # Define collision callback function, will be called when X touches Y
+    def finished(self, arbiter, space, data):
+        for ball in self.balls:
+            self.space.remove(ball.shape, ball.shape.body)
+        # ball_shape1 = arbiter.shapes[0]
+        # space.remove(ball_shape1, ball_shape1.body)
+        # ball_shape2 = arbiter.shapes[1]
+        # space.remove(ball_shape2, ball_shape2.body)
+        return True
+
+    def collide_reset_game(self, arbiter, space, data):
+        # FIX HERE =============================================
+        self.gameStart = 0
+        self.remove_segs()
+        for ball in self.balls:
+            self.space.remove(ball.shape, ball.shape.body)
+        self.balls.clear()
+        self.segs.clear()
+        self.draw()
+
+    # -------END ------------------------------------------
+
+    # ------- MAIN LOOP ------------------------------------------
     def main_loop(self):
-        self.h.begin = self.goal_reached
-        while True:
-            self.event_hanlder()
-            self.draw()
-            self.update()
+        # while True:
+        self.event_hanlder()
+        self.draw()
+        self.update()
+
+    # ------- CORE FUNCTIONS ------------------------------------------
+    # --------------------------------------------------------
 
     def update(self):
+        # if self.game_state != 1:
         self.space.step(self.DT)
-        pygame.display.update()
-        self.clock.tick(self.FPS)
-
-    def reset_game(self, arbiter, space, data):
-        self.gameStart = False
-        for shape in self.space.shapes:
-            if shape.collision_type != self.collision['border']:
-                self.space.remove(shape, shape.body)
-        self.apples = []
-        self.segs = []
-        self.draw()
-        return False
+        # pygame.display.update()
+        # self.clock.tick(self.FPS)
 
     def event_hanlder(self):
-        success, img = self.capture.read()
-        img = cv2.flip(img, 1)
-        img.flags.writeable = False
-        img = self.detector.findHands(img, draw=True)
-        lmList = self.detector.findPosition(img)
-        handState = 'None'
-        if len(lmList) != 0:
-            (self.cX, self.cY) = lmList[8][1:]
-            handState = self.detector.getHandState()
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-        if handState == "Drawing":
-            self.segs.append(self.create_segments((self.X, self.Y), (self.cX, self.cY)))
-            self.X, self.Y = self.cX, self.cY
-            print(self.X, self.Y)
-        if handState == "Selecting" and self.gameStart < 1:
-            self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200)))
-            self.apples.append(self.create_goal())
-            self.gameStart += 1
+                return
+        if position.state != 'None':
+            if position.state == 'Drawing':
+                self.X, self.Y = position.previouspos
+                mpos = position.currentpos
+                self.segs.append(self.create_segments(mpos))
+                # position.previouspos = position.currentpos
+            # if position.state != 'Drawing':
+            #     # position.previouspos = (0, 0)
 
-        # print(handState)
 
-        # if pygame.mouse.get_pressed()[0]:
-        #     mpos = pygame.mouse.get_pos()
-        #     self.segs.append(self.create_segments(mpos))
+            if position.state == 'Close':
+                if self.gameStart < 1:
+                    self.balls.append(GameObjects.Dot(self.space, self.RAD, self.tempBallPos[0], self.player_img,
+                                                      (self.RAD * 2.4, self.RAD * 2.4), 'ball',color=(103,192,169)))
+                    self.balls.append(GameObjects.Dot(self.space, Constants.GOAL_RAD, self.tempBallPos[1], self.goal_img,
+                                                      (Constants.GOAL_RAD * 2.2, Constants.GOAL_RAD * 2.2), 'goal',color=(241,186,80)))
+                    if len(self.tempBallPos) > 2:
+                        for i in range(2, len(self.tempBallPos)):
+                            self.balls.append(GameObjects.Dot(self.space, self.RAD, self.tempBallPos[i], self.die_img,
+                                                              (self.RAD * 2.4, self.RAD * 2.4), 'die', color=(0,0,0)))
+                    # self.platforms2.append(GameObjects.Seg2(self.space, 5, 1, pos1=self.platformtemp[0][0],pos2=self.platformtemp[0][1], elastic=0).getShape())
+                    # self.platforms2.append(
+                    #     GameObjects.Seg2(self.space, 5, 1, pos1=self.platformtemp[1][0], pos2=self.platformtemp[1][1],
+                    #                       elastic=0).getShape())
+                    self.gameStart += 1
+                else:
+                    self.gameStart += 1
 
     def draw(self):
-        self.screen.fill((247, 247, 247))
-        if not self.gameStart:
-            pygame.draw.circle(self.screen, (0, 0, 0), (200, 200), self.RAD)
-            pygame.draw.circle(self.screen, (255, 0, 0), (400, 200), self.RAD)
+        self.screen.blit(self.background, (0, 0))
+        if self.gameStart == 0:
+            pygame.draw.circle(self.screen, (103,192,169), self.tempBallPos[0], self.RAD)
+            pygame.draw.circle(self.screen, (241,186,80),self.tempBallPos[1], Constants.GOAL_RAD)
+            # self.tempSprites.draw(self.screen)
+            if len(self.tempBallPos) > 2:
+                for i in range(2, len(self.tempBallPos)):
+                    pygame.draw.circle(self.screen, (0, 0, 0), self.tempBallPos[i], self.RAD)
 
-        # draw_goal(goal)
-        self.inGameUI.draw()
-        self.draw_apples(self.apples)
+        self.draw_apples(self.balls)
         self.draw_path(self.segs)
+        self.draw_slopes(self.slopes)
+        # self.draw_path(self.platforms2)
 
-    def create_segments(self, previouspos, currentpos):
-        if previouspos == (0, 0):  # if the pen is not inside the canvas or first start the app
-            previouspos = currentpos  # pass the current coordinate of the pen
-        # draw a line from previous frame location of the pen to current frame position
-        seg_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        seg_shape = pymunk.Segment(seg_body, previouspos, currentpos, self.LINE_WEIGHT)
-        seg_shape.elasticity = 0.5
-        self.space.add(seg_body, seg_shape)
-        return seg_shape
+        self.border.draw(self.screen)
+        self.tileSprites.draw(self.screen)
+
+    def restart(self):
+        self.gameStart = 0
+        self.remove_segs()
+        if self.ended <= 0:
+            for ball in self.balls:
+                self.space.remove(ball.shape, ball.shape.body)
+        self.balls = []
+        # self.platforms2 = []
+        self.segs = []
+        self.draw()
+
+    def clear(self):
+        self.gameStart = 0
+        for shape in self.platforms:
+            self.space.remove(shape, shape.body)
+        # if len(self.platforms2) > 0:
+        #     for shape in self.platforms2:
+        #         self.space.remove(shape, shape.body)
+        self.remove_segs()
+
+        if self.ended <= 0:
+            for ball in self.balls:
+                self.space.remove(ball.shape, ball.shape.body)
+        self.balls.clear()
+        self.segs = []
+        self.tempBallPos = []
+        self.platforms = []
+        # self.platforms2 = []
+        self.slopes.clear()
+        self.tileSprites.empty()
+        self.tempSprites.empty()
+
+    def load(self):
+        self.level.number = self.number
+        self.level.platforms = self.platforms
+        self.level.platformtemp = self.platformtemp
+        self.level.slopes = self.slopes
+        self.level.tempPos = self.tempBallPos
+        self.level.built()
+
+    # --------------------------------------------------------
+
+    # -------END ------------------------------------------
+
+    # ------- CREATE  FUNCTIONS -----------------------------------------
+    # --------------------------------------------------------
+    def get_position(self, pos):
+        x1, y1 = pos
+
+        # The drawing function will draw a line from 2 point
+        if self.X == 0 and self.Y == 0:  # if the pen is not inside the canvas or first start the app
+            self.X, self.Y = x1, y1  # pass the current coordinate of the pen
+        else:  # draw a line from previous frame location of the pen to current frame position
+            # seg = GameObjects.Seg(self.space, 5, 1, (self.X, self.Y), (x1, y1))
+            # seg_shape = seg.shape
+            self.segs_coor.append(((self.X, self.Y), (x1, y1)))
+            self.X, self.Y = x1, y1  # after drawing, the current position become previous position
+            # return seg_shape
+
+    def create_segments(self, pos):
+        x1, y1 = pos
+
+        # The drawing function will draw a line from 2 point
+        if self.X == 0 and self.Y == 0:  # if the pen is not inside the canvas or first start the app
+            self.X, self.Y = x1, y1  # pass the current coordinate of the pen
+        else:  # draw a line from previous frame location of the pen to current frame position
+            seg = GameObjects.Seg(self.space, 5, 1, (self.X, self.Y), (x1, y1))
+            seg_shape = seg.shape
+            # self.segs_coor.append(((self.X, self.Y), (x1, y1)))
+            self.X, self.Y = x1, y1  # after drawing, the current position become previous position
+            return seg_shape
+
 
     def create_goal(self):
-        seg = GameObjects.Dot(self.space, self.RAD, (400, 200), self.COLLTYPE_GOAL, color=(255, 0, 0))
-        seg_shape = seg.shape
-        return seg
+        return ball
 
-    def draw_path(self, segments):
-        for seg in segments:
+    # --------------------------------------------------------
+    # -------   END  -----------------------------------------
+
+    # -------   DRAW FUNCTIONS -----------------------------------------
+    # --------------------------------------------------------
+    def draw_blocks(self, blocks):
+        for seg in blocks:
             point1 = seg.a
             point2 = seg.b
 
             pygame.draw.line(self.screen, (0, 0, 0), point1, point2, 5)
 
-    def draw_apples(self, apples):
-        for apple in apples:
-            pos_x = int(apple.body.position.x)
-            pos_y = int(apple.body.position.y)
+    def draw_path(self, segments):
+        for seg in segments:
+            if (seg is not None):
+                point1 = seg.a
+                point2 = seg.b
 
-            pygame.draw.circle(self.screen, apple.color, (pos_x, pos_y), self.RAD)
+                pygame.draw.line(self.screen, (0, 0, 0), point1, point2, 5)
 
+    def draw_tmp_path(self, segments):
+        for seg in segments:
+            point1 = seg[0]
+            point2 = seg[1]
 
-    def level1_map(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = pymunk.Segment(box_body, (0, 640), (1280, 640), 0)
-        self.space.add(box_body, shape1)
+            pygame.draw.line(self.screen, (0, 0, 0), point1, point2, 5)
 
-    def level2_map(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = pymunk.Segment(box_body, (0, 600), (1280, 640), 0)
-        self.space.add(box_body, shape1)
+    def draw_border(self, segments):
+        for seg in segments:
+            point1 = seg.shape.a
+            point2 = seg.shape.b
 
-    def level3_map(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = pymunk.Segment(box_body, (0, 240), (160, 240),0)
-        shape2 = pymunk.Segment(box_body, (160,240),(400,480),0)
-        shape3 = pymunk.Segment(box_body, (400,480),(400,560), 0)
-        shape4 = pymunk.Segment(box_body, (400,560),(560,560), 0)
-        shape5 = pymunk.Segment(box_body, (560,560),(560,480), 0)
-        shape6 = pymunk.Segment(box_body, (560,480),(720,480), 0)
-        shape7 = pymunk.Segment(box_body, (720, 480), (720, 560), 0)
-        shape8 = pymunk.Segment(box_body, (720, 560), (880, 560), 0)
-        shape9 = pymunk.Segment(box_body, (880, 560), (880, 480), 0)
-        shape10 = pymunk.Segment(box_body, (880, 480), (1120, 240), 0)
-        shape11 = pymunk.Segment(box_body, (1120, 240), (1280, 240), 0)
-        pygame.draw.line(self.screen,(0,0,255),(160,240),(400,480),1)
-        pygame.draw.line(self.screen, (0, 0, 255), (880, 480), (1120, 240), 1)
-        self.space.add(box_body, shape1,shape2,shape3,shape4,shape5,shape6,shape7,shape8,shape9,shape10,shape11)
+            pygame.draw.line(self.screen, (0, 0, 0), point1, point2, 5)
 
-    def level4_map(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1=pymunk.Segment(box_body,(240,320),(320,320),0)
-        shape2 = pymunk.Segment(box_body, (320,320), (320,480), 0)
-        shape3 = pymunk.Segment(box_body, (320,480), (160,480), 0)
-        shape4 = pymunk.Segment(box_body, (160,480), (160,400), 0)
-        shape5 = pymunk.Segment(box_body, (160,400), (240,400), 0)
-        shape6 = pymunk.Segment(box_body, (240,400), (240,320), 0)
-        shape7 = pymunk.Segment(box_body, (1280,240), (1040,240), 0)
-        shape8 = pymunk.Segment(box_body, (1040,240), (560,720), 0)
+    def draw_apples(self, balls):
+        for ball in balls:
+            # pos_x = int(ball.body.position.x)
+            # pos_y = int(ball.body.position.y)
+            ball.draw(self.screen)
+            # pygame.draw.circle(self.screen, ball.color, (pos_x, pos_y), self.RAD)
 
-        pygame.draw.line(self.screen,(0, 0, 255),(240,320),(320,320),1)
-        pygame.draw.line(self.screen,(0, 0, 255),(320,320),(320,480),1)
-        pygame.draw.line(self.screen,(0, 0, 255),(320,480),(160,480),1)
-        pygame.draw.line(self.screen,(0, 0, 255),(160,480),(160,400),1)
-        pygame.draw.line(self.screen,(0, 0, 255),(160,400),(240,400),1)
-        pygame.draw.line(self.screen,(0, 0, 255),(240,400),(240,320),1)
-        pygame.draw.line(self.screen,(0, 0, 255),(1280,240),(1040,240),1)
-        pygame.draw.line(self.screen,(0, 0, 255),(1040,240),(560,720),1)
-        self.space.add(box_body,shape1,shape2,shape3,shape4,shape5,shape6,shape7,shape8)
+    def draw_slopes(self, slopes):
+        for slope in slopes:
+            pos_1 = slope.position[0]
+            pos_2 = slope.position[1]
+            pos_3 = slope.position[2]
 
-    def level5_map(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = pymunk.Segment(box_body, (560,160), (960,160), 0)
-        shape2 = pymunk.Segment(box_body, (960,160), (960, 240), 0)
-        shape3 = pymunk.Segment(box_body, (960,240), (560, 240), 0)
-        shape4 = pymunk.Segment(box_body, (560, 240), (560, 160), 0)
-        shape5 = pymunk.Segment(box_body, (0, 480), (480,480), 0)
-        shape6 = pymunk.Segment(box_body, (480, 480), (480, 640), 0)
-        shape7 = pymunk.Segment(box_body, (480, 640), (960, 640), 0)
-        shape8 = pymunk.Segment(box_body, (960, 640), (960, 560), 0)
-        shape9 = pymunk.Segment(box_body, (960,560), (1280, 560), 0)
+            pygame.draw.polygon(self.screen, slope.color, (pos_1, pos_2, pos_3))
 
-        pygame.draw.line(self.screen,(0, 0, 255),(560,160),(960,160),1)
-        pygame.draw.line(self.screen, (0, 0, 255), (960,160), (960, 240), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (960,240), (560, 240), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (560, 240), (560, 160), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (0, 480), (480,480), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (480, 480), (480, 640), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (480, 640), (960, 640), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (960, 640), (960, 560), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (960,560), (1280, 560), 1)
-        self.space.add(box_body,shape1,shape2,shape3,shape4,shape5,shape6,shape7,shape8,shape9)
+    # --------------------------------------------------------
+    # -------   END  -----------------------------------------
 
-    def level6_map(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = pymunk.Segment(box_body, (560,240),(640,240), 0)
-        shape2 = pymunk.Segment(box_body, (640, 240), (640, 320), 0)
-        shape3 = pymunk.Segment(box_body, (640, 320), (560, 320), 0)
-        shape4 = pymunk.Segment(box_body, (560, 320), (560, 240), 0)
-        shape5 = pymunk.Segment(box_body, (0, 640), (1280, 640), 0)
+    # ------   Remove FUNCTIONS -----------------------------------------
+    # --------------------------------------------------------------------------------------
+    def remove_segs(self):
+        for shape in self.segs:
+            if shape is None:
+                self.segs.remove(shape)
+            else:
+                self.space.remove(shape, shape.body)
 
-        pygame.draw.line(self.screen,(0, 0, 255),(560,240),(640,240),1)
-        pygame.draw.line(self.screen, (0, 0, 255), (640, 240), (640, 320), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (640, 320), (560, 320), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (560, 320), (560, 240), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (0, 640), (1280, 640), 1)
-        self.space.add(box_body,shape1,shape2,shape3,shape4,shape5)
+    # --------------------------------------------------------------------------------------
+    # ------   END -----------------------------------------
 
-    def level7_map(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = pymunk.Segment(box_body, (0,240),(160,240), 0)
-        shape2 = pymunk.Segment(box_body, (160, 240), (480, 560), 0)
-        shape3 = pymunk.Segment(box_body, (480, 560), (960, 560), 0)
-        shape4 = pymunk.Segment(box_body, (960, 560), (960, 640), 0)
-        shape5 = pymunk.Segment(box_body, (960,640), (1040, 640), 0)
-        shape6 = pymunk.Segment(box_body, (1040, 640), (1040, 480), 0)
-        shape7 = pymunk.Segment(box_body, (1040, 480), (1280, 480), 0)
-
-        pygame.draw.line(self.screen,(0, 0, 255),(0,240),(160,240),1)
-        pygame.draw.line(self.screen, (0, 0, 255), (160, 240), (480, 560), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (480, 560), (960, 560), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (960, 560), (960, 640), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (960,640), (1040, 640), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (1040, 640), (1040, 480), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (1040, 480), (1280, 480), 1)
-        self.space.add(box_body,shape1,shape2,shape3,shape4,shape5,shape6,shape7)
-
-    def level8_map(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = pymunk.Segment(box_body, (0,80),(560,640), 0)
-        shape2 = pymunk.Segment(box_body, (560,640), (720, 640), 0)
-        shape3 = pymunk.Segment(box_body, (720,640), (1280, 80), 0)
-
-        pygame.draw.line(self.screen,(0, 0, 255),(0,80),(560,640),1)
-        pygame.draw.line(self.screen, (0, 0, 255), (560,640), (720, 640), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (720,640), (1280, 80), 1)
-        self.space.add(box_body,shape1,shape2,shape3)
-
-    def level9_map(self):
-        box_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        shape1 = pymunk.Segment(box_body, (0,160),(400,560), 0)
-        shape2 = pymunk.Segment(box_body, (400, 560), (640, 560), 0)
-        shape3 = pymunk.Segment(box_body, (640,560), (1040, 160), 0)
-        shape4 = pymunk.Segment(box_body, (1040, 160), (1280, 160), 0)
-
-        pygame.draw.line(self.screen,(0, 0, 255),(0,160),(400,560),1)
-        pygame.draw.line(self.screen, (0, 0, 255), (400, 560), (640, 560), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (640,560), (1040, 160), 1)
-        pygame.draw.line(self.screen, (0, 0, 255), (1040, 160), (1280, 160), 1)
-        self.space.add(box_body,shape1,shape2,shape3,shape4)
-
-game = Bubble_tea()
-game.main_loop()
+#
+# game = Bubble_tea()
+# game.main_loop()
