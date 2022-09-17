@@ -1,5 +1,7 @@
 import pygame
+import position
 pygame.init()
+
 # property------------------------------------------------------------------------------------------
 font = pygame.font.SysFont("Ravie", 40)
 tickBox_img = pygame.image.load('assets/MilkTeaImages/TickBox.png')
@@ -65,13 +67,13 @@ class TickBox():
         if (self.online):
             surface.blit(self.tick, (self.rect.x, self.rect.y))
         # get mouse position
-        pos = pygame.mouse.get_pos()
+        pos = position.currentpos
         # check mouseover and clicked
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+            if position.state == 'Selecting' and self.clicked == False:
                 self.online = not self.online
                 self.clicked = True
-        if pygame.mouse.get_pressed()[0] == 0:
+        else:
             self.clicked = False
         return self.online
 
