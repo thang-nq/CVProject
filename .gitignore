@@ -6,3 +6,4 @@
 env/
 .vs
 __pycache__/
+build/
