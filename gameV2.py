@@ -64,7 +64,7 @@ class Bubble_tea:
         # Varibles
         self.X, self.Y = 0, 0
         self.x_mouse, self.y_mouse = 0, 0
-        self.inGameUI = GameUI.inGameUI(self.screen)
+
 
         # Setup the collision callback function
         self.h = self.space.add_collision_handler(self.collision['ball'], self.collision['goal'])
@@ -234,12 +234,10 @@ class Bubble_tea:
         # The drawing function will draw a line from 2 point
         if self.X == 0 and self.Y == 0:  # if the pen is not inside the canvas or first start the app
             self.X, self.Y = x1, y1  # pass the current coordinate of the pen
+
         else:  # draw a line from previous frame location of the pen to current frame position
-            # seg = GameObjects.Seg(self.space, 5, 1, (self.X, self.Y), (x1, y1))
-            # seg_shape = seg.shape
             self.segs_coor.append(((self.X, self.Y), (x1, y1)))
             self.X, self.Y = x1, y1  # after drawing, the current position become previous position
-            # return seg_shape
 
     def create_segments(self, pos):
         x1, y1 = pos
@@ -247,10 +245,10 @@ class Bubble_tea:
         # The drawing function will draw a line from 2 point
         if self.X == 0 and self.Y == 0:  # if the pen is not inside the canvas or first start the app
             self.X, self.Y = x1, y1  # pass the current coordinate of the pen
+
         else:  # draw a line from previous frame location of the pen to current frame position
             seg = GameObjects.Seg(self.space, 5, 1, (self.X, self.Y), (x1, y1))
             seg_shape = seg.shape
-            # self.segs_coor.append(((self.X, self.Y), (x1, y1)))
             self.X, self.Y = x1, y1  # after drawing, the current position become previous position
             return seg_shape
 

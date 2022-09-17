@@ -133,10 +133,12 @@ class Bubble_tea:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+
         if handState == "Drawing":
             self.segs.append(self.create_segments((self.X, self.Y), (self.cX, self.cY)))
             self.X, self.Y = self.cX, self.cY
             print(self.X, self.Y)
+
         if handState == "Selecting" and self.gameStart < 1:
             self.apples.append(GameObjects.Dot(self.space, self.RAD, (200, 200), self.COLLTYPE_BALL))
             self.apples.append(self.create_goal())
@@ -162,12 +164,14 @@ class Bubble_tea:
     def create_segments(self, previouspos, currentpos):
         if previouspos == (0, 0):  # if the pen is not inside the canvas or first start the app
             previouspos = currentpos  # pass the current coordinate of the pen
+
         # draw a line from previous frame location of the pen to current frame position
-        seg_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        seg_shape = pymunk.Segment(seg_body, previouspos, currentpos, self.LINE_WEIGHT)
-        seg_shape.elasticity = 0.5
-        self.space.add(seg_body, seg_shape)
+        seg = GameObjects.Seg(self.space, 5, 1, previouspos, currentpos)
+        seg_shape = seg.shape
+        previouspos = currentpos  # after drawing, the current position become previous position
         return seg_shape
+
+
 
     def create_goal(self):
         seg = GameObjects.Dot(self.space, self.RAD, (400, 200), self.COLLTYPE_GOAL, color=(255, 0, 0))

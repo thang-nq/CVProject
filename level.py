@@ -241,8 +241,8 @@ class Level:
         self.balls.add(
             GameSprites.Ball(self.tempPos[3], (Constants.PLAYER_RAD * 2.38, Constants.PLAYER_RAD * 2.38), self.die_img))
 
-        pygame.draw.line(self.screen, (60, 61, 71), (50, 250), (400, 225), 5)
-        pygame.draw.line(self.screen, (60, 61, 71), (1450, 250), (1100, 225), 5)
+        # pygame.draw.line(self.screen, (60, 61, 71), (50, 250), (400, 225), 5)
+        # pygame.draw.line(self.screen, (60, 61, 71), (1450, 250), (1100, 225), 5)
 
 
     def load_level(self):

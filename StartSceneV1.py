@@ -27,16 +27,20 @@ def main():
     # ----------------- Game loop --------------------------------
     while True:
         gameManager.time_now = pygame.time.get_ticks()
-        if gameManager.gameState == Constants.UI_STATES["main"]:
-            gameManager.getMainUI()
-            gameManager.checkMainUI()
+        if gameManager.gameState >= len(Constants.UI_STATES):
+            gameManager.game.number = gameManager.gameState - len(Constants.UI_STATES)
+            gameManager.getGame()
 
         elif gameManager.gameState == Constants.UI_STATES["levelSelect"]:
             gameManager.getLevelSelect()
             if gameManager.gameState > len(Constants.UI_STATES):
                 gameManager.loadLevel()
                 gameManager.getGame()
-
+                
+        elif gameManager.gameState == Constants.UI_STATES["main"]:
+            gameManager.getMainUI()
+            gameManager.checkMainUI()
+            
         elif gameManager.gameState == Constants.UI_STATES["setting"]:
             gameManager.getSetting()
 
@@ -51,16 +55,14 @@ def main():
 
         elif gameManager.gameState == Constants.UI_STATES["lose"]:
             gameManager.getLosePanel()
-
-        elif gameManager.gameState >= len(Constants.UI_STATES):
-
-            gameManager.game.number = gameManager.gameState - len(Constants.UI_STATES)
-
-            gameManager.getGame()
-
+            
         elif gameManager.gameState == Constants.UI_STATES["restart"]:
             gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number
             gameManager.restartGame()
+            
+
+
+        
 
         pygame.display.update()
         clock.tick(FPS)
