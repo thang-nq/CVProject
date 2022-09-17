@@ -199,23 +199,23 @@ class aboutUI:
         khoaX = WIDTH / 2 - 250
         khoaY = HEIGHT / 2 - 50
         self.khoa_Box = AboutUsCompBox(khoaX, khoaY, avatarSample1, "Tran Nguyen Anh Khoa", "s3863956",
-                                       "I have developed games before, but never a puzzle games. This has been a fun experience to me. ", 1)
+                                       "I love game development", 1)
 
         khaiX = WIDTH / 2 - 200
         khaiY = HEIGHT / 2 + 100
         self.khai_Box = AboutUsCompBox(khaiX, khaiY, avatarSample2, "Ngo Quang Khai", "s3836387",
-                                       "I have some experience in game development and very passionate about computer vision technology. ",
+                                       "I am very passionate about computer vision technology. ",
                                        1)
 
-        thangX = WIDTH / 2 - 70
-        thangY = HEIGHT / 2 + 250
+        thangX = WIDTH / 2 + 200
+        thangY = HEIGHT / 2 -150
         self.thang_Box = AboutUsCompBox(thangX, thangY, avatarSample3, "Nguyen Quoc Thang", "s3796613",
-                                        "I found Machine learning and Game Development are interesting topic. Through the project, I have learned valuable skills ", 1)
+                                        "Through the project, I have learned valuable skills ", 1)
 
-        ducX = WIDTH / 2 + 250
-        ducY = HEIGHT / 2 - 150
+        ducX = WIDTH / 2 -70
+        ducY = HEIGHT / 2 +250
         self.duc_Box = AboutUsCompBox(ducX, ducY, avatarSample4, "Nguyen Huu Duc", "s3669698",
-                                      "I have experience in many computer vision projects and an interest in AI technology. I am always looking for new things and trying to solve problems. ",
+                                      "I have experience in computer vision projects and an interest in AI technology. ",
                                       1)
 
         # ----------------------------------- END ----------------------------------------
