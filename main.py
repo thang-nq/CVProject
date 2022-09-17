@@ -18,7 +18,7 @@ from SceneManager import manager
 FPS = Constants.FPS
 
 # TRacking
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
 cap.set(3, 1500)
 cap.set(4, 810)
 detector = htm.handDetector(detectCon=0.85)
