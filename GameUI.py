@@ -5,7 +5,6 @@ from LevelBox import NormalLevelBox, ChocolateLevelBox
 from Panel import GamePanel, AboutUsCompBox, SettingCompBox
 import MusicController
 import Constants
-import position
 
 WIDTH = Constants.WIDTH
 HEIGHT = Constants.HEIGHT
@@ -192,31 +191,31 @@ class aboutUI:
         # --------------------------- END -------------------------------
 
         # ------------------------------- AVATARS -------------------------------
-        avatarSample1 = pygame.image.load('assets/MilkTeaImages/Avatar_Beereel.png').convert_alpha()
-        avatarSample2 = pygame.image.load('assets/MilkTeaImages/Avatar_Princess.png').convert_alpha()
-        avatarSample3 = pygame.image.load('assets/MilkTeaImages/Avatar_Tinia.png').convert_alpha()
-        avatarSample4 = pygame.image.load('assets/MilkTeaImages/Avatar_Scyn.png').convert_alpha()
+        avatarSample1 = pygame.image.load('assets/TeamProfile/Khoa.png').convert_alpha()
+        avatarSample2 = pygame.image.load('assets/TeamProfile/Khai.png').convert_alpha()
+        avatarSample3 = pygame.image.load('assets/TeamProfile/Thang.png').convert_alpha()
+        avatarSample4 = pygame.image.load('assets/TeamProfile/Duc.png').convert_alpha()
 
         khoaX = WIDTH / 2 - 250
         khoaY = HEIGHT / 2 - 50
         self.khoa_Box = AboutUsCompBox(khoaX, khoaY, avatarSample1, "Tran Nguyen Anh Khoa", "s3863956",
-                                       "I worked on the aesthetic, UX/ UI of the game ", 1)
+                                       "I love game development", 1)
 
         khaiX = WIDTH / 2 - 200
         khaiY = HEIGHT / 2 + 100
-        self.khai_Box = AboutUsCompBox(khaiX, khaiY, avatarSample2, "Khai", "s3863956",
-                                       "I worked on the physics simulation",
+        self.khai_Box = AboutUsCompBox(khaiX, khaiY, avatarSample2, "Ngo Quang Khai", "s3836387",
+                                       "I am very passionate about computer vision technology. ",
                                        1)
 
-        thangX = WIDTH / 2 - 70
-        thangY = HEIGHT / 2 + 250
-        self.thang_Box = AboutUsCompBox(thangX, thangY, avatarSample3, "Thang", "s3863956",
-                                        "I worked in the computer vision system", 1)
+        thangX = WIDTH / 2 + 200
+        thangY = HEIGHT / 2 -150
+        self.thang_Box = AboutUsCompBox(thangX, thangY, avatarSample3, "Nguyen Quoc Thang", "s3796613",
+                                        "Through the project, I have learned valuable skills ", 1)
 
-        ducX = WIDTH / 2 + 250
-        ducY = HEIGHT / 2 - 150
-        self.duc_Box = AboutUsCompBox(ducX, ducY, avatarSample4, "Duc", "s3863956",
-                                      "I worked in the computer vision system",
+        ducX = WIDTH / 2 -70
+        ducY = HEIGHT / 2 +250
+        self.duc_Box = AboutUsCompBox(ducX, ducY, avatarSample4, "Nguyen Huu Duc", "s3669698",
+                                      "I have experience in computer vision projects and an interest in AI technology. ",
                                       1)
 
         # ----------------------------------- END ----------------------------------------
@@ -317,9 +316,9 @@ class wonPanelUI:
     def __init__(self, screen):
         self.screen = screen
         # -------------- Overlay color ----------------
-        self.overlay = pygame.image.load('assets/MilkTeaImages/Background.png').convert_alpha()
-        # self.overlay.set_alpha(0)
-
+        self.overlay = pygame.Surface((WIDTH, HEIGHT))
+        self.overlay.set_alpha(80)
+        self.overlay.fill((0, 0, 0))
         # -------------- Overlay Panel ----------------
         wonPanel_img = pygame.image.load('assets/MilkTeaImages/YouWon.png').convert_alpha()
         self.aboutPanel = GamePanel(WIDTH / 2, HEIGHT / 2, wonPanel_img, 0.9)
@@ -333,7 +332,6 @@ class wonPanelUI:
         selButtonX = WIDTH / 2 - selector.get_width() / 2 + 70
         selButtonY = HEIGHT / 2 - selector.get_height() / 2 + 240
         self.selectorButton = CompleteButton(selButtonX, selButtonY, selector, 1)
-
 
     def checkInput(self):
         pygame.event.pump()
