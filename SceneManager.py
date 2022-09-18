@@ -57,6 +57,7 @@ class manager:
         # print(self.gameState)
 
     def getAbout(self):
+        self.getMainUI()
         self.aboutUI.draw_UI()
         self.gameState = self.aboutUI.checkInput()
 
@@ -74,8 +75,6 @@ class manager:
         self.game.load()
 
     def getGame(self):
-
-
         self.game.event_hanlder()
         self.game.draw()
         self.inGameUI.draw()

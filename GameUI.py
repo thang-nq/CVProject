@@ -316,8 +316,7 @@ class wonPanelUI:
     def __init__(self, screen):
         self.screen = screen
         # -------------- Overlay color ----------------
-        self.overlay = pygame.Surface((WIDTH, HEIGHT))
-        self.overlay.set_alpha(80)
+        self.overlay = pygame.image.load('assets/MilkTeaImages/Background.png').convert_alpha()
         self.overlay.fill((0, 0, 0))
         # -------------- Overlay Panel ----------------
         wonPanel_img = pygame.image.load('assets/MilkTeaImages/YouWon.png').convert_alpha()
@@ -352,8 +351,7 @@ class losePanelUI:
     def __init__(self, screen):
         self.screen = screen
         # -------------- Overlay color ----------------
-        self.overlay = pygame.Surface((WIDTH, HEIGHT))
-        self.overlay.set_alpha(80)
+        self.overlay = pygame.image.load('assets/MilkTeaImages/Background.png').convert_alpha()
         self.overlay.fill((0, 0, 0))
         # -------------- Overlay Panel ----------------
         losePanel_img = pygame.image.load('assets/MilkTeaImages/YouLose.png').convert_alpha()

@@ -18,7 +18,7 @@ from SceneManager import manager
 FPS = Constants.FPS
 
 # TRacking
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(0)
 cap.set(3, 1500)
 cap.set(4, 810)
 detector = htm.handDetector(detectCon=0.85)
@@ -57,7 +57,11 @@ def main():
             position.state = 'None'
             isHand = False
 
-        if gameManager.gameState == Constants.UI_STATES["main"]:
+        if gameManager.gameState >= len(Constants.UI_STATES):
+            gameManager.game.number = gameManager.gameState - len(Constants.UI_STATES)
+            gameManager.getGame()
+
+        elif gameManager.gameState == Constants.UI_STATES["main"]:
             gestureMode = 'Menu'
             gameManager.getMainUI()
             gameManager.checkMainUI()
@@ -84,11 +88,6 @@ def main():
 
         elif gameManager.gameState == Constants.UI_STATES["lose"]:
             gameManager.getLosePanel()
-
-        elif gameManager.gameState >= len(Constants.UI_STATES):
-            gameManager.game.number = gameManager.gameState - len(Constants.UI_STATES)
-            gameManager.getGame()
-
 
         elif gameManager.gameState == Constants.UI_STATES["restart"]:
             gameManager.gameState = len(Constants.UI_STATES) + gameManager.game.number
